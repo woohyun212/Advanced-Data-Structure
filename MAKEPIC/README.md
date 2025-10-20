@@ -2,7 +2,7 @@
 
 > 텍스트 기반 그림판 프로그램 (MAKEPIC.C) 완성 및 기능 개선  
 > 제출 파일명: **MAKEPIC_조장학번.C**  
-> 환경: **Linux + gcc**
+> 환경: **(Linux/Mac/Windows) + gcc + Makefile**
 
 ---
 
