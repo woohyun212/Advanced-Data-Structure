@@ -113,63 +113,116 @@ int main()
     make();
     return 0;
 }
-void make() 
+
+void make()
 {
-    int nowx=whereX-1,nowy=whereY,picx=0,picy=0;
-    char go,yn;
-    while(1/*(go=getch())!='!'*/){
-    go=getch();
-    switch(go){
-        case LEFT  : if(nowx==whereX-1){prxy(45,20,"You can't go there(LEFT)        ");gotoxy(nowx,nowy);}
-                     else{
-                        nowx=nowx-2;
-                        gotoxy(nowx,nowy);
-                        picx--;
-                        }
-                     break;
-        case RIGHT : if(nowx==(whereX-3+(longx*2))){prxy(45,20,"You can't go there(RIGHT)       ");gotoxy(nowx,nowy);}
-                     else{
-                        nowx=nowx+2;
-                        gotoxy(nowx,nowy);
-                        picx++;
-                        }
-                     break;
-        case UP    : 
+	int nowx = whereX - 1, nowy = whereY, picx = 0, picy = 0;
+	char go, yn;
+	while (1/*(go=getch())!='!'*/)
+	{
+		go = getch();
+		switch (go)
+		{
+		case LEFT: if (nowx == whereX - 1)
+			{
+				prxy(45, 20, "You can't go there(LEFT)        ");
+				gotoxy(nowx, nowy);
+			}
+			else
+			{
+				nowx = nowx - 2;
+				gotoxy(nowx, nowy);
+				picx--;
+			}
+			break;
+		case RIGHT: if (nowx == (whereX - 3 + (longx * 2)))
+			{
+				prxy(45, 20, "You can't go there(RIGHT)       ");
+				gotoxy(nowx, nowy);
+			}
+			else
+			{
+				nowx = nowx + 2;
+				gotoxy(nowx, nowy);
+				picx++;
+			}
+			break;
+		case UP: if (nowy == whereY)
+			{
+				prxy(45, 20, "You can't go there(UP)        ");
+				gotoxy(nowx, nowy);
+			}
+			else
+			{
+				nowy = nowy - 1;
+				gotoxy(nowx, nowy);
+				picy--;
+			}
+			break;
+		case DOWN:
+			if (nowy == (whereY - 1 + (longy * 1)))
+			{
+				prxy(45, 20, "You can't go there(DOWN)       ");
+				gotoxy(nowx, nowy);
+			}
+			else
+			{
+				nowy = nowy + 1;
+				gotoxy(nowx, nowy);
+				picy++;
+			}
+			break;
 
-        case DOWN  : 
+		case '1':	// *
+			// prxy(nowx, nowy, "*");
+			picture[picy][picx] = '*';
+			break;
+		case '2':	// 0
+			// prxy(nowx, nowy, "0");
+			picture[picy][picx] = '0';
+			break;
+		case '3':	// o
+			// prxy(nowx, nowy, "o");
+			picture[picy][picx] = 'o';
+			break;
+		case '4':	// 공백
+			// prxy(nowx, nowy, " ");
+			picture[picy][picx] = ' ';
+			break;
 
-        case '1'   :
-
-        case '2'   :
-
-        case '3'   :
-
-        case 'q'   : 
-
-        case 'x'   : exit(0);
-		case 's'   : 
-        case '4'   :
+		case 'q':
+			// 저장하고 나가기
+		case 'x': exit(0);
+			// 나가기
+		case 's':
+			// 저장
 
 
-        default    : gotoxy(nowx,nowy);
-                     /*putch(go);*/
-                     break;
-            }
-        }
 
+		default: gotoxy(nowx, nowy);
+			/*putch(go);*/
+			break;
+		}
+	}
 }
 
-void filesave(int nowx,int nowy)
+void filesave(int nowx, int nowy)
 {
-    int yn;
-	prxy(45,22,"Save with \" \' \" or now (y/n/q): ");
-	yn=getch();
-	prxy(45,22,"                                        ");
-	if(yn=='y'){
-	filewrite1();gotoxy(nowx,nowy);}
-    else if(yn=='n'){
-	filewrite2();gotoxy(nowx,nowy);}
-	else {gotoxy(nowx,nowy);}
+	int yn;
+	prxy(45, 22, "Save with \" \' \" or now (y/n/q): ");
+	yn = getch();
+	prxy(45, 22, "                                        ");
+	if (yn == 'y')
+	{
+		filewrite1();
+		gotoxy(nowx, nowy);
+	}
+	else if (yn == 'n')
+	{
+		filewrite2();
+		gotoxy(nowx, nowy);
+	}
+	else { gotoxy(nowx, nowy); }
 }
 
 void filewrite1()
