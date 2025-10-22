@@ -59,6 +59,8 @@ void make(void); // 사용자가 그림을 그리는 주요 루프를 포함하�
 void filesave(int nowx,int nowy); // 파일 저장 여부를 묻고 저장 함수를 호출하는 함수
 void filewrite1(void); // 파일 저장 함수(따옴표와 함께 저장) (구현 완료)
 void filewrite2(void); // 파일 저장(따옴표 없이 저장) (구현 완료)
+void fileread1(void); // 파일 읽기 함수(filewrite1() 저장 형식)
+void fileread2(void); // 파일 읽기 함수(filewrite2() 저장 형식)
 void prxy(int x,int y,char *msg); // 특정 위치에 문자열을 출력하는 함수
 void cls(void); // 화면을 clrscr()의 Wrapper 함수
 // 사용자가 그린 그림의 내용을 저장하는 25*25 2차원 문자 배열. 초기에는 공백으로 채워짐
@@ -148,6 +150,13 @@ void make()
 
         case 'x'   : exit(0);
 		case 's'   : 
+        case 'l'   : prxy(45, 22, "input file type: 1. quote, 2. plain");
+        go=getch();
+        prxy(45,22,"                                        ");
+        if(go == '1'){ fileread1(); }else{ fileread2(); }
+        cls();
+        mon();
+        gotoxy(nowx, nowy);
         case '4'   :
 
 
@@ -226,10 +235,6 @@ void filewrite2()
         for(tempx=0;tempx<longx;tempx++)
         {
             buff2[len++] = picture[tempy][tempx];
-            if (tempx < longx - 1) {
-                buff2[len++] = ',';
-                buff2[len++] = ' ';
-            }
         }
         buff2[len] = '\0';
         fprintf(fp, " \"%s\"", buff2); // // "*, 0,  , o" 형태로 파일에 저장
@@ -241,6 +246,63 @@ void filewrite2()
      putc('}',fp);putc(';',fp);
 	 fclose(fp);
 	 prxy(45,22,"                         ");
+}
+void fileread1(){
+    FILE *fp;
+    char filename[10],buff[20],buff2[100];
+    int tempx=0,tempy=0,c;
+    prxy(45,22,"File Name:");
+    scanf("%s",filename);
+    sprintf(buff,"%s",filename);
+    if((fp=fopen(buff,"rt"))==NULL){prxy(45,20,"File open error");exit(0);}
+
+    while((c = fgetc(fp)) != EOF){ // EOF 접근 시 탈출
+        if (c == '\'') { // 여는 따옴표 접근시
+            c = fgetc(fp); // 실제 문자 읽기
+            picture[tempy][tempx++] = c;
+            if (tempx >= longx) {
+                if(tempy >= longy){
+                    break;
+                }else{
+                    tempx = 0;
+                    tempy++;
+                }
+            }
+        }else{
+            continue; // 중괄호, 쉼표, 공백 처리
+        }
+    }
+    fclose(fp);
+    prxy(45,22,"                         ");
+}
+void fileread2(){
+    FILE *fp;
+    char filename[10],buff[20],buff2[100];
+    int tempx=0,tempy=0,c;
+    prxy(45,22,"File Name:");
+    scanf("%s",filename);
+    sprintf(buff,"%s",filename);
+    if((fp=fopen(buff,"rt"))==NULL){prxy(45,20,"File open error");exit(0);}
+
+    while((c = fgetc(fp)) != EOF){ // EOF 접근 시 탈출
+        if(c != '\"'){ // 여는 큰따옴표에 접근 할 때까지 문자 호출
+            while((c = fgetc(c)) != '\"'){ // 닫는 큰따옴표에 접근 할 때까지 문자 기록
+                picture[tempy][tempx] = c;
+                if (tempx >= longx) {
+                    if(tempy >= longy){
+                        break;
+                    }else{
+                        tempx = 0;
+                        tempy++;
+                    }
+                }
+            }
+        }else{
+            continue;
+        }
+    }
+    fclose(fp);
+    prxy(45,22,"                         ");
 }
 
 void mon() /* 메뉴 화면 출력 */
@@ -269,7 +331,7 @@ void mon() /* 메뉴 화면 출력 */
     }
          textcolor(11);
  	prxy(48,5,"--- M E N U ---");
-     textcolor(10);
+    textcolor(10);
  	prxy(48,6," 1 . put \"*\"");
  	prxy(48,7," 2 . put \"0\"");
  	prxy(48,8," 3 . put \"o\"");
@@ -281,7 +343,7 @@ void mon() /* 메뉴 화면 출력 */
  	prxy(48,14," s . save");
  	prxy(48,15," q . save & exit");
  	prxy(48,16," x . exit");
-     textcolor(15);
+    textcolor(15);
 }
 void cls(void)
 {
