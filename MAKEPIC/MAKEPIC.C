@@ -18,6 +18,12 @@ void gotoxy(int x, int y) { // 커서를 (x, y) 좌표로 이동시키는 함수
 
 void textcolor(int color) { // 텍스트 색상 설정 함수(미구현)
     // Linux에서는 컬러를 ANSI escape code로 처리할 수 있음. 여기서는 무시.
+    if(color<8){
+        printf("\033[%dm", color + 30); //텍스트의 전경색 계산
+    }else{
+        printf("\033[%dm", color + 82); //텍스트의 밝은 전경색 계산
+    }
+    
 }
 
 int getch(void) { // 키보드에서 문자 입력 시 즉시 문자를 반환하는 함수(termios 구조체 사용)
