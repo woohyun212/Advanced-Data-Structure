@@ -191,10 +191,13 @@ void make()
 			break;
 
 		case 'q':
+			filesave(nowx, nowy);
+			exit(0);
 			// 저장하고 나가기
 		case 'x': exit(0);
 			// 나가기
 		case 's':
+			filesave(nowx, nowy);
 			// 저장
 
 
