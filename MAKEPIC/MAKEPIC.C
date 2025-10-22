@@ -268,6 +268,7 @@ void fileread1(){
                     tempy++;
                 }
             }
+            fgetc(fp); // 닫는 따옴표 처리
         }else{
             continue; // 중괄호, 쉼표, 공백 처리
         }
