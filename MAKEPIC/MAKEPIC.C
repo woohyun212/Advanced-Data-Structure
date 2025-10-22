@@ -189,15 +189,17 @@ void make()
 			// prxy(nowx, nowy, " ");
 			picture[picy][picx] = ' ';
 			break;
-		case 'q':
+
+		case 'q': // 저장하고 나가기
 			filesave(nowx, nowy);
 			exit(0);
-			// 저장하고 나가기
-		case 'x': exit(0);
-			// 나가기
-		case 's':
+
+		case 'x': // 나가기
+			exit(0);
+
+		case 's': // 저장
 			filesave(nowx, nowy);
-			// 저장
+
 		default: gotoxy(nowx, nowy);
 			/*putch(go);*/
 			break;
