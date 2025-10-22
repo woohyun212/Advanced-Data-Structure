@@ -215,7 +215,7 @@ void make()
 			break;
 
 		case 'r': // 그림파 초기화
-			for (int i = 0; i < 25; i++) for (int j = 0; j < 25; j++) picture[i][j] = ' ';
+			for (int i = 0; i < longy; i++) for (int j = 0; j < longx; j++) picture[i][j] = ' ';
 			break;
 
 		default: gotoxy(nowx, nowy);
