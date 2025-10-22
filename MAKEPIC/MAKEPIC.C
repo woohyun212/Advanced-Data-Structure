@@ -503,7 +503,7 @@ void mon() /* 메뉴 화면 출력 */
         for(y=whereY;y<myy;y++)
         {
             picY=y-whereY;
-            gotoxy(x, y);
+            gotoxy(x-1, y);
             //picture 배열에 그림이 있다면 출력, 없다면 격자 출력
             if(picture[picY][picX]!=' ')
             {
