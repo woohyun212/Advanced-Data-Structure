@@ -175,19 +175,20 @@ void make()
 			}
 			break;
 
-		case '1':	// *
+		case '1': // *
 			// prxy(nowx, nowy, "*");
 			picture[picy][picx] = '*';
 			break;
-		case '2':	// 0
+		case '2': // 0
 			// prxy(nowx, nowy, "0");
 			picture[picy][picx] = '0';
 			break;
-		case '3':	// o
+		case '3': // o
 			// prxy(nowx, nowy, "o");
 			picture[picy][picx] = 'o';
 			break;
-		case '4':	// 공백
+
+		case '4': // 공백
 			// prxy(nowx, nowy, " ");
 			picture[picy][picx] = ' ';
 			break;
@@ -196,19 +197,23 @@ void make()
 			filesave(nowx, nowy);
 			exit(0);
 
-    case 'l'   : prxy(45, 22, "input file type: 1. quote, 2. plain");
-        go=getch();
-        prxy(45,22,"                                        ");
-        if(go == '1'){ fileread1(); }else{ fileread2(); }
-        cls();
-        mon();
-        case '4'   :
-
 		case 'x': // 나가기
 			exit(0);
 
 		case 's': // 저장
 			filesave(nowx, nowy);
+			break;
+
+		case 'l': // 불러오기
+			prxy(45, 22, "input file type: 1. quote, 2. plain");
+			go = getch();
+			prxy(45, 22, "                                        ");
+			if (go == '1') { fileread1(); }
+			else { fileread2(); }
+			cls();
+			mon();
+			break;
+
 
 		default: gotoxy(nowx, nowy);
 			/*putch(go);*/
