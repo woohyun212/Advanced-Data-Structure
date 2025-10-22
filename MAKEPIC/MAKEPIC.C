@@ -214,6 +214,9 @@ void make()
 			mon();
 			break;
 
+		case 'r': // 그림파 초기화
+			for (int i = 0; i < 25; i++) for (int j = 0; j < 25; j++) picture[i][j] = ' ';
+			break;
 
 		default: gotoxy(nowx, nowy);
 			/*putch(go);*/
@@ -380,7 +383,7 @@ void mon() /* 메뉴 화면 출력 */
     for(x=whereX;x<myx;x=x+2)
     {
         int picX, picY; //picture 배열의 좌표값
-        picX=(x-whereX)/2; 
+        picX=(x-whereX)/2;
         for(y=whereY;y<myy;y++)
         {
             picY=y-whereY;
@@ -406,10 +409,11 @@ void mon() /* 메뉴 화면 출력 */
  	prxy(48,11," z . move down");
  	prxy(48,12," a . move left");
  	prxy(48,13," d . move right");
- 	prxy(48,14," s . save");
-	prxy(48,15," l . load"); // file load 기능 추가
- 	prxy(48,16," q . save & exit");
- 	prxy(48,17," x . exit");
+ 	prxy(48,14," r . reset");
+ 	prxy(48,15," s . save");
+	prxy(48,16," l . load"); // file load 기능 추가
+ 	prxy(48,17," q . save & exit");
+ 	prxy(48,18," x . exit");
     textcolor(15);
 }
 void cls(void)
