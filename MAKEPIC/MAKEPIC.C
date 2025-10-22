@@ -285,9 +285,10 @@ void fileread2(){
     if((fp=fopen(buff,"rt"))==NULL){prxy(45,20,"File open error");exit(0);}
 
     while((c = fgetc(fp)) != EOF){ // EOF 접근 시 탈출
-        if(c != '\"'){ // 여는 큰따옴표에 접근 할 때까지 문자 호출
-            while((c = fgetc(c)) != '\"'){ // 닫는 큰따옴표에 접근 할 때까지 문자 기록
-                picture[tempy][tempx] = c;
+        if(c == '\"'){ // 여는 큰따옴표에 접근 할 때까지 문자 호출
+            c = fgetc(fp);
+            while((c = fgetc(fp)) != '\"'){ // 닫는 큰따옴표에 접근 할 때까지 문자 기록
+                picture[tempy][tempx++] = c;
                 if (tempx >= longx) {
                     if(tempy >= longy){
                         break;
