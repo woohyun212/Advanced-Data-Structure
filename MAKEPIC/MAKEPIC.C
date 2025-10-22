@@ -156,7 +156,6 @@ void make()
         if(go == '1'){ fileread1(); }else{ fileread2(); }
         cls();
         mon();
-        gotoxy(nowx, nowy);
         case '4'   :
 
 
@@ -331,7 +330,7 @@ void mon() /* 메뉴 화면 출력 */
             putch(' '); //x축 2칸 출력 간격 유지
         }
     }
-         textcolor(11);
+	textcolor(11);
  	prxy(48,5,"--- M E N U ---");
     textcolor(10);
  	prxy(48,6," 1 . put \"*\"");
@@ -343,8 +342,9 @@ void mon() /* 메뉴 화면 출력 */
  	prxy(48,12," a . move left");
  	prxy(48,13," d . move right");
  	prxy(48,14," s . save");
- 	prxy(48,15," q . save & exit");
- 	prxy(48,16," x . exit");
+	prxy(48,15," l . load"); // file load 기능 추가
+ 	prxy(48,16," q . save & exit");
+ 	prxy(48,17," x . exit");
     textcolor(15);
 }
 void cls(void)
