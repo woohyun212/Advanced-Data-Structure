@@ -63,9 +63,9 @@ void prxy(int x,int y,char *msg); // 특정 위치에 문자열을 출력하는 
 void cls(void); // 화면을 clrscr()의 Wrapper 함수
 // 사용자가 그린 그림의 내용을 저장하는 25*25 2차원 문자 배열. 초기에는 공백으로 채워짐
 char picture[25][25]=
-   {{' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-    {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
-    {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+   {{'1','2','3',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+    {'4','5','6',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
+    {'7','8','9',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
     {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
     {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
     {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},
@@ -116,46 +116,46 @@ int main()
 
 void make()
 {
-	int nowx = whereX - 1, nowy = whereY, picx = 0, picy = 0;
+	int nowx = whereX, nowy = whereY, picx = 0, picy = 0;
 	char go, yn;
 	while (1/*(go=getch())!='!'*/)
 	{
 		go = getch();
 		switch (go)
 		{
-		case LEFT: if (nowx == whereX - 1)
+		case LEFT: if (nowx == whereX)
 			{
 				prxy(45, 20, "You can't go there(LEFT)        ");
-				gotoxy(nowx, nowy);
+				// gotoxy(nowx, nowy);
 			}
 			else
 			{
 				nowx = nowx - 2;
-				gotoxy(nowx, nowy);
+				// gotoxy(nowx, nowy);
 				picx--;
 			}
 			break;
-		case RIGHT: if (nowx == (whereX - 3 + (longx * 2)))
+		case RIGHT: if (nowx == (whereX - 2 + (longx * 2)))
 			{
 				prxy(45, 20, "You can't go there(RIGHT)       ");
-				gotoxy(nowx, nowy);
+				// gotoxy(nowx, nowy);
 			}
 			else
 			{
 				nowx = nowx + 2;
-				gotoxy(nowx, nowy);
+				// gotoxy(nowx, nowy);
 				picx++;
 			}
 			break;
 		case UP: if (nowy == whereY)
 			{
 				prxy(45, 20, "You can't go there(UP)        ");
-				gotoxy(nowx, nowy);
+				// gotoxy(nowx, nowy);
 			}
 			else
 			{
 				nowy = nowy - 1;
-				gotoxy(nowx, nowy);
+				// gotoxy(nowx, nowy);
 				picy--;
 			}
 			break;
@@ -163,12 +163,12 @@ void make()
 			if (nowy == (whereY - 1 + (longy * 1)))
 			{
 				prxy(45, 20, "You can't go there(DOWN)       ");
-				gotoxy(nowx, nowy);
+				// gotoxy(nowx, nowy);
 			}
 			else
 			{
 				nowy = nowy + 1;
-				gotoxy(nowx, nowy);
+				// gotoxy(nowx, nowy);
 				picy++;
 			}
 			break;
@@ -189,7 +189,6 @@ void make()
 			// prxy(nowx, nowy, " ");
 			picture[picy][picx] = ' ';
 			break;
-
 		case 'q':
 			filesave(nowx, nowy);
 			exit(0);
@@ -199,13 +198,14 @@ void make()
 		case 's':
 			filesave(nowx, nowy);
 			// 저장
-
-
-
 		default: gotoxy(nowx, nowy);
 			/*putch(go);*/
 			break;
 		}
+		mon();
+		// gotoxy(48, 3);
+		// cprintf("%d, %d, %c",picx, picy, picture[picy][picx]);
+		gotoxy(nowx, nowy);
 	}
 }
 
