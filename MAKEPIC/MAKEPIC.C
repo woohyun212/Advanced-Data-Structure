@@ -251,7 +251,21 @@ void mon() /* 메뉴 화면 출력 */
     tempy=myy;
     for(x=whereX;x<myx;x=x+2)
     {
-        /* 복구 */ 
+        int picX, picY; //picture 배열의 좌표값
+        picX=(x-whereX)/2; 
+        for(y=whereY;y<myy;y++)
+        {
+            picY=y-whereY;
+            gotoxy(x, y);
+            //picture 배열에 그림이 있다면 출력, 없다면 격자 출력
+            if(picture[picY][picX]!=' ')
+            {
+                putch(picture[picY][picX]);
+            }else{
+                putch(',');
+            }
+            putch(' '); //x축 2칸 출력 간격 유지
+        }
     }
          textcolor(11);
  	prxy(48,5,"--- M E N U ---");
