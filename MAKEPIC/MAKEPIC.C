@@ -256,85 +256,113 @@ void filesave(int nowx, int nowy)
 
 void filewrite1()
 {
-     FILE *fp;
-     char filename[10],buff[20],buff2[100];
-     int tempx,tempy,len; // buff2 index용 len 변수 추가
-     prxy(45,22,"File Name:");
-     scanf("%s",filename);
-     sprintf(buff,"%s",filename);
-     if((fp=fopen(buff,"w+t"))==NULL){prxy(45,20,"File open error");exit(0);}
-     putc('{',fp);
-     putc('\n', fp);
-     for(tempy=0;tempy<longy;tempy++) // row마다 반복
-     {
-        len = 0; // 버퍼(buff2) 초기화 - 저장하는 문자열이 고정 값이므로 내용을 비우지 않고 index만 초기화한다.
-        for(tempx=0;tempx<longx;tempx++) // column마다 반복, 한 row만큼의 문자열을 buff2에 저장
-        {
-            buff2[len++] = '\'';
-            buff2[len++] = picture[tempy][tempx];
-            buff2[len++] = '\'';
-            // 마지막 요소가 아니면 ', ' 추가
-            if (tempx < longx - 1) {
-                buff2[len++] = ',';
-                buff2[len++] = ' ';
-            }
+    FILE *fp;
+    char filename[10],buff[20],buff2[100];
+    int tempx,tempy,len; // buff2 index용 len 변수 추가
+    prxy(45,22,"File Name:");
+    scanf("%s",filename);
+    sprintf(buff,"%s",filename);
+    if((fp=fopen(buff,"w+t"))==NULL){prxy(45,20,"File open error");exit(0);}
+
+    fprintf(fp, "SIZE %d %d\n", longx, longy); // 저장 시점의 그림판 크기 저장
+    putc('{',fp);
+    putc('\n', fp);
+    for(tempy=0;tempy<longy;tempy++) // row마다 반복
+    {
+    len = 0; // 버퍼(buff2) 초기화 - 저장하는 문자열이 고정 값이므로 내용을 비우지 않고 index만 초기화한다.
+    for(tempx=0;tempx<longx;tempx++) // column마다 반복, 한 row만큼의 문자열을 buff2에 저장
+    {
+        buff2[len++] = '\'';
+        buff2[len++] = picture[tempy][tempx];
+        buff2[len++] = '\'';
+        // 마지막 요소가 아니면 ', ' 추가
+        if (tempx < longx - 1) {
+            buff2[len++] = ',';
+            buff2[len++] = ' ';
         }
-        buff2[len] = '\0'; // 문자열 끝 널 처리
-        fprintf(fp, " {%s}", buff2); // {'*', '0', 'o', ' '} 형태로 파일에 저장
-        if(tempy < longy - 1){
-            putc(',', fp);
-        }
-        putc('\n', fp);
-     }
-     putc('}',fp);putc(';',fp);
-     fclose(fp);
-	 prxy(45,22,"                         ");
+    }
+    buff2[len] = '\0'; // 문자열 끝 널 처리
+    fprintf(fp, " {%s}", buff2); // {'*', '0', 'o', ' '} 형태로 파일에 저장
+    if(tempy < longy - 1){
+        putc(',', fp);
+    }
+    putc('\n', fp);
+    }
+    putc('}',fp);putc(';',fp);
+    fclose(fp);
+    prxy(45,22,"                         ");
 }
 
 void filewrite2()
 {
-     FILE *fp;
-     char filename[10],buff[20],buff2[100];
-     int tempx,tempy,len;
-     prxy(45,22,"File Name:");
-     scanf("%s",filename);
-     sprintf(buff,"%s",filename);
-     if((fp=fopen(buff,"w+t"))==NULL){prxy(45,20,"File open error");exit(0);}
-     putc('{',fp);
-     putc('\n', fp);
-     for(tempy=0;tempy<longy;tempy++)
-     {
-        len = 0;
-        for(tempx=0;tempx<longx;tempx++)
-        {
-            buff2[len++] = picture[tempy][tempx];
-        }
-        buff2[len] = '\0';
-        fprintf(fp, " \"%s\"", buff2); // // "*, 0,  , o" 형태로 파일에 저장
-        if(tempy < longy - 1){
-            putc(',', fp);
-        }
-        putc('\n', fp);
-     }
-     putc('}',fp);putc(';',fp);
-	 fclose(fp);
-	 prxy(45,22,"                         ");
+    FILE *fp;
+    char filename[10],buff[20],buff2[100];
+    int tempx,tempy,len;
+    prxy(45,22,"File Name:");
+    scanf("%s",filename);
+    sprintf(buff,"%s",filename);
+    if((fp=fopen(buff,"w+t"))==NULL){prxy(45,20,"File open error");exit(0);}
+
+    fprintf(fp, "SIZE %d %d\n", longx, longy); // 저장 시점의 그림판 크기 저장
+    putc('{',fp);
+    putc('\n', fp);
+    for(tempy=0;tempy<longy;tempy++)
+    {
+    len = 0;
+    for(tempx=0;tempx<longx;tempx++)
+    {
+        buff2[len++] = picture[tempy][tempx];
+    }
+    buff2[len] = '\0';
+    fprintf(fp, " \"%s\"", buff2); // // "*, 0,  , o" 형태로 파일에 저장
+    if(tempy < longy - 1){
+        putc(',', fp);
+    }
+    putc('\n', fp);
+    }
+    putc('}',fp);putc(';',fp);
+    fclose(fp);
+    prxy(45,22,"                         ");
 }
 void fileread1(){
     FILE *fp;
-    char filename[10],buff[20],buff2[100];
-    int tempx=0,tempy=0,c;
+    char filename[10],buff[20],go;
+    int tempx=0,tempy=0,c,savex,savey;
     prxy(45,22,"File Name:");
     scanf("%s",filename);
     sprintf(buff,"%s",filename);
     if((fp=fopen(buff,"rt"))==NULL){prxy(45,20,"File open error");exit(0);}
 
+    fscanf(fp, "SIZE %d %d", &savex, &savey); // 저장된 텍스트 파일의 그림판 크기 불러옴
+    while (getchar() != '\n'); // 개행 문자 제거
+
+    if(savex != longx || savey != longy){ // 만약 그림판 크기가 저장된 크기와 다르면 사용자 입력을 받음(그림판 크기 변경 여부)
+        prxy(45,20,"saved size is different from current size. want to resize? (y/n)");
+        go = getch();
+        prxy(45,20,"                                        ");
+        switch(go){
+            case 'Y':
+            case 'y': longx = savex;longy = savey;break;
+            case 'N':
+            case 'n': break;
+            default : prxy(45,20,"please type \'y\' or \'n\'");break; // 예외처리를 해야하나? 고민중
+        }
+        prxy(45,20,"                                        ");
+    }
+    for (int y = 0; y < 25; y++){ // 그림판 초기화
+        for (int x = 0; x < 25; x++)
+            picture[y][x] = ' ';
+    }
+
     while((c = fgetc(fp)) != EOF){ // EOF 접근 시 탈출
         if (c == '\'') { // 여는 따옴표 접근시
             c = fgetc(fp); // 실제 문자 읽기
-            picture[tempy][tempx++] = c;
-            if (tempx >= longx) {
-                if(tempy >= longy){
+            if (tempy < longy && tempx < longx) { // 클리핑 기능 추가: 그림판 범위를 벗어나면 기록 X
+                picture[tempy][tempx] = c;
+            }
+            tempx++;
+            if (tempx >= savex) {
+                if(tempy >= savey){
                     break;
                 }else{
                     tempx = 0;
@@ -351,20 +379,43 @@ void fileread1(){
 }
 void fileread2(){
     FILE *fp;
-    char filename[10],buff[20],buff2[100];
-    int tempx=0,tempy=0,c;
+    char filename[10],buff[20],go;
+    int tempx=0,tempy=0,c,savex,savey;
     prxy(45,22,"File Name:");
     scanf("%s",filename);
     sprintf(buff,"%s",filename);
     if((fp=fopen(buff,"rt"))==NULL){prxy(45,20,"File open error");exit(0);}
 
+    fscanf(fp, "SIZE %d %d", &savex, &savey);
+    while (getchar() != '\n');
+
+    if(savex != longx || savey != longy){ 
+        prxy(45,20,"saved size is different from current size. want to resize? (y/n)");
+        go = getch();
+        prxy(45,20,"                                        ");
+        switch(go){
+            case 'Y':
+            case 'y': longx = savex;longy = savey;break;
+            case 'N':
+            case 'n': break;
+            default : prxy(45,20,"please type \'y\' or \'n\'");break;
+        }
+        prxy(45,20,"                                        ");
+    }
+    for (int y = 0; y < 25; y++){
+        for (int x = 0; x < 25; x++)
+            picture[y][x] = ' ';
+    }
+    
     while((c = fgetc(fp)) != EOF){ // EOF 접근 시 탈출
         if(c == '\"'){ // 여는 큰따옴표에 접근 할 때까지 문자 호출
-            c = fgetc(fp);
             while((c = fgetc(fp)) != '\"'){ // 닫는 큰따옴표에 접근 할 때까지 문자 기록
-                picture[tempy][tempx++] = c;
-                if (tempx >= longx) {
-                    if(tempy >= longy){
+                if (tempy < longy && tempx < longx) {
+                picture[tempy][tempx] = c;
+                }
+                tempx++;
+                if (tempx >= savex) {
+                    if(tempy >= savey){
                         break;
                     }else{
                         tempx = 0;

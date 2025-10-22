@@ -1,5 +1,5 @@
 CC=gcc
-SRC=MAKEPIC.c
+SRC=MAKEPIC.C
 
 ifeq ($(OS),Windows_NT)
   HOST_OS := Windows
