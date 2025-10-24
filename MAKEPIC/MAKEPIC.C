@@ -5,8 +5,12 @@
 #include <termios.h> // 터미널 I/O 인터페이스(입력 모드 변경에 사용)
 #include <fcntl.h> // 파일 제어
 #include <stdarg.h> // 가변 인자 목록 처리
-//#include <sys.stat.h> // mkdir() 사용
-//#include <dirent.h> // 디렉토리 탐색
+#include <signal.h> // kill 시그널 처리 라이브러리
+
+void handle_sigint(int signo) {
+	// exit() 호출해서 atexit()에 등록한 함수도 실행되게 함.
+	exit(0);
+}
 
 void clrscr() { // 화면을 지우고 커서를 (1, 1)로 이동하는 함수
     printf("\033[2J\033[1;1H");
@@ -106,6 +110,9 @@ char last_saved_filename[100] = ""; // 최근 저장 파일 이름
 int last_save_type = 0; // 1: quote, 2: plain
 int main()
 {
+	atexit(clrscr);
+	signal(SIGINT, handle_sigint);
+
     FILE *fp;
     int allxy[101],lastxy;
     char readline,ch,filename,sel;
@@ -460,7 +467,7 @@ void checkFileType(){
         if(go == 'y' || go == 'Y'){ // 최근 저장한 파일 불러오기
             prxy(45,22,"                                        ");
             fscanf(fp, "SIZE %d %d %d", &savex, &savey, &filetype); // 저장된 텍스트 파일의 그림판 크기 불러옴
-            while (getchar() != '\n'); // 개행 문자 제거
+            // while (getchar() != '\n'); // 개행 문자 제거
             if(filetype == 1){
                 fileread1(fp, buff, savex, savey);
             }else{
