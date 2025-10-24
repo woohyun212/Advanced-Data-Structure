@@ -409,9 +409,9 @@ void fileread2(FILE *fp, char *buff, int savex, int savey){
     //while (getchar() != '\n');
 
     if(savex != longx || savey != longy){ 
-        prxy(45,20,"saved size is different from current size. want to resize? (y/n)");
+        prxy(45,22,"saved size is different from current size. want to resize? (y/n)");
         go = getch();
-        prxy(45,20,"                                        ");
+        prxy(45,22,"                                        ");
         switch(go){
             case 'Y':
             case 'y': longx = savex;longy = savey;break;
@@ -419,7 +419,7 @@ void fileread2(FILE *fp, char *buff, int savex, int savey){
             case 'n': break;
             default : prxy(45,20,"please type \'y\' or \'n\'");break;
         }
-        prxy(45,20,"                                        ");
+        prxy(45,22,"                                        ");
     }
     for (int y = 0; y < 25; y++){
         for (int x = 0; x < 25; x++)
@@ -458,7 +458,7 @@ void checkFileType(){
         go = getch();
         prxy(45,22,"                                        ");
         if(go == 'y' || go == 'Y'){ // 최근 저장한 파일 불러오기
-            prxy(45,20,"                                        ");
+            prxy(45,22,"                                        ");
             fscanf(fp, "SIZE %d %d %d", &savex, &savey, &filetype); // 저장된 텍스트 파일의 그림판 크기 불러옴
             while (getchar() != '\n'); // 개행 문자 제거
             if(filetype == 1){
