@@ -16,7 +16,7 @@ else
 endif
 
 # 컴파일 옵션/링크 옵션 초기화
-CFLAGS  := -std=c99 -Wall
+CFLAGS  := -x c -std=c99 -Wall
 LDFLAGS :=
 
 ifeq ($(HOST_OS),Windows)
