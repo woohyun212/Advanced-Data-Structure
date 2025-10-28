@@ -491,9 +491,9 @@ void mon() /* 메뉴 화면 출력 */
             {
                 putch(picture[picY][picX]);
             }else{
-                putch(',');
+                putch(' ');
             }
-            putch(' '); //x축 2칸 출력 간격 유지
+            putch(','); //x축 2칸 출력 간격 유지
         }
     }
 	textcolor(11);
