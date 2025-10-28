@@ -72,8 +72,8 @@ void filesave(int nowx,int nowy); // 파일 저장 여부를 묻고 저장 함�
 void copy_file(char *src, char *dest); // 파일 복사용 편의 함수
 void filewrite1(void); // 파일 저장 함수(따옴표와 함께 저장) (구현 완료)
 void filewrite2(void); // 파일 저장(따옴표 없이 저장) (구현 완료)
-void fileread1(FILE *fp, char *buff, int savex, int savey); // 파일 읽기 함수(filewrite1() 저장 형식)
-void fileread2(FILE *fp, char *buff, int savex, int savey); // 파일 읽기 함수(filewrite2() 저장 형식)
+void fileread1(FILE *fp, int savex, int savey); // 파일 읽기 함수(filewrite1() 저장 형식)
+void fileread2(FILE *fp, int savex, int savey); // 파일 읽기 함수(filewrite2() 저장 형식)
 void checkFileType(); // 최근 저장한 파일이 있는지 확인하고, 저장 방식에 따라 다르게 로드
 void prxy(int x,int y,char *msg); // 특정 위치에 문자열을 출력하는 함수
 void cls(void); // 화면을 clrscr()의 Wrapper 함수
@@ -348,17 +348,9 @@ void filewrite2()
     copy_file(filename, "latest_file.txt");
     prxy(45,22,"                         ");
 }
-void fileread1(FILE *fp, char *filename, int savex, int savey){
-    //FILE *fp;
-    //char filename[10], buff[20];
+void fileread1(FILE *fp, int savex, int savey){
     char go;
     int tempx=0,tempy=0,c;
-    //prxy(45,22,"File Name:");
-    //scanf("%s",filename);
-    //sprintf(buff,"%s",filename);
-    //if((fp=fopen(buff,"rt"))==NULL){prxy(45,20,"File open error");exit(0);}
-    //fscanf(fp, "SIZE %d %d", &savex, &savey); // 저장된 텍스트 파일의 그림판 크기 불러옴
-    //while (getchar() != '\n'); // 개행 문자 제거
 
     if(savex != longx || savey != longy){ // 만약 그림판 크기가 저장된 크기와 다르면 사용자 입력을 받음(그림판 크기 변경 여부)
         prxy(45,20,"saved size is different from current size. want to resize? (y/n)");
@@ -369,7 +361,7 @@ void fileread1(FILE *fp, char *filename, int savex, int savey){
             case 'y': longx = savex;longy = savey;break;
             case 'N':
             case 'n': break;
-            default : prxy(45,20,"please type \'y\' or \'n\'");break; // 예외처리를 해야하나? 고민중
+            default : prxy(45,20,"please type \'y\' or \'n\'");break;
         }
         prxy(45,20,"                                        ");
     }
@@ -401,19 +393,9 @@ void fileread1(FILE *fp, char *filename, int savex, int savey){
     fclose(fp);
     prxy(45,22,"                         ");
 }
-void fileread2(FILE *fp, char *buff, int savex, int savey){
-    //FILE *fp;
-    //char filename[10], buff[20];
+void fileread2(FILE *fp, int savex, int savey){
     char go;
     int tempx=0,tempy=0,c;
-    //prxy(45,22,"File Name:");
-    //scanf("%s",filename);
-    //sprintf(buff,"%s",filename);
-    //if((fp=fopen(buff,"rt"))==NULL){prxy(45,20,"File open error");exit(0);}
-    //fscanf(fp, "SIZE %d %d", &savex, &savey); // 저장된 텍스트 파일의 그림판 크기 불러옴
-    //if((fp=fopen(buff,"rt"))==NULL){prxy(45,20,"File open error");exit(0);}
-
-    //while (getchar() != '\n');
 
     if(savex != longx || savey != longy){ 
         prxy(45,22,"saved size is different from current size. want to resize? (y/n)");
@@ -469,22 +451,22 @@ void checkFileType(){
             fscanf(fp, "SIZE %d %d %d", &savex, &savey, &filetype); // 저장된 텍스트 파일의 그림판 크기 불러옴
             // while (getchar() != '\n'); // 개행 문자 제거
             if(filetype == 1){
-                fileread1(fp, buff, savex, savey);
+                fileread1(fp, savex, savey);
             }else{
-                fileread2(fp, buff, savex, savey);
+                fileread2(fp, savex, savey);
             }
-        }else{ // 최근 저장한 파일이 아닌 다른 파일 불러오기. 예외처리 할지 고민중
+        }else{ // 최근 저장한 파일이 아닌 다른 파일 불러오기.
             prxy(45,22,"File Name:");
             scanf("%s",filename);
             sprintf(buff,"%s",filename);
             if((fp=fopen(buff,"rt"))==NULL){prxy(45,20,"File open error\n");exit(0);} // 입력된 filename의 파일 불러옴.
             fscanf(fp, "SIZE %d %d %d", &savex, &savey, &filetype);
             if(filetype == 1){ // filetype에 따라 맞는 함수 호출(1: quote, 2: plain)
-                fileread1(fp, buff, savex, savey);
+                fileread1(fp, savex, savey);
             }else if(filetype == 2){
-                fileread2(fp, buff, savex, savey);
+                fileread2(fp, savex, savey);
             }else{
-                prxy(45,22,"File Type error"); // File type error 처리. (부분구현)
+                prxy(45,22,"File Type error"); // File type error 처리.
                 exit(0);
             }
         }
