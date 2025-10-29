@@ -225,8 +225,6 @@ void make()
 
 		case 'l': // 불러오기
             checkFileType();
-			cls();
-			mon();
 			break;
 
 		case 'r': // 그림판 초기화
