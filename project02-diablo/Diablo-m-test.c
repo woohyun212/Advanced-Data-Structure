@@ -1,4 +1,3 @@
-// Linux 호환을 위해 수정된 코드
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +7,7 @@
 #include <termios.h>
 #include <fcntl.h>
 
-// 함수 선언
+
 void Q1_1(); void Q1_2(); void Q1_3(); void Q1_4(); void Q1_5(); void Q1_6();
 void Q2_1(); void Q2_2(); void Q2_3(); void Q2_4(); void Q2_5(); void Q2_6();
 void Q3_1(); void Q3_2(); void Q3_3(); void Q3_4(); void Q3_5(); void Q3_6();
@@ -20,13 +19,13 @@ void Weapon_Store(); void Battle(); void cheatcenter();
 void M_A(); void Mg();
 int my_random(int n);
 
-// Windows 전용 함수 대체
+
 void clrscr() {
     printf("\033[2J\033[1;1H");
 }
 
 void textcolor(int color) {
-    // Linux에서는 컬러를 ANSI escape code로 처리할 수 있음. 여기서는 무시.
+
 }
 
 void gotoxy(int x, int y) {
@@ -37,7 +36,7 @@ void delay(int ms) {
     usleep(ms * 1000);
 }
 
-// kbhit 대체 (non-blocking 키 입력 확인)
+
 int kbhit(void) {
     struct termios oldt, newt;
     int ch;
@@ -64,7 +63,7 @@ int kbhit(void) {
     return hit;
 }
 
-// getch 대체
+
 int getch(void) {
     struct termios oldattr, newattr;
     int ch;
@@ -77,13 +76,13 @@ int getch(void) {
     return ch;
 }
 
-// random 대체
+
 int my_random(int n) {
     if (n <= 0) return 0;
     return rand() % n;
 }
 
-// randomize 대체
+
 void randomize() {
     srand(time(NULL));
 }
@@ -151,18 +150,17 @@ struct monster_struct {
 	textcolor(15);
 	clrscr();
 	printf("\n\n\n\n\n\n");
-	printf("\n            ������������������������������������������������");
-	printf("\n            ��                                            ��");
-	printf("\n            ��              Text Diablo III               ��");
-	printf("\n            ��            Title: Diablo Korea            ��");
-	printf("\n            ��                             Demo V0.99     ��");
-	printf("\n            ��               1. New Game                  ��");
-	printf("\n            ��               2. Load Game                 ��");
-	printf("\n            ��               3. End                       ��");
-	printf("\n            �� Press Input number:                        ��");
-	printf("\n            ��                        (c) cwnu computer engineering");
-	printf("\n            ��               (c) Copyright 2025      ��");
-	printf("\n            ������������������������������������������������");
+	printf("\n            ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+	printf("\n            ┃                                            ┃");
+	printf("\n            ┃              Text Diablo III               ┃");
+	printf("\n            ┃            Title: 하수구의 군주            ┃");
+	printf("\n            ┃                             Demo V0.99     ┃");
+	printf("\n            ┃               1. New Game                  ┃");
+	printf("\n            ┃               2. Load Game                 ┃");
+	printf("\n            ┃               3. End                       ┃");
+	printf("\n            ┃ Press Input number:                        ┃");
+	printf("\n            ┃                          Copy Left 2025    ┃");
+	printf("\n            ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
 	gotoxy(35,16);scanf("%d",&a);
 	if(a>0 && a<=3) break;
 	}
@@ -202,9 +200,9 @@ struct monster_struct {
   user.nhp=user.hp;
   user.nmp=user.mp;
   for(i=0;i<8;i++)
-	if(user.item[i]>20) {user.item[i]=20;printf("%d�� ������ ������ 20�� �̻��� �Ǿ �ڵ����� �Ҹ�˴ϴ�",i+1);getch();clrscr();}
-  if(user.defence>20) {user.defence=20;printf("���潺�� 20�̻��� �Ǹ� �ڵ����� ���潺�� �϶��˴ϴ�.");getch();clrscr();}
-  printf("     ������������������ Camp ����������������\n\n");
+	if(user.item[i]>20) {user.item[i]=20;printf("%d번 포션의 수량이 20개 이상이 되어서 자동으로 소모됩니다",i+1);getch();clrscr();}
+  if(user.defence>20) {user.defence=20;printf("디펜스가 20이상이 되면 자동으로 디펜스가 하락됩니다.");getch();clrscr();}
+  printf("     ━━━━━━━━━ Camp ━━━━━━━━\n\n");
   printf("                    1. Condition                  \n");
   printf("                    2. Item Store                 \n");
   printf("                    3. Weapon Store               \n");
@@ -225,6 +223,7 @@ struct monster_struct {
  Play_1();
  return;
  }
+
  void cheatcenter()
  {
  int ca;
@@ -263,16 +262,16 @@ struct monster_struct {
  char data;
  textcolor(15);
  clrscr();
- printf("  ��������������������������������������������������\n");
- printf("  ��  A C T 1 ��  A C T 2 ��  A C T 3 ��  A C T 4 ��\n");
- printf("  ��������������������������������������������������\n");
- printf("  ��1. Quest 1��7. Quest 1��13.Quest 1��19.Quest 1��\n");
- printf("  ��2. Quest 2��8. Quest 2��14.Quest 2��20.Quest 2��\n");
- printf("  ��3. Quest 3��9. Quest 3��15.Quest 3��21.Quest 3��\n");
- printf("  ��4. Quest 4��10 Quest 4��16.Quest 4��0. Exit   ��\n");
- printf("  ��5. Quest 5��11 Quest 5��17.Quest 5��          ��\n");
- printf("  ��6. Quest 6��12 Quest 6��18.Quest 6��          ��\n");
- printf("  ��������������������������������������������������\n");
+ printf("  ┏━━━━━┳━━━━━┳━━━━━┳━━━━━┓\n");
+ printf("  ┃  A C T 1 ┃  A C T 2 ┃  A C T 3 ┃  A C T 4 ┃\n");
+ printf("  ┣━━━━━╋━━━━━╋━━━━━╋━━━━━┫\n");
+ printf("  ┃1. Quest 1┃7. Quest 1┃13.Quest 1┃19.Quest 1┃\n");
+ printf("  ┃2. Quest 2┃8. Quest 2┃14.Quest 2┃20.Quest 2┃\n");
+ printf("  ┃3. Quest 3┃9. Quest 3┃15.Quest 3┃21.Quest 3┃\n");
+ printf("  ┃4. Quest 4┃10 Quest 4┃16.Quest 4┃0. Exit   ┃\n");
+ printf("  ┃5. Quest 5┃11 Quest 5┃17.Quest 5┃          ┃\n");
+ printf("  ┃6. Quest 6┃12 Quest 6┃18.Quest 6┃          ┃\n");
+ printf("  ┗━━━━━┻━━━━━┻━━━━━┻━━━━━┛\n");
  printf("Select Quest Number(1~%2d):",user.wh);
  gotoxy(27,11);scanf("%d",&l);
  if(l<0 || l>user.wh) {printf("\n You can't go there....");getch();continue;}
@@ -340,7 +339,7 @@ struct monster_struct {
  {
   int l;
   printf("\n    M    E    N    U          YOURS ");
-  printf("\n������������������������������������������");
+  printf("\n━━━━━━━━━━━━━━━━━━━━━");
   printf("\n  1.Light Healing Potion     [ %3d ]",user.item[0]);
   printf("\n  2.Light Mana Potion        [ %3d ]",user.item[1]);
   printf("\n  3.Super Healing Potion     [ %3d ]",user.item[2]);
@@ -350,7 +349,7 @@ struct monster_struct {
   printf("\n  7.Full Helating Potion     [ %3d ]",user.item[6]);
   printf("\n  8.Full Mana Potion         [ %3d ]",user.item[7]);
   printf("\n  9.OUT  		         ");
-  printf("\n������������������������������������������");
+  printf("\n━━━━━━━━━━━━━━━━━━━━━");
   printf("\nWhat you eat? :  ");
   scanf("%d",&l);
   if(l==9) set();
@@ -385,11 +384,11 @@ while(1)
  {
   clrscr();
   printf("             M    E    N    U     POWER  BONUS-HP  BONUS-MP   G O L D\n");
-  printf("������������������������������������������������������������������������\n");
+  printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
   for(i=0;i<count1;i++)
 	printf("%d.%30s     [%4d]  [%4d]  [%4d]   [%4d]\n",i+1,weapon[i].name,weapon[i].power,weapon[i].hp_bonus,weapon[i].mp_bonus,weapon[i].cost);
   printf("%d.Out\n",count1+1);
-  printf("������������������������������������������������������������������������");
+  printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   printf("\nWhat do you Need? :    GOLD: %5d",user.gold);
   gotoxy(20,5+count1);scanf("%d",&l);
   if(l < 1 || l> count1+1 ) continue;
@@ -417,12 +416,12 @@ while(1)
  {
   clrscr();
   printf("             M    E    N    U    DEFENCE BONUS-HP  BONUS-MP   G O L D\n");
-  printf("������������������������������������������������������������������������\n");
+  printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
   for(i=0;i<count2;i++)
 	printf("%d.%30s     [%4d]  [%4d]  [%4d]   [%4d]\n",i+1,defence[i].name,defence[i].defence,defence[i].hp,defence[i].mp,defence[i].cost);
   printf("%d.Out\n",count2+1);
-  printf("������������������������������������������������������������������������");
-  printf("\n*���潺�� 20 ������ ���ѵ˴ϴ�.");
+  printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  printf("\n*디펜스는 20 까지로 제한됩니다.");
   printf("\nWhat do you Need? :    GOLD: %5d",user.gold);
   gotoxy(20,6+count2);scanf("%d",&l);
   if(l < 1 || l> count2+1 ) continue;
@@ -443,7 +442,7 @@ while(1)
   }
  return;
  }
-  void Item_store()
+ void Item_store()
   {
   int cost[8]={50,50,100,100,500,500,1000,1000};
   int i,j,k,l;
@@ -451,7 +450,7 @@ while(1)
   {
   clrscr();
   printf("\n    M    E    N    U       GOLD      YOURS ");
-  printf("\n��������������������������������������������");
+  printf("\n━━━━━━━━━━━━━━━━━━━━━━");
   printf("\n  1.Light Healing Potion   [ 50 ]    [ %3d ]",user.item[0]);
   printf("\n  2.Light Mana Potion      [ 50 ]    [ %3d ]",user.item[1]);
   printf("\n  3.Super Healing Potion   [ 100]    [ %3d ]",user.item[2]);
@@ -461,7 +460,7 @@ while(1)
   printf("\n  7.Full Helating Potion   [1000]    [ %3d ]",user.item[6]);
   printf("\n  8.Full Mana Potion       [1000]    [ %3d ]",user.item[7]);
   printf("\n  9.OUT  		         ");
-  printf("\n��������������������������������������������");
+  printf("\n━━━━━━━━━━━━━━━━━━━━━━");
   printf("\nWhat do you Need? :    GOLD: %5d",user.gold);
   gotoxy(20,14);scanf("%d",&l);
   if(l <= 0 || l>= 10 ) continue;
@@ -504,7 +503,7 @@ while(1)
  fprintf(fp3,"\n%d",user.item[6]);
  fprintf(fp3,"\n%d",user.item[7]);
  fclose(fp3);
- printf("\n ���̺갡 �Ϸ�Ǿ����ϴ�<Enter>");
+ printf("\n 세이브가 완료되었습니다<Enter>");
  getch();
  return;
  }
@@ -524,20 +523,20 @@ while(1)
   printf("          G   O  L   D: %d \n",user.gold);
   textcolor(15);
   printf("     Can Private Magic: \n ");
-  printf("\n��������������������������������������������������������������������");
+  printf("\n━━━━━━━━━━━━┳━━━━━━━┳━━━━━┳━━━━━━━");
   textcolor(15);
   for(i=0;i<8;i++)
   {
 	if(magic[i].lv <= user.lv)
-	  {printf("\n NAME: %16s ��  Damage: %3d �� Mp: %4d ��  Level: %3d",magic[i].name,magic[i].power,magic[i].ump,magic[i].lv);}
+	  {printf("\n NAME: %16s ┃  Damage: %3d ┃ Mp: %4d ┃  Level: %3d",magic[i].name,magic[i].power,magic[i].ump,magic[i].lv);}
   }
   textcolor(15);
-  printf("\n��������������������������������������������������������������������");
+  printf("\n━━━━━━━━━━━━┻━━━━━━━┻━━━━━┻━━━━━━━");
  printf("\n\n\n  < E N T E R >");
  getch();
  return;
 }
- void Insert_magic()
+void Insert_magic()
   {
 	FILE *fp2;
 	int i;
@@ -594,7 +593,7 @@ while(1)
  user.wh=wh;
  fclose(fp1);
  if(code != (user.lv+user.cs+user.nhp+user.nmp+user.gold+user.exp)/user.lv+user.lv) {
- printf("�̷� ġ���ѳ� .. �̷� ������ ����Ʈ �Ϸ� �ϴٴ�... �� �Ѥ� �Ӱ�ư ���� �ٺ��ڳ� .. �ʰ�ư ���� �̰��� ���ڰ� ����... ����!!");
+ printf("이런 치사한넘 .. 이런 게임을 에디트 하려 하다니... !!");
  getch();
  exit(0);
  }
@@ -616,18 +615,17 @@ while(1)
 
 	clrscr();
 	printf("\n\n\n\n\n");
-	printf("\n           ����������������������������������������������");
-	printf("\n           ��                                          ��");
-	printf("\n           ��                                          ��");
-	printf("\n           ��            Choose Your Character         ��");
-	printf("\n           ��                                          ��");
-	printf("\n           ��                 1. Amazon                ��");
-	printf("\n           ��                 2. Sorceress             ��");
-	printf("\n           ��                 3. Necromancer           ��");
-	printf("\n           ��   Press Input number:                    ��");
-	printf("\n           ��                                          ��");
-	printf("\n           ��   *Barbarian �� Paladin�� �����Ƽ� ����. ��");
-	printf("\n           ����������������������������������������������");
+	printf("\n           ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+	printf("\n           ┃                                          ┃");
+	printf("\n           ┃                                          ┃");
+	printf("\n           ┃            Choose Your Character         ┃");
+	printf("\n           ┃                                          ┃");
+	printf("\n           ┃                 1. Amazon                ┃");
+	printf("\n           ┃                 2. Sorceress             ┃");
+	printf("\n           ┃                 3. Necromancer           ┃");
+	printf("\n           ┃   Press Input number:                    ┃");
+	printf("\n           ┃                                          ┃");
+	printf("\n           ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
 	gotoxy(37,15);scanf("%d",&ch);
 	user.gold=0;
 	if(ch==1)
@@ -673,7 +671,7 @@ while(1)
 	 fclose(fp0);
 	 return;
  }
-  void set()
+ void set()
  {
 
  int re,input;
@@ -682,9 +680,9 @@ while(1)
  {
  clrscr();
  if(monster.nhp<=0) {
-	printf("\n ļ��~~�� ������������ �ٸ������� ����");
+	printf("\n 캬오~~凸 우케케케케케 꾸르르르르 끄억");
 
-	printf("\n ����� %d ��ŭ�� ���� %d ��ŭ�� ����ġ�� ����ϴ�",monster.gold,monster.exp);
+	printf("\n 당신은 %d 만큼의 골드와 %d 만큼의 경험치를 얻습니다",monster.gold,monster.exp);
 	getch();
 	user.exp-=monster.exp;
 	user.gold+=monster.gold;
@@ -707,7 +705,7 @@ while(1)
 	break;
   }
  if(user.nhp<=0) {
-	printf("\n ����! �̷��� ���ϴٴ� �̼����� �̷���.....");
+	printf("\n 으억! 이렇게 당하다니 이세계의 미래는.....");
 	getch();
 	clrscr();
 	printf("\n Game Over");
@@ -715,16 +713,16 @@ while(1)
 	exit(1);
 	}
  textcolor(15);
- gotoxy(1,1);printf("                               ����������������������������������������������");
- gotoxy(1,2);printf("   1.Melee Attack              ��   Name: %12s       %10s    ��",user.name,monster.name);
- gotoxy(1,3);printf("   2.Magic                     ��   Lev :   %3d              %3d           ��",user.lv,monster.lv);
- gotoxy(1,4);printf("   3.Eat potion                ��   H  P: %4d/%4d        %4d/%4d       ��",user.nhp,user.hp,monster.nhp,monster.hp);
- gotoxy(1,5);printf("   4.Run Away                  ��   M  P: %4d/%4d        %4d/%4d       ��",user.nmp,user.mp,monster.nmp,monster.mp);
- gotoxy(1,6);printf("                               ��   Att : %4d~%4d        %4d~%4d       ��",user.attack-2,user.attack+2,monster.attack-2,monster.attack+2);
- gotoxy(1,7);printf("                               ��   Def :  %4d             %4d           ��",user.defence,monster.defence);
- gotoxy(1,8);printf("                               ��   EXP :  %5d           %5d           ��",user.exp,monster.exp);
- gotoxy(1,9);printf("                               ��   Gold:                  %5d           ��",monster.gold);
- gotoxy(1,10);printf("                               ����������������������������������������������  ");
+ gotoxy(1,1);printf("                               ┏━━━━━━━━━━━━━━━━━━━━━┓");
+ gotoxy(1,2);printf("   1.Melee Attack              ┃   Name: %12s       %10s    ┃",user.name,monster.name);
+ gotoxy(1,3);printf("   2.Magic                     ┃   Lev :   %3d              %3d           ┃",user.lv,monster.lv);
+ gotoxy(1,4);printf("   3.Eat potion                ┃   H  P: %4d/%4d        %4d/%4d       ┃",user.nhp,user.hp,monster.nhp,monster.hp);
+ gotoxy(1,5);printf("   4.Run Away                  ┃   M  P: %4d/%4d        %4d/%4d       ┃",user.nmp,user.mp,monster.nmp,monster.mp);
+ gotoxy(1,6);printf("                               ┃   Att : %4d~%4d        %4d~%4d       ┃",user.attack-2,user.attack+2,monster.attack-2,monster.attack+2);
+ gotoxy(1,7);printf("                               ┃   Def :  %4d             %4d           ┃",user.defence,monster.defence);
+ gotoxy(1,8);printf("                               ┃   EXP :  %5d           %5d           ┃",user.exp,monster.exp);
+ gotoxy(1,9);printf("                               ┃   Gold:                  %5d           ┃",monster.gold);
+ gotoxy(1,10);printf("                               ┗━━━━━━━━━━━━━━━━━━━━━┛  ");
  gotoxy(30,11);printf("Leave Monster: %d",l_m);
  gotoxy(1,11);printf("Battle Order(1~4): ");scanf("%d",&input);
  if(input<1 || input>4) continue;
@@ -740,7 +738,7 @@ while(1)
  void  Q1_1()
 	{
 	 int i;
-	 if(user.lv>=16) {printf("\n����� ������ ���� ���̻� ���� �Ұ����մϴ�.<Enter>");getch();return;}
+	 if(user.lv>=16) {printf("\n당신은 레벨이 높아 더이상 출입 불가능합니다.<Enter>");getch();return;}
 	 clrscr();
 	 monster.lv=1;
 	 l_m=29;
@@ -777,7 +775,7 @@ while(1)
 		set();
 	  }
 		clrscr();
-		printf("\n �ǳʽ�: Light Healing Potion +1");
+		printf("\n 뽀너스: Light Healing Potion +1");
 		user.item[0]+=1;
 		getch();
 		monster.lv=3;
@@ -811,6 +809,7 @@ while(1)
   set();
  if(user.wh==2) user.wh++;
  return;}
+
  void Q1_3() {
 
  l_m=0;
@@ -824,13 +823,14 @@ while(1)
  set();
  if(user.wh==3) user.wh++;
  return;}
+
  void Q1_4() {
  int i;
  monster.lv=12;
  l_m=2;
  for(i=0;i<2;i++)
  {
- strcpy(monster.name,"���ζʸ���");
+ strcpy(monster.name,"케인똘마니");
  monster.attack=my_random(6)+10;
  monster.mp=monster.nmp=monster.mp=monster.nhp=monster.hp=my_random(50)+150;
  monster.gold=50;
@@ -839,7 +839,7 @@ while(1)
  set();
  l_m=l_m;
  }
- strcpy(monster.name,"���������");
+ strcpy(monster.name,"데까드케인");
  monster.attack=my_random(6)+4;
  monster.mp=monster.nmp=monster.mp=monster.nhp=monster.hp=my_random(60)+400;
  monster.gold=60;
@@ -848,6 +848,7 @@ while(1)
  set();
  if(user.wh==4) user.wh++;
  return;}
+
  void Q1_5() {
  int i;
  l_m=10;
@@ -855,7 +856,7 @@ while(1)
  monster.lv=11;
  for(i=0;i<3;i++)
  {
- strcpy(monster.name,"����糪��");
+ strcpy(monster.name,"각목사나이");
  monster.attack=my_random(6)+2;
  monster.mp=monster.nmp=monster.mp=monster.nhp=monster.hp=my_random(60)+100;
  monster.gold=10;
@@ -866,7 +867,7 @@ while(1)
  }
  for(i=0;i<4;i++)
  {
- strcpy(monster.name,"��ù̱���");
+ strcpy(monster.name,"사시미군단");
  monster.attack=my_random(6)+15;
  monster.mp=monster.nmp=monster.mp=monster.nhp=monster.hp=my_random(20)+10;
  monster.gold=30;
@@ -877,7 +878,7 @@ while(1)
  }
  for(i=0;i<3;i++)
  {
- strcpy(monster.name,"����޺���");
+ strcpy(monster.name,"장관급부하");
  monster.attack=my_random(6)+11;
  monster.mp=monster.nmp=monster.mp=monster.nhp=monster.hp=my_random(30)+70;
  monster.gold=10;
@@ -890,25 +891,25 @@ while(1)
  return;
  }
  void Q1_6() {
- if(user.wh>6) {printf("\n ������ ���������� �ѹ� �̻� Ŭ��� �Ұ��� �մϴ�");getch();
+ if(user.wh>6) {printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");getch();
  return;}
  clrscr();
- printf("\nAnddaerial: �ϰ� �� �Ʊ׵� �ǵ�ȳ�?");
+ printf("\nAnddaerial: 니가 내 아그들 건드렸냐?");
  delay(1200);
- printf("\n%s: �׷� ��¿��? �ϰ� �����ذ� �ֳ�?",user.name);
+ printf("\n%s: 그래 어쩔래? 니가 보태준거 있냐?",user.name);
  delay(1200);
- printf("\nAnddaerial: ����. �װ� �ͳ� ������ �װ� �ӳ�?");
+ printf("\nAnddaerial: 없다. 죽고 싶냐 말투가 그게 머냐?");
  delay(1200);
- printf("\n%s: ����.. ���� ������� ���Գ� ���� �����ָ�!!",user.name);
+ printf("\n%s: 후훗.. 간이 배밖으로 나왔나 보군 없애주마!!",user.name);
  delay(1200);
- printf("\nAnddaerial: ������ %d �ۿ� �ȵǴ� ������ �� ������ %d ��!!",user.lv,monster.lv=user.lv+10);
+ printf("\nAnddaerial: 레벨도 %d 밖에 안되는 주제에 내 레벨은 %d 다!!",user.lv,monster.lv=user.lv+10);
  delay(1200);
- printf("\n%s: ��... �׷��� �ºδ�!! -.-;; \n <Enter> ",user.name);
+ printf("\n%s: 헉... 그래도 승부다!! -.-;; \n <Enter> ",user.name);
  getch();
  getch();
 
  l_m=0;
- strcpy(monster.name,"�ȶ�����");
+ strcpy(monster.name,"안때리얼");
  monster.attack=my_random(6)+14;
  monster.mp=monster.nmp=monster.mp=monster.nhp=monster.hp=my_random(300)+770;
  monster.gold=10;
@@ -917,6 +918,7 @@ while(1)
  set();
  if(user.wh==6) user.wh++;
  return;}
+
  void Q2_1() {
  monster.lv=12;
  l_m=5;
@@ -955,7 +957,7 @@ while(1)
  monster.defence=5;
  monster.exp=my_random(50)+20;
  set();
- strcpy(monster.name,"���� �ܱ�");
+ strcpy(monster.name,"동상 단군");
  monster.attack=my_random(10)+16;
  monster.mp=monster.nmp=monster.mp=monster.nhp=monster.hp=my_random(100)+250;
  monster.gold=my_random(50)+150;
@@ -981,14 +983,14 @@ while(1)
  monster.defence=4;
  monster.exp=my_random(30)+5;
  set();
- strcpy(monster.name,"����Ǳ�");
+ strcpy(monster.name,"기니피그");
  monster.attack=my_random(20)+6;
  monster.mp=monster.nmp=monster.mp=monster.nhp=monster.hp=my_random(100)+150;
  monster.gold=my_random(50)+50;
  monster.defence=6;
  monster.exp=my_random(30)+10;
  set();
- strcpy(monster.name,"~�ñ���~");
+ strcpy(monster.name,"~시궁쥐~");
  monster.attack=my_random(46)+16;
  monster.mp=monster.nmp=monster.mp=monster.nhp=monster.hp=my_random(100)+350;
  monster.gold=my_random(50)+10;
@@ -1056,7 +1058,7 @@ while(1)
 
 
 
-	 void M_A()
+void	 M_A()
 	 {
 	  int cr,ud;
 	  randomize();
@@ -1064,16 +1066,16 @@ while(1)
 	  if(ud<0) ud=0;
 
 	  cr=my_random(40);
-	  if(cr==3) {gotoxy(10,13);printf("Ǯ �Ŀ�~! ũ��Ƽ�� ���� %d��ŭ�� ������!",ud*3);
+	  if(cr==3) {gotoxy(10,13);printf("풀 파워~! 크리티컬 어택 %d만큼의 데미지!",ud*3);
 	  monster.nhp=monster.nhp-(ud*3);
 	  getch();
 	 }
 	 else
 	 {
-	 if(ud==0) {gotoxy(10,13);printf("���� �����̳� �ϴٴ� �� ��� Ű������~~ ����..");}
+	 if(ud==0) {gotoxy(10,13);printf(" ~~ ㅋㅋ..");}
 	 else
 	 {
-	 gotoxy(10,13);printf("����� %s���� �������� ������ %d��ŭ�� ����� ���մϴ�....",monster.name,ud);
+	 gotoxy(10,13);printf("당신은 %s에게 물리적인 힘으로 %d만큼의 충격을 가합니다....",monster.name,ud);
 	 monster.nhp-=ud;
 	 }
 	 }
@@ -1093,12 +1095,12 @@ while(1)
   printf("\n");
   switch(s)
   {
-	case 0: printf("����� %s���� ��ġ�� ���� ���ϸ鼭 %d ��ŭ�� ����� �޽��ϴ�...",monster.name,md);  break;
-	case 1: printf("%s�� ����� �� �ö�Ÿ ���İ��� ���� �ڷ� �����鼭 %d�� ����� ���մϴ�..",monster.name,md); break;
-	case 2: printf("%s�� �ܻ��� ����� ������� ���İ��� ������ �ٰ��� �� ���� �հ������� �����ϰ� ��鼭 %d�� �������� �ݴϴ�..",monster.name,md);break;
-	case 3: printf("%s�� �н� 3���� ��Ÿ�� ���� �Ӹ� ���� �� �� ��Ÿ�ϰ� ������� %d��ŭ�� �������� �ݴϴ�..",monster.name,md);break;
-	case 4: printf("���ù����� %s�� �յ��� �������� ����� �� �ڸ� �ķ� ����鼭 %d��ŭ�� �������� �ݴϴ�..",monster.name,md);break;
-	case 5: printf("%s�� ������ ������ �ձ��� ����� ������ �����մϴ�..���İ��� %d��ŭ�� ��û�� ����� ������ �����˴ϴ�...",monster.name,md*2);md=md*2;break;
+	case 0: printf("당신은 %s에게 명치를 가격 당하면서 %d 만큼의 충격을 받습니다...",monster.name,md);  break;
+	case 1: printf("%s가 당신의 목에 올라타 순식간에 목을 뒤로 꺽으면서 %d의 충격을 가합니다..",monster.name,md); break;
+	case 2: printf("%s가 잔상을 남기며 사라지며 순식간에 앞으로 다가와 두 눈을 손가락으로 강력하게 찌르면서 %d의 데미지를 줍니다..",monster.name,md);break;
+	case 3: printf("%s의 분신 3개가 나타나 각각 머리 가슴 배 를 구타하고 사라지며 %d만큼의 데미지를 줍니다..",monster.name,md);break;
+	case 4: printf("무시무시한 %s의 손등이 번개같이 당신의 목 뒤를 후려 갈기면서 %d만큼의 데미지를 줍니다..",monster.name,md);break;
+	case 5: printf("%s의 잔인한 죽음의 손길이 당신의 죽음을 재촉합니다..순식간에 %d만큼의 엄청난 충격이 몸으로 흡수됩니다...",monster.name,md*2);md=md*2;break;
   }
   user.nhp-=md;
   getch();
@@ -1108,13 +1110,13 @@ while(1)
   {
   int bonus,w,in,i,xx,s=0;
   gotoxy(1,13);printf("     Can Private Magic: \n ");
-  printf("\n��������������������������������������������������������������������");
+  printf("\n━━━━━━━━━━━━┳━━━━━━━┳━━━━━┳━━━━━━━");
   for(i=0;i<8;i++)
   {
 	if(magic[i].lv <= user.lv)
-	  {printf("\n%2d.NAME: %12s   �� Damage: %3d  �� Mp: %3d  ��  Level: %3d",s+1,magic[i].name,magic[i].power,magic[i].ump,magic[i].lv);s++;}
+	  {printf("\n%2d.NAME: %12s   ┃ Damage: %3d  ┃ Mp: %3d  ┃  Level: %3d",s+1,magic[i].name,magic[i].power,magic[i].ump,magic[i].lv);s++;}
   }
-	printf("\n��������������������������������������������������������������������");
+	printf("\n━━━━━━━━━━━━┻━━━━━━━┻━━━━━┻━━━━━━━");
   xx:
   printf("\n0.Cancel ,Magic Order(1~%d):",s);
   scanf(" %d",&in);
@@ -1122,7 +1124,7 @@ while(1)
   if(in<0 || in>s || magic[in-1].ump>user.nmp) goto xx;
 	if(in==0)
 	{
-	printf("\n �׷����� �Ұ��� �մϴ�.<Enter>");
+	printf("\n 그런것은 불가능 합니다.<Enter>");
 	getch();
 	set();
 	}
@@ -1132,15 +1134,13 @@ while(1)
 	if(user.cs==1) bonus=my_random(magic[in-1].power+user.lv*4);
 	if(user.cs==2) bonus=my_random(magic[in-1].power+user.lv*8);
 	if(user.cs==3) bonus=my_random(magic[in-1].power+user.lv*6);
-
-
-    switch(w)
+	switch(w)
 	{
-	case 0:textcolor(15);printf("\n �ǿ� ���ָ� �ڵ��̿� �������� %s �� �޾ƶ�~~~",magic[in-1].name); break;
-	case 1:textcolor(15);printf("\n ���� �ư����� ������ �ָ�~~~~%s!!!!",magic[in-1].name);break;
-	case 2:textcolor(15);printf("\n %s!!! ���� ������? ",magic[in-1].name);break;
+	case 0:textcolor(15);printf("\n 피에 굶주린 자들이여 성스러운 %s 를 받아라~~~",magic[in-1].name); break;
+	case 1:textcolor(15);printf("\n 나의 주먹을 맛 보아라~~~~%s!!!!",magic[in-1].name);break;
+	case 2:textcolor(15);printf("\n %s!!! 하핫 아프지? ",magic[in-1].name);break;
 	}
-	printf("\n ����� %s ���� %d ��ŭ�� �������� ���մϴ�",monster.name,magic[in-1].power+bonus);
+	printf("\n 당신은 %s 에게 %d 만큼의 데미지를 가합니다",monster.name,magic[in-1].power+bonus);
 	monster.nhp-=(magic[in-1].power+bonus);
 	user.nmp-=magic[in-1].ump;
 	getch();
@@ -1148,6 +1148,3 @@ while(1)
   if(monster.nhp>0) h_m();
   return;
   }
-
-
-
