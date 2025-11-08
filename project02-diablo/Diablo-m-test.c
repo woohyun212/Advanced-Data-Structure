@@ -1012,7 +1012,7 @@ void Q1_5()
 {
     int i;
     l_m = 10;
-    monster.lv = 11;
+    monster.lv = 11; //이거 왜 두개?
     monster.lv = 11;
     for (i = 0; i < 3; i++)
     {
@@ -1207,6 +1207,7 @@ void Q2_3()
     monster.defence = 6;
     monster.exp = my_random(40) + 130;
     set();
+    if (user.wh == 9) user.wh++;
     return;
 }
 
@@ -1222,9 +1223,76 @@ void Q3_4() { return; }
 void Q3_5() { return; }
 void Q3_6() { return; }
 
-void Q4_1() { return; } // 아정
-void Q4_2() { return; }
-void Q4_3() { return; }
+void Q4_1() { // 아정
+    l_m = 4;
+    for(int i=0;i<3;i++){
+        strcpy(monster.name, "Griffin");
+        monster.attack = my_random(100) + 100;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 600;
+        monster.gold = my_random(50) + 150;
+        monster.defence = 650;
+        monster.exp = my_random(300) + 420;
+        set();
+    }
+    strcpy(monster.name, "Ttirael");
+    monster.attack = my_random(300) + 200;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 1000;
+    monster.gold = my_random(50) + 200;
+    monster.defence = 740;
+    monster.exp = my_random(380) + 440;
+    set();
+    if (user.wh == 19) user.wh++;
+    return; } 
+void Q4_2() {
+    l_m = 5;
+    for(int i=0;i<5;i++){
+        strcpy(monster.name, "Nephalem");
+        monster.attack = my_random(360) + 200;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 570;
+        monster.gold = my_random(220) + 100;
+        monster.defence = 760;
+        monster.exp = my_random(400) + 460;
+        set();
+    }
+    if (user.wh == 20) user.wh++;
+    return; }
+void Q4_3() { 
+    if (user.wh > 21)
+    {
+        printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
+        getch();
+        return;
+    }
+    clrscr();
+    textcolor(9);
+    printf("\nDiablo: 너희가 감히 나를 잡을 수 있을 것이라고 생각하느냐.");
+    delay(1200);
+    textcolor(15);
+    printf("\n%s: 디아블로, 나는 이미 당신의 수많은 부하를 죽이고 왔다.", user.name);
+    delay(1200);
+    textcolor(9);
+    printf("\nDiablo: 너희의 그 모험이 얼마나 어리석은 짓이였는지 알려주마.");
+    delay(1200);
+    textcolor(15);
+    printf("\n%s: ㅋㅋㅋㅋㅋ이제 곧 죽을 녀석의 말은 듣지 않는다.", user.name);
+    delay(1200);
+    textcolor(9);
+    printf("\n%s: 현재 내 레벨은 %d, 너를 죽이기엔 충분한 경험을 쌓았지... 조용히 죽어라 디아블로!",user.name, user.lv);
+    delay(1200);
+    textcolor(15);
+    printf("\nDiablo: 해볼테면 해봐라 나약한 인간... \n <Enter> ");
+    getch();
+    getch();
+
+    l_m = 0;
+    strcpy(monster.name, "DIABLO");
+    monster.attack = my_random(400) + 850;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1000) + 6500;        monster.gold = my_random(220) + 100;
+    monster.defence = 700;
+    monster.exp = my_random(400) + 1000;
+    set();
+    //if (user.wh == 21) user.wh++;
+    return; }
 
 
 void M_A()
