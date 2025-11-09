@@ -1216,12 +1216,279 @@ void Q2_4() { return; }// 우현
 void Q2_5() { return; }
 void Q2_6() { return; }
 
-void Q3_1() { return; } // 준서
-void Q3_2() { return; }
-void Q3_3() { return; }
-void Q3_4() { return; }
-void Q3_5() { return; }
-void Q3_6() { return; }
+// Act 3-1: rebellious squids from QUEST3_1.DAT
+void Q3_1()
+{
+    l_m = 5;
+    monster.lv = 18;
+
+    strcpy(monster.name, "Ink_Rebel");
+    monster.attack = my_random(50) + 70;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(220) + 420;
+    monster.gold = my_random(80) + 120;
+    monster.defence = 45;
+    monster.exp = my_random(80) + 140;
+    set();
+
+    strcpy(monster.name, "Salted_Veteran");
+    monster.attack = my_random(40) + 80;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(250) + 480;
+    monster.gold = my_random(60) + 130;
+    monster.defence = 55;
+    monster.exp = my_random(70) + 150;
+    set();
+
+    strcpy(monster.name, "Sashimi_Berserker");
+    monster.attack = my_random(55) + 95;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(260) + 530;
+    monster.gold = my_random(90) + 150;
+    monster.defence = 60;
+    monster.exp = my_random(90) + 170;
+    set();
+
+    strcpy(monster.name, "Boiled_Enforcer");
+    monster.attack = my_random(60) + 100;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(300) + 570;
+    monster.gold = my_random(80) + 170;
+    monster.defence = 65;
+    monster.exp = my_random(100) + 190;
+    set();
+
+    strcpy(monster.name, "King_Squid");
+    monster.attack = my_random(70) + 120;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 900;
+    monster.gold = my_random(120) + 220;
+    monster.defence = 80;
+    monster.exp = my_random(120) + 210;
+    set();
+
+    if (user.wh == 13) user.wh++;
+    return;
+}
+
+// Act 3-2: crab republic from QUEST3_2.DAT
+void Q3_2()
+{
+    l_m = 6;
+    monster.lv = 20;
+
+    strcpy(monster.name, "Crab_Militia");
+    monster.attack = my_random(55) + 85;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(260) + 520;
+    monster.gold = my_random(90) + 150;
+    monster.defence = 70;
+    monster.exp = my_random(90) + 180;
+    set();
+
+    strcpy(monster.name, "Shell_Guardian");
+    monster.attack = my_random(60) + 90;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(320) + 560;
+    monster.gold = my_random(110) + 170;
+    monster.defence = 90;
+    monster.exp = my_random(100) + 190;
+    set();
+
+    strcpy(monster.name, "Tax_Collector");
+    monster.attack = my_random(70) + 95;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(340) + 600;
+    monster.gold = my_random(120) + 200;
+    monster.defence = 95;
+    monster.exp = my_random(100) + 210;
+    set();
+
+    strcpy(monster.name, "Claw_Senator");
+    monster.attack = my_random(80) + 100;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(360) + 640;
+    monster.gold = my_random(140) + 220;
+    monster.defence = 110;
+    monster.exp = my_random(110) + 220;
+    set();
+
+    strcpy(monster.name, "Republic_Hammer");
+    monster.attack = my_random(80) + 115;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(420) + 700;
+    monster.gold = my_random(140) + 260;
+    monster.defence = 120;
+    monster.exp = my_random(120) + 230;
+    set();
+
+    strcpy(monster.name, "President_Gestin");
+    monster.attack = my_random(90) + 150;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(500) + 1100;
+    monster.gold = my_random(180) + 280;
+    monster.defence = 140;
+    monster.exp = my_random(140) + 260;
+    set();
+
+    if (user.wh == 14) user.wh++;
+    return;
+}
+
+// Act 3-3: demon chefs from QUEST3_3.DAT
+void Q3_3()
+{
+    l_m = 4;
+    monster.lv = 22;
+
+    strcpy(monster.name, "Demonic_LineCook");
+    monster.attack = my_random(70) + 110;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(360) + 640;
+    monster.gold = my_random(120) + 210;
+    monster.defence = 100;
+    monster.exp = my_random(120) + 210;
+    set();
+
+    strcpy(monster.name, "Sous_Chef");
+    monster.attack = my_random(80) + 120;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(380) + 680;
+    monster.gold = my_random(120) + 240;
+    monster.defence = 115;
+    monster.exp = my_random(130) + 220;
+    set();
+
+    strcpy(monster.name, "Sashimi_Wraith");
+    monster.attack = my_random(90) + 130;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(420) + 720;
+    monster.gold = my_random(150) + 250;
+    monster.defence = 120;
+    monster.exp = my_random(140) + 240;
+    set();
+
+    textcolor(9);
+    printf("\n셰프 마고로시: \"신선함의 비결은... 방금 죽은 손님이죠.\"");
+    textcolor(15);
+    strcpy(monster.name, "Chef_Magoroshi");
+    monster.attack = my_random(110) + 170;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(520) + 900;
+    monster.gold = my_random(180) + 260;
+    monster.defence = 140;
+    monster.exp = my_random(160) + 280;
+    set();
+
+    if (user.wh == 15) user.wh++;
+    return;
+}
+
+// Act 3-4: awakened whales from QUEST3_4.DAT
+void Q3_4()
+{
+    l_m = 3;
+    monster.lv = 24;
+
+    strcpy(monster.name, "Rotwave_Whale");
+    monster.attack = my_random(100) + 140;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(520) + 900;
+    monster.gold = my_random(160) + 260;
+    monster.defence = 150;
+    monster.exp = my_random(170) + 260;
+    set();
+
+    strcpy(monster.name, "Sonic_Leviathan");
+    monster.attack = my_random(110) + 160;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(560) + 980;
+    monster.gold = my_random(180) + 300;
+    monster.defence = 160;
+    monster.exp = my_random(180) + 280;
+    set();
+
+    strcpy(monster.name, "Blood_Whale");
+    monster.attack = my_random(140) + 190;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(700) + 1300;
+    monster.gold = my_random(220) + 340;
+    monster.defence = 190;
+    monster.exp = my_random(220) + 320;
+    set();
+
+    if (user.wh == 16) user.wh++;
+    return;
+}
+
+// Act 3-5: soul angler from QUEST3_5.DAT
+void Q3_5()
+{
+    l_m = 4;
+    monster.lv = 25;
+
+    strcpy(monster.name, "Hooked_Spirit");
+    monster.attack = my_random(110) + 150;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(520) + 880;
+    monster.gold = my_random(160) + 280;
+    monster.defence = 160;
+    monster.exp = my_random(170) + 290;
+    set();
+
+    strcpy(monster.name, "Line_Binder");
+    monster.attack = my_random(120) + 160;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(560) + 950;
+    monster.gold = my_random(180) + 300;
+    monster.defence = 170;
+    monster.exp = my_random(180) + 300;
+    set();
+
+    strcpy(monster.name, "Soul_Net");
+    monster.attack = my_random(130) + 170;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(600) + 1000;
+    monster.gold = my_random(190) + 320;
+    monster.defence = 180;
+    monster.exp = my_random(200) + 320;
+    set();
+
+    textcolor(9);
+    printf("\n조낚귀: \"낚싯줄은 이미 네 심장에 닿아 있다.\"");
+    textcolor(15);
+    strcpy(monster.name, "JoNakGwi");
+    monster.attack = my_random(150) + 200;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(700) + 1400;
+    monster.gold = my_random(220) + 360;
+    monster.defence = 200;
+    monster.exp = my_random(220) + 350;
+    set();
+
+    if (user.wh == 17) user.wh++;
+    return;
+}
+
+// Act 3-6: Mephisto encounter from QUEST3_6.DAT
+void Q3_6()
+{
+    if (user.wh > 18)
+    {
+        printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
+        getch();
+        return;
+    }
+
+    clrscr();
+    textcolor(9);
+    printf("\n메피스토: \"어서 오세요. 오늘은 손님이 회가 되는 날입니다.\"");
+    delay(1200);
+    textcolor(15);
+    printf("\n%s: 이 수조에서 사람 머리가 떠다니는 걸 보니 입맛이 싹 달아나는군.", user.name);
+    delay(1200);
+    textcolor(9);
+    printf("\n메피스토: 불결함과 청결, 둘 다 내 것이다. 넌 마지막 재료다.");
+    delay(1200);
+    textcolor(15);
+    printf("\n%s: 네 앞치마에 내 피는 묻지 않을거다. 칼을 내려놔라.", user.name);
+    delay(1200);
+    textcolor(9);
+    printf("\n메피스토: 그럼 직접 썰어주지... \n <Enter> ");
+    getch();
+    getch();
+
+    l_m = 0;
+    strcpy(monster.name, "MEPHISTO");
+    monster.lv = user.lv + 8;
+    monster.attack = my_random(250) + 600;
+    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(700) + 4200;
+    monster.gold = my_random(220) + 500;
+    monster.defence = 320;
+    monster.exp = my_random(300) + 650;
+    set();
+
+    if (user.wh == 18) user.wh++;
+    return;
+}
 
 void Q4_1() { // 아정
     l_m = 4;
