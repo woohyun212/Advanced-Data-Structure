@@ -41,7 +41,6 @@ void delay(int ms)
 {
     // ms 단위 딜레이
     // usleep(ms * 1000);
-    // TODO: 제출 시 원상 복구
     usleep(ms * 1);
 }
 
@@ -627,7 +626,7 @@ void Condition()
     printf("          G   O  L   D: %d \n", user.gold);
     textcolor(15);
     printf("     Can Private Magic: \n ");
-    printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━");
+    printf("\n━━━━━━━━━━━━┳━━━━━━━┳━━━━━┳━━━━━━━");
     textcolor(15);
     for (i = 0; i < 8; i++)
     {
@@ -638,9 +637,9 @@ void Condition()
         }
     }
     textcolor(15);
-    printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
+    printf("\n━━━━━━━━━━━━┻━━━━━━━┻━━━━━┻━━━━━━━");
     printf("\n\n\n  < E N T E R >");
-    getch();getch();
+    getch();
     return;
 }
 
@@ -701,11 +700,10 @@ void Load()
     user.defence = defence;
     user.wh = wh;
     fclose(fp1);
-    if (code != (user.lv + user.cs + user.nhp + user.nmp + user.gold + user.exp) / user.lv + user.lv)
+    if (code == (user.lv + user.cs + user.nhp + user.nmp + user.gold + user.exp) / user.lv + user.lv)
     {
         printf("이런 치사한넘 .. 이런 게임을 에디트 하려 하다니... !!");
         getch();
-        // TODO: 제출 시 원상 복구
         // exit(0);
     }
     return;
@@ -879,6 +877,7 @@ void set()
             break;
         case 3: Potion();
             break;
+            //여기 구현해야함
         }
     }
     return;
@@ -1224,36 +1223,36 @@ void Q3_5() { return; }
 void Q3_6() { return; }
 
 void Q4_1() { // 아정
-    l_m = 4;
-    for(int i=0;i<3;i++){
-        strcpy(monster.name, "Griffin");
-        monster.attack = my_random(100) + 100;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 600;
-        monster.gold = my_random(50) + 150;
-        monster.defence = 650;
-        monster.exp = my_random(300) + 420;
+    l_m = 10;
+    for(int i=0;i<10;i++){
+        strcpy(monster.name, "악마 공무원");
+        monster.attack = my_random(100) + 60;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(200) + 600;
+        monster.gold = my_random(50) + 100;
+        monster.defence = 400;
+        monster.exp = my_random(150) + 320;
         set();
     }
-    strcpy(monster.name, "Ttirael");
-    monster.attack = my_random(300) + 200;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 1000;
-    monster.gold = my_random(50) + 200;
-    monster.defence = 740;
-    monster.exp = my_random(380) + 440;
-    set();
     if (user.wh == 19) user.wh++;
     return; } 
 void Q4_2() {
-    l_m = 5;
-    for(int i=0;i<5;i++){
-        strcpy(monster.name, "Nephalem");
-        monster.attack = my_random(360) + 200;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 570;
-        monster.gold = my_random(220) + 100;
-        monster.defence = 760;
-        monster.exp = my_random(400) + 460;
+    l_m = 4;
+    for(int i=0;i<3;i++){
+        strcpy(monster.name, "악마 공무원");
+        monster.attack = my_random(200) + 200;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(500) + 800;
+        monster.gold = my_random(100) + 150;
+        monster.defence = 600;
+        monster.exp = my_random(250) + 450;
         set();
     }
+    strcpy(monster.name, "곽팀장");
+        monster.attack = my_random(200) + 350;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(800) + 1800;
+        monster.gold = my_random(220) + 300;
+        monster.defence = 760;
+        monster.exp = my_random(400) + 660;
+        set();
     if (user.wh == 20) user.wh++;
     return; }
 void Q4_3() { 
@@ -1264,20 +1263,20 @@ void Q4_3() {
         return;
     }
     clrscr();
-    textcolor(9);
-    printf("\nDiablo: 너희가 감히 나를 잡을 수 있을 것이라고 생각하느냐.");
-    delay(1200);
     textcolor(15);
-    printf("\n%s: 디아블로, 나는 이미 당신의 수많은 부하를 죽이고 왔다.", user.name);
+    printf("\n%s: 결제? 웃기고 있네ㅋㅋㅋ창원시가 그렇게 쉽게 넘어갈거 같냐?", user.name);
     delay(1200);
     textcolor(9);
-    printf("\nDiablo: 너희의 그 모험이 얼마나 어리석은 짓이였는지 알려주마.");
+    printf("\nDiablo: 이미 창원시는 나의 행정력에 무릎을 꿇었다.");
+    delay(1200);
+    textcolor(9);
+    printf("\nDiablo: 이제 네 놈의 죽이고 네 놈의 피로 결제를 해야겠다.");
     delay(1200);
     textcolor(15);
     printf("\n%s: ㅋㅋㅋㅋㅋ이제 곧 죽을 녀석의 말은 듣지 않는다.", user.name);
     delay(1200);
     textcolor(9);
-    printf("\n%s: 현재 내 레벨은 %d, 너를 죽이기엔 충분한 경험을 쌓았지... 조용히 죽어라 디아블로!",user.name, user.lv);
+    printf("\n%s: 이제 창원의 행정을 바로 잡을 시간이다. 디아블로!",user.name);
     delay(1200);
     textcolor(15);
     printf("\nDiablo: 해볼테면 해봐라 나약한 인간... \n <Enter> ");
@@ -1285,12 +1284,26 @@ void Q4_3() {
     getch();
 
     l_m = 0;
-    strcpy(monster.name, "DIABLO");
-    monster.attack = my_random(400) + 850;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1000) + 6500;        monster.gold = my_random(220) + 100;
-    monster.defence = 700;
-    monster.exp = my_random(400) + 1000;
-    set();
+    if(monster.nhp > 666){ //페이즈 1
+        strcpy(monster.name, "DIABLO");
+        monster.attack = my_random(366) + 666;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 3000;        
+        monster.defence = 900;
+        set();
+
+    }else{ //페이즈 2
+        clrscr();
+        textcolor(9);
+        printf("\nDiablo: 생각보다 강하군...그럼 진심으로 널 상대해볼까?");
+        delay(1200);
+        strcpy(monster.name, "DIABLO[각성]");
+        monster.attack = my_random(666) + 666;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 4000;
+        monster.gold = my_random(300) + 666;
+        monster.defence = 1100;
+        monster.exp = my_random(1000) + 1500;
+        set();
+    }
     //if (user.wh == 21) user.wh++;
     return; }
 
@@ -1364,7 +1377,7 @@ void Mg()
     int bonus, w, in, i, xx, s = 0;
     gotoxy(1, 13);
     printf("     Can Private Magic: \n ");
-    printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━");
+    printf("\n━━━━━━━━━━━━┳━━━━━━━┳━━━━━┳━━━━━━━");
     for (i = 0; i < 8; i++)
     {
         if (magic[i].lv <= user.lv)
@@ -1374,7 +1387,7 @@ void Mg()
             s++;
         }
     }
-    printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
+    printf("\n━━━━━━━━━━━━┻━━━━━━━┻━━━━━┻━━━━━━━");
 xx:
     printf("\n0.Cancel ,Magic Order(1~%d):", s);
     scanf(" %d", &in);
