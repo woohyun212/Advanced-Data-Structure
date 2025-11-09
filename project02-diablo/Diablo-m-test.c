@@ -640,7 +640,7 @@ void Condition()
     textcolor(15);
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
     printf("\n\n\n  < E N T E R >");
-    getch();getch()
+    getch();getch();
     return;
 }
 
