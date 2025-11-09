@@ -41,6 +41,7 @@ void delay(int ms)
 {
     // ms 단위 딜레이
     // usleep(ms * 1000);
+    // TODO: 제출 시 원상 복구
     usleep(ms * 1);
 }
 
