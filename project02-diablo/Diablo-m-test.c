@@ -626,7 +626,7 @@ void Condition()
     printf("          G   O  L   D: %d \n", user.gold);
     textcolor(15);
     printf("     Can Private Magic: \n ");
-    printf("\n━━━━━━━━━━━━┳━━━━━━━┳━━━━━┳━━━━━━━");
+    printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━");
     textcolor(15);
     for (i = 0; i < 8; i++)
     {
@@ -637,7 +637,7 @@ void Condition()
         }
     }
     textcolor(15);
-    printf("\n━━━━━━━━━━━━┻━━━━━━━┻━━━━━┻━━━━━━━");
+    printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
     printf("\n\n\n  < E N T E R >");
     getch();
     return;
