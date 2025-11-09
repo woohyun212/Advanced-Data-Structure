@@ -8,15 +8,44 @@
 #include <fcntl.h>
 
 
-void Q1_1(); void Q1_2(); void Q1_3(); void Q1_4(); void Q1_5(); void Q1_6();
-void Q2_1(); void Q2_2(); void Q2_3(); void Q2_4(); void Q2_5(); void Q2_6();
-void Q3_1(); void Q3_2(); void Q3_3(); void Q3_4(); void Q3_5(); void Q3_6();
-void Q4_1(); void Q4_2(); void Q4_3();
-void h_m(); void set();
-void Opening(); void Load(); void Insert_magic(); void Insert_weapon(); void Insert_defence();
-void Play_1(); void Item_store(); void Defence_Store(); void Save_option(); void Condition();
-void Weapon_Store(); void Battle(); void cheatcenter();
-void M_A(); void Mg();
+void Q1_1();
+void Q1_2();
+void Q1_3();
+void Q1_4();
+void Q1_5();
+void Q1_6();
+void Q2_1();
+void Q2_2();
+void Q2_3();
+void Q2_4();
+void Q2_5();
+void Q2_6();
+void Q3_1();
+void Q3_2();
+void Q3_3();
+void Q3_4();
+void Q3_5();
+void Q3_6();
+void Q4_1();
+void Q4_2();
+void Q4_3();
+void h_m();
+void set();
+void Opening();
+void Load();
+void Insert_magic();
+void Insert_weapon();
+void Insert_defence();
+void Play_1();
+void Item_store();
+void Defence_Store();
+void Save_option();
+void Condition();
+void Weapon_Store();
+void Battle();
+void cheatcenter();
+void M_A();
+void Mg();
 int my_random(int n);
 
 
@@ -112,8 +141,8 @@ struct monster_struct
     int exp;
     int gold;
     int defence;
-    int nhp;
-    int nmp;
+    int nhp; // 남은 HP
+    int nmp; // 남은 MP
 } monster;
 
 struct magic_sturct
@@ -640,7 +669,8 @@ void Condition()
     textcolor(15);
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
     printf("\n\n\n  < E N T E R >");
-    getch();getch();
+    getch();
+    getch();
     return;
 }
 
@@ -1207,13 +1237,202 @@ void Q2_3()
     monster.defence = 6;
     monster.exp = my_random(40) + 130;
     set();
+    if (user.wh == 9) user.wh++;
     return;
 }
 
+void set_monster(const char* name, int lv,
+                 int hp_min, int hp_max,
+                 int mp_min, int mp_max,
+                 int att_min, int att_max,
+                 int def,
+                 int gold_min, int gold_max,
+                 int exp_min, int exp_max)
+{
+    strcpy(monster.name, name);
+    monster.lv = lv;
+    monster.nhp = monster.hp = my_random(hp_max - hp_min + 1) + hp_min;
+    monster.nmp = monster.mp = my_random(mp_max - mp_min + 1) + mp_min;
+    monster.attack = my_random(att_max - att_min + 1) + att_min;
+    monster.defence = def;
+    monster.gold = my_random(gold_max - gold_min + 1) + gold_min;
+    monster.exp = my_random(exp_max - exp_min + 1) + exp_min;
+}
 
-void Q2_4() { return; }// 우현
-void Q2_5() { return; }
-void Q2_6() { return; }
+void Q2_4()
+{
+    int i;
+    if (user.lv >= 25)
+    {
+        printf("\n당신은 레벨이 높아 더이상 출입 불가능합니다.<Enter>");
+        getch();
+        return;
+    }
+    clrscr();
+    monster.lv = 20;
+    l_m = 14;
+    for (i = 0; i < 6; i++)
+    {
+        set_monster("고지방 감자튀김", 15, 30, 40, 10, 15,
+                    10, 14, 3, 10, 15, 15, 20);
+        set();
+    }
+    for (i = 0; i < 3; i++)
+    {
+        set_monster("유당 콜라", 16, 32, 42, 14, 19,
+                    12, 16, 3, 13, 18, 18, 23);
+        set();
+    }
+    for (i = 0; i < 3; i++)
+    {
+        set_monster("치즈 슬라임", 17, 80, 90, 15, 20,
+                    10, 15, 4, 10, 15, 15, 20);
+        set();
+    }
+    set_monster("불타는 치즈버거 괴물", 18, 140, 150, 30, 35,
+                18, 21, 4, 10, 15, 15, 20);
+    set();
+    clrscr();
+    printf("\n 뽀너스: Light Healing Potion +1");
+    user.item[0] += 1;
+    getch();
+    clrscr();
+    printf("\n롯데리우스: 리아 올뉴 한우 콰트로 치즈 맥시멈 쉐프의 초이스 단일 상품 29,900원!");
+    delay(1200);
+    printf("\n%s: 그걸 먹을 이유가 있나?", user.name);
+    delay(1200);
+    printf("\n롯데리우스: 알빠노?\n<ENTER>");
+    getch();
+
+    l_m = 0;
+    set_monster("롯데리우스", 20, 220, 230, 40, 45,
+                25, 26, 5, 80, 160, 180, 230);
+    set();
+    clrscr();
+    printf("\n 참깨빵위에 순쇠고기 패티 두 장...");
+    printf("\n\n 뽀너스: Super Healing Potion +1");
+    user.item[2] += 1;
+    getch();
+    if (user.wh == 10) user.wh++;
+    return;
+} // 우현
+
+void Q2_5()
+{
+    int i;
+    if (user.lv >= 26)
+    {
+        printf("\n당신은 레벨이 높아 더이상 출입 불가능합니다.<Enter>");
+        getch();
+        return;
+    }
+    clrscr();
+    monster.lv = 15;
+    l_m = 14;
+    for (i = 0; i < 6; i++)
+    {
+        set_monster("치어 좀비", 16, 60, 80, 15, 25,
+                    12, 16, 2, 18, 19, 25, 35);
+        set();
+    }
+    for (i = 0; i < 4; i++)
+    {
+        set_monster("200dB 악단", 17, 70, 90, 14, 19,
+                    14, 18, 3, 15, 40, 25, 50);
+        set();
+    }
+    for (i = 0; i < 3; i++)
+    {
+        set_monster("블랙 치어리더", 18, 120, 160, 25, 40,
+                    16, 22, 4, 20, 25, 30, 45);
+        set();
+    }
+    set_monster("응원단의 악령", 19, 180, 220, 40, 60,
+                20, 25, 5, 50, 70, 80, 120);
+    set();
+    clrscr();
+    printf("\n치어데몬: 자~! 목소리 안 들려요! 더 크게!!!");
+    delay(500);
+    printf("\n칭칭언니 준비됐어요? 출발합시다~ 라일러 라일러~");
+    delay(1200);
+    getch();
+    getch();
+
+    set_monster("[응원단장] 치어 데몬", 20, 420, 500, 70, 100, 20, 28, 6, 90, 160, 200, 300);
+    set();
+    clrscr();
+    printf("\n응원봉이 부러지고, 지옥 응원가가 멈췄다...");
+    printf("\n당신의 귀에는 아직도 메아리가 남아 있다.");
+    printf("\n보상: Super Healing Potion +1");
+    user.item[2] += 1;
+    getch();
+    if (user.wh == 11) user.wh++;
+    return;
+}
+
+void Q2_6()
+{
+    int i;
+    if (user.lv >= 26)
+    {
+        printf("\n당신은 레벨이 높아 더이상 출입 불가능합니다.<Enter>");
+        getch();
+        return;
+    }
+    clrscr();
+    monster.lv = 15;
+    l_m = 14;
+    for (i = 0; i < 5; i++)
+    {
+        set_monster("Frozen Stew Chunk", 19, 80, 100, 20,
+                    30, 14, 18, 2, 10, 25, 30, 50);
+        set();
+    }
+    for (i = 0; i < 4; i++)
+    {
+        set_monster("Frozen Cucumber", 19, 70, 90, 25,
+                    35, 15, 19, 3, 15, 30, 35, 55);
+        set();
+    }
+    for (i = 0; i < 3; i++)
+    {
+        set_monster("Spirit of Frozen Kimchi", 20, 120, 160, 40,
+                    50, 17, 23, 4, 25, 45, 50, 80);
+        set();
+    }
+    set();
+    clrscr();
+    delay(500);
+    printf("\n듀리엘: 흐윽... 따뜻한 인간의 체온이라니... 불쾌하군...");
+    delay(1000);
+    getch();
+    getch();
+    getch();
+    set_monster("냉장고 듀리엘", 22, 450, 600, 100, 130,
+                24, 32, 6, 0, 0, 0, 0);
+    set();
+    clrscr();
+    printf("\n듀리엘: 네 영혼을 급속 냉동 보관해주지..!!");
+    delay(500);
+    printf("\n냉기야, 퍼져라!!");
+    delay(1200);
+    getch();
+    getch();
+
+    set_monster("냉장고 듀리엘", 22, 550, 650, 100, 130,
+                26, 32, 6, 400, 600, 760, 900);
+    set();
+    clrscr();
+    printf("\n듀리엘이 녹아내린다... 하수구의 냉기가 사라진다.");
+    printf("\n\n보상: Great Healing Potion +1");
+    printf("\n보상: Great Mana Potion +1");
+    user.item[4] += 1;
+    user.item[5] += 1;
+    getch();
+
+    if (user.wh == 12) user.wh++;
+    return;
+}
 
 void Q3_1() { return; } // 준서
 void Q3_2() { return; }
