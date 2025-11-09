@@ -699,11 +699,11 @@ void Load()
     user.gold = gold;
     user.defence = defence;
     user.wh = wh;
-    fclose(fp1);
-    if (code == (user.lv + user.cs + user.nhp + user.nmp + user.gold + user.exp) / user.lv + user.lv)
+    if (code != (user.lv + user.cs + user.nhp + user.nmp + user.gold + user.exp) / user.lv + user.lv)
     {
         printf("이런 치사한넘 .. 이런 게임을 에디트 하려 하다니... !!");
         getch();
+        // TODO: 제출 시 원상 복구
         // exit(0);
     }
     return;
