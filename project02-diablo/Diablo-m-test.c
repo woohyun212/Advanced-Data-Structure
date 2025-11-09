@@ -231,7 +231,7 @@ int main()
 void Insert_weapon()
 {
     int i;
-    FILE* fp13 = fopen("weapon.qwe", "r");
+    FILE* fp13 = fopen("WEAPON.QWE", "r");
     fscanf(fp13, "%d", &count1);
     for (i = 0; i < 100; i++)
         fscanf(fp13, "%s %d %d %d %d", weapon[i].name, &weapon[i].power, &weapon[i].hp_bonus, &weapon[i].mp_bonus,
@@ -360,27 +360,27 @@ void Battle()
             getch();
             continue;
         }
-        if (l == 1) fp24 = fopen("Quest1_1.dat", "rt");
-        if (l == 2) fp24 = fopen("Quest1_2.dat", "rt");
-        if (l == 3) fp24 = fopen("Quest1_3.dat", "rt");
-        if (l == 4) fp24 = fopen("Quest1_4.dat", "rt");
-        if (l == 5) fp24 = fopen("Quest1_5.dat", "rt");
-        if (l == 6) fp24 = fopen("Quest1_6.dat", "rt");
-        if (l == 7) fp24 = fopen("Quest2_1.dat", "rt");
-        if (l == 8) fp24 = fopen("Quest2_2.dat", "rt");
-        if (l == 9) fp24 = fopen("Quest2_3.dat", "rt");
-        if (l == 10) fp24 = fopen("Quest2_4.dat", "rt");
-        if (l == 11) fp24 = fopen("Quest2_5.dat", "rt");
-        if (l == 12) fp24 = fopen("Quest2_6.dat", "rt");
-        if (l == 13) fp24 = fopen("Quest3_1.dat", "rt");
-        if (l == 14) fp24 = fopen("Quest3_2.dat", "rt");
-        if (l == 15) fp24 = fopen("Quest3_3.dat", "rt");
-        if (l == 16) fp24 = fopen("Quest3_4.dat", "rt");
-        if (l == 17) fp24 = fopen("Quest3_5.dat", "rt");
-        if (l == 18) fp24 = fopen("Quest3_6.dat", "rt");
-        if (l == 19) fp24 = fopen("Quest4_1.dat", "rt");
-        if (l == 20) fp24 = fopen("Quest4_2.dat", "rt");
-        if (l == 21) fp24 = fopen("Quest4_3.dat", "rt");
+        if (l == 1) fp24 = fopen("QUEST1_1.DAT", "rt");
+        if (l == 2) fp24 = fopen("QUEST1_2.DAT", "rt");
+        if (l == 3) fp24 = fopen("QUEST1_3.DAT", "rt");
+        if (l == 4) fp24 = fopen("QUEST1_4.DAT", "rt");
+        if (l == 5) fp24 = fopen("QUEST1_5.DAT", "rt");
+        if (l == 6) fp24 = fopen("QUEST1_6.DAT", "rt");
+        if (l == 7) fp24 = fopen("QUEST2_1.DAT", "rt");
+        if (l == 8) fp24 = fopen("QUEST2_2.DAT", "rt");
+        if (l == 9) fp24 = fopen("QUEST2_3.DAT", "rt");
+        if (l == 10) fp24 = fopen("QUEST2_4.DAT", "rt");
+        if (l == 11) fp24 = fopen("QUEST2_5.DAT", "rt");
+        if (l == 12) fp24 = fopen("QUEST2_6.DAT", "rt");
+        if (l == 13) fp24 = fopen("QUEST3_1.DAT", "rt");
+        if (l == 14) fp24 = fopen("QUEST3_2.DAT", "rt");
+        if (l == 15) fp24 = fopen("QUEST3_3.DAT", "rt");
+        if (l == 16) fp24 = fopen("QUEST3_4.DAT", "rt");
+        if (l == 17) fp24 = fopen("QUEST3_5.DAT", "rt");
+        if (l == 18) fp24 = fopen("QUEST3_6.DAT", "rt");
+        if (l == 19) fp24 = fopen("QUEST4_1.DAT", "rt");
+        if (l == 20) fp24 = fopen("QUEST4_2.DAT", "rt");
+        if (l == 21) fp24 = fopen("QUEST4_3.DAT", "rt");
         if (l == 0) break;
         if (l > 0 && l <= user.wh)
         {
@@ -612,7 +612,7 @@ void Save_option()
     FILE* fp3;
     clrscr();
     user.code = (user.lv + user.cs + user.nhp + user.nmp + user.gold + user.exp) / user.lv + user.lv;
-    fp3 = fopen("savedata.sav", "w+");
+    fp3 = fopen("SAVEDATA.SAV", "w+");
     fprintf(fp3, "%s", user.name);
     fprintf(fp3, "\n%d", user.lv);
     fprintf(fp3, "\n%d", user.cs);
@@ -678,9 +678,9 @@ void Insert_magic()
 {
     FILE* fp2;
     int i;
-    if (user.cs == 1) fp2 = fopen("Amamagic.dat", "rt");
-    if (user.cs == 2) fp2 = fopen("Socmagic.dat", "rt");
-    if (user.cs == 3) fp2 = fopen("Necmagic.dat", "rt");
+    if (user.cs == 1) fp2 = fopen("AMAMAGIC.DAT", "rt");
+    if (user.cs == 2) fp2 = fopen("SOCMAGIC.DAT", "rt");
+    if (user.cs == 3) fp2 = fopen("NECMAGIC.DAT", "rt");
     for (i = 0; i < 8; i++)
         fscanf(fp2, "%s %d %d %d", magic[i].name, &magic[i].power, &magic[i].ump, &magic[i].lv);
     fclose(fp2);
@@ -694,7 +694,7 @@ void Load()
     int code, lv, cs, nmp, defence, gold, mp, nhp, hp, exp, attack, wh;
     FILE* fp1;
     clrscr();
-    fp1 = fopen("savedata.sav", "rt");
+    fp1 = fopen("SAVEDATA.SAV", "rt");
     fscanf(fp1, "%s", name);
     fscanf(fp1, "%d", &lv);
     fscanf(fp1, "%d", &cs);
@@ -743,7 +743,7 @@ void Load()
 
 void Opening()
 {
-    FILE* fp0 = fopen("Opening.qwe", "rt");
+    FILE* fp0 = fopen("OPENING.QWE", "rt");
     int ch, i;
     char data;
     randomize();
