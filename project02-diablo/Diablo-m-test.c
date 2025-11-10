@@ -1710,7 +1710,7 @@ void Q3_6()
 }
 
 void Q4_1() { // 아정
-    l_m = 10;
+    l_m = 5;
     monster.lv = 27;
     for(int i=0;i<5;i++){
         strcpy(monster.name, "악마 공무원");
