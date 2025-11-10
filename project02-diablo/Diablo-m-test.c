@@ -1711,34 +1711,36 @@ void Q3_6()
 
 void Q4_1() { // 아정
     l_m = 10;
-    for(int i=0;i<10;i++){
+    monster.lv = 27;
+    for(int i=0;i<5;i++){
         strcpy(monster.name, "악마 공무원");
-        monster.attack = my_random(100) + 60;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(200) + 600;
-        monster.gold = my_random(50) + 100;
-        monster.defence = 400;
-        monster.exp = my_random(150) + 320;
+        monster.attack = my_random(225) + 300;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1050) + 2100;
+        monster.gold = my_random(330) + 540;
+        monster.defence = 300;
+        monster.exp = my_random(330) + 525;
         set();
     }
     if (user.wh == 19) user.wh++;
     return; } 
 void Q4_2() {
     l_m = 4;
+    monster.lv = 29;
     for(int i=0;i<3;i++){
         strcpy(monster.name, "악마 공무원");
-        monster.attack = my_random(200) + 200;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(500) + 800;
-        monster.gold = my_random(100) + 150;
-        monster.defence = 600;
-        monster.exp = my_random(250) + 450;
+        monster.attack = my_random(270) + 360;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1,260) + 2,520;
+        monster.gold = my_random(400) + 650;
+        monster.defence = 360;
+        monster.exp = my_random(600) + 630;
         set();
     }
     strcpy(monster.name, "곽팀장");
-        monster.attack = my_random(200) + 350;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(800) + 1800;
-        monster.gold = my_random(220) + 300;
-        monster.defence = 760;
-        monster.exp = my_random(400) + 660;
+        monster.attack = my_random(300) + 400;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1,400) + 2,700;
+        monster.gold = my_random(435) + 710;
+        monster.defence = 400;
+        monster.exp = my_random(430) + 700;
         set();
     if (user.wh == 20) user.wh++;
     return; }
@@ -1773,9 +1775,9 @@ void Q4_3() {
     l_m = 0;
     if(monster.nhp > 666){ //페이즈 1
         strcpy(monster.name, "DIABLO");
-        monster.attack = my_random(366) + 666;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 3000;        
-        monster.defence = 900;
+        monster.attack = my_random(350) + 480;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(830) + 1,660;        
+        monster.defence = 480;
         set();
 
     }else{ //페이즈 2
@@ -1783,12 +1785,12 @@ void Q4_3() {
         textcolor(9);
         printf("\nDiablo: 생각보다 강하군...그럼 진심으로 널 상대해볼까?");
         delay(1200);
-        strcpy(monster.name, "DIABLO[각성]");
-        monster.attack = my_random(666) + 666;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 4000;
-        monster.gold = my_random(300) + 666;
-        monster.defence = 1100;
-        monster.exp = my_random(1000) + 1500;
+    strcpy(monster.name, "DIABLO[각성]");
+        monster.attack = my_random(530) + 720;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1,660) + 3,330;
+        monster.gold = my_random(700) + 1,140;
+        monster.defence = 570;
+        monster.exp = my_random(700) + 1,110;
         set();
     }
     //if (user.wh == 21) user.wh++;
