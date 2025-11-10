@@ -1729,7 +1729,7 @@ void Q4_2() {
     for(int i=0;i<3;i++){
         strcpy(monster.name, "악마 공무원");
         monster.attack = my_random(270) + 360;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1,260) + 2,520;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1260) + 2520;
         monster.gold = my_random(400) + 650;
         monster.defence = 360;
         monster.exp = my_random(600) + 630;
@@ -1737,7 +1737,7 @@ void Q4_2() {
     }
     strcpy(monster.name, "곽팀장");
         monster.attack = my_random(300) + 400;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1,400) + 2,700;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1400) + 2700;
         monster.gold = my_random(435) + 710;
         monster.defence = 400;
         monster.exp = my_random(430) + 700;
@@ -1776,7 +1776,7 @@ void Q4_3() {
     if(monster.nhp > 666){ //페이즈 1
         strcpy(monster.name, "DIABLO");
         monster.attack = my_random(350) + 480;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(830) + 1,660;        
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(830) + 1660;        
         monster.defence = 480;
         set();
 
@@ -1787,10 +1787,10 @@ void Q4_3() {
         delay(1200);
     strcpy(monster.name, "DIABLO[각성]");
         monster.attack = my_random(530) + 720;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1,660) + 3,330;
-        monster.gold = my_random(700) + 1,140;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1660) + 3330;
+        monster.gold = my_random(700) + 1140;
         monster.defence = 570;
-        monster.exp = my_random(700) + 1,110;
+        monster.exp = my_random(700) + 1110;
         set();
     }
     //if (user.wh == 21) user.wh++;
