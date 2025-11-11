@@ -506,10 +506,10 @@ void Potion()
             if (user.nmp > user.mp) user.nmp = user.mp;
             user.item[5]--;
             break;
-        case 7: user.nhp += user.hp;
+        case 7: user.nhp = user.hp;
             user.item[6]--;
             break;
-        case 8: user.nmp += user.nmp;
+        case 8: user.nmp = user.mp;
             user.item[7]--;
             break;
         }
