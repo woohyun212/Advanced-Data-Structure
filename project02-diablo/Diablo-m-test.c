@@ -439,42 +439,44 @@ void Potion()
     printf("\nWhat you eat? :  ");
     scanf("%d", &l);
     if (l == 9) set();
-    if (user.item[l - 1] != 0)
-    {
-        switch (l)
+    if(l>=1 && l<=8){
+        if (user.item[l - 1] != 0)
         {
-        case 1: user.nhp += 25;
-            if (user.nhp > user.hp) user.nhp = user.hp;
-            user.item[0]--;
-            break;
-        case 2: user.nmp += 25;
-            if (user.nmp > user.mp) user.nmp = user.mp;
-            user.item[1]--;
-            break;
-        case 3: user.nhp += 50;
-            if (user.nhp > user.hp) user.nhp = user.hp;
-            user.item[2]--;
-            break;
-        case 4: user.nmp += 50;
-            if (user.nmp > user.mp) user.nmp = user.mp;
-            user.item[3]--;
-            break;
-        case 5: user.nhp += 100;
-            if (user.nhp > user.hp) user.nhp = user.hp;
-            user.item[4]--;
-            break;
-        case 6: user.nmp += 100;
-            if (user.nmp > user.mp) user.nmp = user.mp;
-            user.item[5]--;
-            break;
-        case 7: user.nhp += user.hp;
-            user.item[6]--;
-            break;
-        case 8: user.nmp += user.nmp;
-            user.item[7]--;
-            break;
+            switch (l)
+            {
+            case 1: user.nhp += 25;
+                if (user.nhp > user.hp) user.nhp = user.hp;
+                user.item[0]--;
+                break;
+            case 2: user.nmp += 25;
+                if (user.nmp > user.mp) user.nmp = user.mp;
+                user.item[1]--;
+                break;
+            case 3: user.nhp += 50;
+                if (user.nhp > user.hp) user.nhp = user.hp;
+                user.item[2]--;
+                break;
+            case 4: user.nmp += 50;
+                if (user.nmp > user.mp) user.nmp = user.mp;
+                user.item[3]--;
+                break;
+            case 5: user.nhp += 100;
+                if (user.nhp > user.hp) user.nhp = user.hp;
+                user.item[4]--;
+                break;
+            case 6: user.nmp += 100;
+                if (user.nmp > user.mp) user.nmp = user.mp;
+                user.item[5]--;
+                break;
+            case 7: user.nhp += user.hp;
+                user.item[6]--;
+                break;
+            case 8: user.nmp += user.nmp;
+                user.item[7]--;
+                break;
+            }
+            h_m();
         }
-        h_m();
     }
     else
     {
