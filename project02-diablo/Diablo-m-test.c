@@ -48,7 +48,7 @@ void M_A();
 void Mg();
 int my_random(int n);
 int scani();
-void Func_HWND();
+void state_handler();
 void set_monster(const char* name, int lv,
                  int hp_min, int hp_max,
                  int mp_min, int mp_max,
@@ -186,7 +186,7 @@ int scani()
     }
 }
 
-void Func_HWND(){
+void state_handler(){
     int Func_set = 0;
     while(Func_set != -1){
         switch (Func_set){
@@ -297,7 +297,7 @@ int main()
     Insert_magic();
     Insert_weapon();
     Insert_defence();
-    Func_HWND(); //Play_1();
+    state_handler(); //Play_1();
     return 0;
 }
 
