@@ -514,9 +514,8 @@ void Potion()
     printf("\nWhat you eat? :  ");
     l = scani(); // scanf -> scani
     if (l == 9) set();
-    if (user.item[l - 1] != 0)
-    {
-        switch (l)
+    if(l>=1 && l<=8){
+        if (user.item[l - 1] != 0)
         {
         case 1: user.nhp += 25;
             if (user.nhp > user.hp) user.nhp = user.hp;
@@ -549,7 +548,7 @@ void Potion()
             user.item[7]--;
             break;
         }
-        h_m();
+      h_m();
     }
     else
     {
