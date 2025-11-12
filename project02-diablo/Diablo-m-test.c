@@ -49,6 +49,13 @@ void Mg();
 int my_random(int n);
 int scani();
 
+void flush_stdin(void)
+{
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF)
+    {
+    }
+}
 
 void clrscr()
 {
@@ -683,6 +690,7 @@ void Condition()
 {
     int i;
     clrscr();
+    flush_stdin();
     textcolor(15);
     printf("\n");
     printf("          N   a  m   e: %s\n", user.name);
@@ -708,7 +716,6 @@ void Condition()
     textcolor(15);
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
     printf("\n\n\n  < E N T E R >");
-    getch();
     getch();
     return;
 }
@@ -1761,7 +1768,7 @@ void Q4_1() { // 아정
         set();
     }
     if (user.wh == 19) user.wh++;
-    return; } 
+    return; }
 void Q4_2() {
     l_m = 4;
     monster.lv = 29;
@@ -1783,7 +1790,7 @@ void Q4_2() {
         set();
     if (user.wh == 20) user.wh++;
     return; }
-void Q4_3() { 
+void Q4_3() {
     if (user.wh > 21)
     {
         printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
