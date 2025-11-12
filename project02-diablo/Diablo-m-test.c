@@ -343,6 +343,7 @@ int Play_1()
     clrscr();
     //user.nhp = user.hp; //배틀 중에 변경된 체력과 마나로 유지하기 위해 초기화 로직을 지움.
     //user.nmp = user.mp;
+    /*
     for (i = 0; i < 8; i++)
         if (user.item[i] > 20)
         {
@@ -358,6 +359,7 @@ int Play_1()
         getch();
         clrscr();
     }
+    */
     printf("     ━━━━━━━━━ Camp ━━━━━━━━\n\n");
     printf("                    1. Condition                  \n");
     printf("                    2. Item Store                 \n");
@@ -400,7 +402,7 @@ void cheatcenter()
         if (ca < 1 || ca > 5) continue;
         switch (ca)
         {
-        case 1: user.gold += 10000;
+        case 1: user.gold += 1000000; // TODO: 10000으로 수정
             break;
         case 2: user.attack += 1;
             break;
@@ -658,6 +660,13 @@ void Defence_Store()
             printf("\nDEFENCE: %3d + %3d -> %3d", user.defence - defence[l - 1].defence, defence[l - 1].defence,
                    user.defence);
             getch();
+            if(user.defence > 20){ // Play_1()의 디펜스 하락 로직 상점에서 방어구 구매 시점으로 이동
+                user.defence = 20;
+                clrscr();
+                printf("\n디펜스가 20이상이 되면 자동으로 디펜스가 하락됩니다.");
+                getch();
+                clrscr();
+            }
         }
     }
     return;
@@ -687,10 +696,16 @@ void Item_store()
         l = scani(); // scanf -> scani
         if (l <= 0 || l >= 10) continue;
         if (l == 9) break;
-        if (cost[l - 1] > user.gold && l > 0 && l < 9)
+        if (cost[l - 1] > user.gold) // && l > 0 && l < 9 전처리 있으므로 삭제
         {
             clrscr();
             printf("\n Need More Money");
+            getch();
+            continue;
+        }
+        else if(user.item[l-1] >= 20){ // Play_1의 물약 개수 검증 상점에 구현
+            clrscr();
+            printf("\n You can't buy item more than 20");
             getch();
             continue;
         }
