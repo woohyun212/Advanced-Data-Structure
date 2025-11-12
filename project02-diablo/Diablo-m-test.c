@@ -75,6 +75,11 @@ void clrscr()
 void textcolor(int color)
 {
     // 색깔바꾸기
+    if(color<8){
+        printf("\033[%dm", color + 30); //텍스트의 전경색 계산
+    }else{
+        printf("\033[%dm", color + 82); //텍스트의 밝은 전경색 계산
+    }
 }
 
 void gotoxy(int x, int y)
