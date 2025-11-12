@@ -926,7 +926,7 @@ int set()
             getch();
             user.exp -= monster.exp;
             user.gold += monster.gold;
-            if(l_m>0){l_m--};
+            if(l_m>0){l_m--;};
             if (user.exp <= 0)
             {
                 clrscr();
@@ -1101,7 +1101,7 @@ void Q1_5()
     int i;
     l_m = 10;
     monster.lv = 11; //이거 왜 두개?
-    monster.lv = 11;
+    //monster.lv = 11;
     for (i = 0; i < 3; i++)
     {
         set_monster("각목사나이", 11, 100, 160, 100, 160,
