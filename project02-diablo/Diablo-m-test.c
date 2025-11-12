@@ -6,7 +6,6 @@
 #include <unistd.h>
 #ifdef _WIN32
     #include <conio.h>
-    #include <windows.h>
 #else
     #include <termios.h>
     #include <fcntl.h>
@@ -261,7 +260,7 @@ int main()
 {
     int a;
     #ifdef _WIN32 
-        SetConsoleOutputCP(65001); 
+        system("chcp 65001");
     #endif
     randomize();
     cheat = 0;
