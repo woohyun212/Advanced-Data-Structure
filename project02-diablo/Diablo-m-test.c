@@ -516,8 +516,9 @@ void Potion()
     printf("\nWhat you eat? :  ");
     l = scani(); // scanf -> scani
     if (l == 9) set();
-    if(l>=1 && l<=8){
-        switch (user.item[l - 1] != 0)
+    if (user.item[l - 1] != 0)
+    {
+        switch (l)
         {
         case 1: user.nhp += 25;
             if (user.nhp > user.hp) user.nhp = user.hp;
@@ -548,6 +549,8 @@ void Potion()
             break;
         case 8: user.nmp = user.mp; // 기존에는 현재 마나를 두배로 만드는 연산을 했다. 오버플로우 가능성
             user.item[7]--;
+            break;
+        default:
             break;
         }
       h_m();
