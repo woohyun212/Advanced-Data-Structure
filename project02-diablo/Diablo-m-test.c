@@ -4,8 +4,13 @@
 #include <math.h>
 #include <time.h>
 #include <unistd.h>
-#include <termios.h>
-#include <fcntl.h>
+#ifdef _WIN32
+    #include <conio.h>
+    #include <windows.h>
+#else
+    #include <termios.h>
+    #include <fcntl.h>
+#endif
 
 
 void Q1_1();
@@ -96,7 +101,7 @@ void delay(int ms)
     usleep(ms * 1);
 }
 
-
+#if !defined(_WIN32)
 int kbhit(void)
 {
     // 키 입력 여부 반환 함수
@@ -139,7 +144,7 @@ int getch(void)
     tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
     return ch;
 }
-
+#endif
 
 int my_random(int n)
 {
@@ -255,6 +260,9 @@ int cheat = 0, l_m, count1, count2;
 int main()
 {
     int a;
+    #ifdef _WIN32 
+        SetConsoleOutputCP(65001); 
+    #endif
     randomize();
     cheat = 0;
     while (1)
