@@ -30,7 +30,7 @@ void Q4_1();
 void Q4_2();
 void Q4_3();
 void h_m();
-void set();
+int set(); // 전투의 결과를 알려주도록 Set() 반환값을 void -> int로 변경
 void Opening();
 void Load();
 void Insert_magic();
@@ -186,24 +186,6 @@ int scani()
     }
 }
 
-void state_handler(){
-    int Func_set = 0;
-    while(Func_set != -1){
-        switch (Func_set){
-            case 0: Func_set = Play_1(); break; // Play_1()은 사용자 입력을 q로 반환하는 int 함수로 변경. exit == q
-            case 1: Condition(); Func_set = 0; break;
-            case 2: Item_store(); Func_set = 0; break;
-            case 3: Weapon_Store(); Func_set = 0; break;
-            case 4: Defence_Store(); Func_set = 0; break;
-            case 5: Battle(); Func_set = 0; break;
-            case 6: Save_option(); Func_set = 0; break;
-            case 7: Func_set = -1; break;
-            case 99: cheatcenter(); Func_set = 0; break; // 원래 1008인데 일단 99로 설정
-            default: Func_set = -1;
-        }
-    }
-}
-
 struct monster_struct
 {
     char name[100];
@@ -301,6 +283,26 @@ int main()
     return 0;
 }
 
+void state_handler(){
+    int Func_set = 0;
+    user.nhp = user.hp;
+    user.nmp = user.mp;
+    while(Func_set != -1){
+        switch (Func_set){
+            case 0: Func_set = Play_1(); break; // Play_1()은 사용자 입력을 q로 반환하는 int 함수로 변경. exit == q
+            case 1: Condition(); Func_set = 0; break;
+            case 2: Item_store(); Func_set = 0; break;
+            case 3: Weapon_Store(); Func_set = 0; break;
+            case 4: Defence_Store(); Func_set = 0; break;
+            case 5: Battle(); Func_set = 0; break;
+            case 6: Save_option(); Func_set = 0; break;
+            case 7: Func_set = -1; break;
+            case 99: cheatcenter(); Func_set = 0; break; // 원래 1008인데 일단 99로 설정
+            default: Func_set = -1;
+        }
+    }
+}
+
 void Insert_weapon()
 {
     int i;
@@ -329,8 +331,8 @@ int Play_1()
 {
     int i, q;
     clrscr();
-    user.nhp = user.hp;
-    user.nmp = user.mp;
+    //user.nhp = user.hp; //배틀 중에 변경된 체력과 마나로 유지하기 위해 초기화 로직을 지움.
+    //user.nmp = user.mp;
     for (i = 0; i < 8; i++)
         if (user.item[i] > 20)
         {
@@ -515,7 +517,7 @@ void Potion()
     l = scani(); // scanf -> scani
     if (l == 9) set();
     if(l>=1 && l<=8){
-        if (user.item[l - 1] != 0)
+        switch (user.item[l - 1] != 0)
         {
         case 1: user.nhp += 25;
             if (user.nhp > user.hp) user.nhp = user.hp;
@@ -889,7 +891,7 @@ void Opening()
     return;
 }
 
-void set()
+int set()
 {
     int re, input;
     randomize();
@@ -983,10 +985,10 @@ void set()
             break;
         case 3: Potion();
             break;
-            //여기 구현해야함
+        case 4: return 0; // Run Away 구현
         }
     }
-    return;
+    return 1;
 }
 
 void Q1_1()
@@ -1005,19 +1007,19 @@ void Q1_1()
     {
         set_monster("Skel_Hasu", 1, 10, 17, 1, 8,
                     3, 7, 0, 1, 7, 1, 5);
-        set();
+        if(set() == 0) return;
     }
     for (i = 0; i < 10; i++)
     {
         set_monster("Skel_Mid", 1, 7, 20, 7, 20,
                     2, 7, 2, 3, 8, 1, 6);
-        set();
+        if(set() == 0) return;
     }
     for (i = 0; i < 9; i++)
     {
         set_monster("Skel_Gosu", 1, 9, 30, 9, 30,
                     3, 4, 3, 1, 4, 2, 9);
-        set();
+        if(set() == 0) return;
     }
     clrscr();
     printf("\n 뽀너스: Light Healing Potion +1");
@@ -1027,7 +1029,7 @@ void Q1_1()
     strcpy(monster.name, "Skel_Boss");
     set_monster("Skel_Boss", 3, 60, 65, 60, 65,
                 5, 9, 1, 1, 8, 7, 42);
-    set();
+    if(set() == 0) return;
     if (user.wh == 1) user.wh++;
     return;
 }
@@ -1037,10 +1039,10 @@ void Q1_2()
     l_m = 1;
     set_monster("Iron_Fish", 3, 150, 160, 150, 160,
                 5, 10, 2, 50, 56, 22, 28);
-    set();
+    if(set() == 0) return;
     set_monster("Gold_Fish", 8, 210, 250, 210, 250,
                 5, 10, 6, 45, 51, 30, 37);
-    set();
+    if(set() == 0) return;
     if (user.wh == 2) user.wh++;
     return;
 }
@@ -1050,7 +1052,7 @@ void Q1_3()
     l_m = 0;
     set_monster("Saladin", 10, 250, 320, 250, 320,
                 4, 10, 3, 100, 100, 45, 81);
-    set();
+    if(set() == 0) return;
     if (user.wh == 3) user.wh++;
     return;
 }
@@ -1064,12 +1066,12 @@ void Q1_4()
     {
         set_monster("케인똘마니", 12, 150, 200, 150, 200,
                     10, 16, 0, 50, 50, 14, 20);
-        set();
+        if(set() == 0) return;
         //l_m = l_m; // 쓸데없는 배정문 삭제
     }
     set_monster("데까드케인", 12, 400, 460, 400, 460,
                 4, 9, 5, 60, 60, 37, 107);
-    set();
+    if(set() == 0) return;
     if (user.wh == 4) user.wh++;
     return;
 }
@@ -1084,19 +1086,19 @@ void Q1_5()
     {
         set_monster("각목사나이", 11, 100, 160, 100, 160,
                     2, 7, 1, 10, 10, 10, 16);
-        set();
+        if(set() == 0) return;
     }
     for (i = 0; i < 4; i++)
     {
         set_monster("사시미군단", 11, 10, 30, 10, 30,
                     15, 20, 2, 30, 30, 10, 16);
-        set();
+        if(set() == 0) return;
     }
     for (i = 0; i < 3; i++)
     {
         set_monster("장관급부하", 11, 70, 100, 70, 100,
                     11, 16, 4, 10, 10, 20, 26);
-        set();
+        if(set() == 0) return;
     }
     if (user.wh == 5) user.wh++;
     return;
@@ -1128,7 +1130,7 @@ void Q1_6()
     l_m = 0;
     set_monster("안때리얼", user.lv + 10, 770, 1070, 770, 1070,
                 14, 20, 3, 10, 10, 200, 600);
-    set();
+    if(set() == 0) return;
     if (user.wh == 6) user.wh++;
     return;
 }
@@ -1139,22 +1141,22 @@ void Q2_1()
     l_m = 5;
     set_monster("Turtle_1", 12, 150, 250, 150, 250,
                 6, 26, 8, 50, 100, 6, 35);
-    set();
+    if(set() == 0) return;
     set_monster("Turtle_2", 12, 150, 250, 150, 250,
                 6, 26, 6, 50, 100, 6, 35);
-    set();
+    if(set() == 0) return;
     set_monster("Turtle_3", 12, 150, 250, 150, 250,
                 6, 26, 7, 50, 100, 6, 35);
-    set();
+    if(set() == 0) return;
     set_monster("Turtle_4", 12, 150, 250, 150, 250,
                 6, 26, 4, 50, 100, 6, 35);
-    set();
+    if(set() == 0) return;
     set_monster("Turtle_5", 12, 150, 250, 150, 250,
                 6, 36, 5, 10, 39, 20, 70);
-    set();
+    if(set() == 0) return;
     set_monster("동상 단군", 12, 250, 350, 250, 350,
                 16, 26, 9, 150, 200, 40, 80);
-    set();
+    if(set() == 0) return;
 
     if (user.wh == 7) user.wh++;
     return;
@@ -1165,16 +1167,16 @@ void Q2_2()
     l_m = 4;
     set_monster("GoldHamster", 9, 150, 250, 150, 250,
                 8, 28, 7, 10, 60, 8, 47);
-    set();
+    if(set() == 0) return;
     set_monster("Jangarian", 9, 250, 350, 250, 350,
                 10, 30, 4, 10, 60, 5, 34);
-    set();
+    if(set() == 0) return;
     set_monster("기니피그", 9, 150, 250, 150, 250,
                             6, 26, 6, 50, 100, 10, 40);
-    set();
+    if(set() == 0) return;
     set_monster("~시궁쥐~", 9, 350, 450, 350, 450,
                             16, 62, 3, 10, 60, 40, 80);
-    set();
+    if(set() == 0) return;
     if (user.wh == 8) user.wh++;
     return;
 }
@@ -1184,19 +1186,19 @@ void Q2_3()
     l_m = 4;
     set_monster("Boradolei", 10, 350, 450, 350, 450,
                             16, 52, 3, 10, 60, 30, 70);
-    set();
+    if(set() == 0) return;
     set_monster("Ddubi", 10, 350, 450, 350, 450,
                         16, 52, 3, 10, 60, 30, 70);
-    set();
+    if(set() == 0) return;
     set_monster("NaNa", 10, 350, 450, 350, 450,
                         16, 52, 3, 10, 60, 30, 70);
-    set();
+    if(set() == 0) return;
     set_monster("Bo", 10, 350, 450, 350, 450,
                         16, 52, 3, 10, 60, 30, 70);
-    set();
+    if(set() == 0) return;
     set_monster("BabyOfSun", 10, 1550, 1650, 1550, 1650,
                     8, 18, 6, 100, 600, 130, 170);
-    set();
+    if(set() == 0) return;
     if (user.wh == 9) user.wh++;
     return;
 }
@@ -1235,23 +1237,23 @@ void Q2_4()
     {
         set_monster("고지방 감자튀김", 15, 30, 40, 10, 15,
                     10, 14, 3, 10, 15, 15, 20);
-        set();
+        if(set() == 0) return;
     }
     for (i = 0; i < 3; i++)
     {
         set_monster("유당 콜라", 16, 32, 42, 14, 19,
                     12, 16, 3, 13, 18, 18, 23);
-        set();
+        if(set() == 0) return;
     }
     for (i = 0; i < 3; i++)
     {
         set_monster("치즈 슬라임", 17, 80, 90, 15, 20,
                     10, 15, 4, 10, 15, 15, 20);
-        set();
+        if(set() == 0) return;
     }
     set_monster("불타는 치즈버거 괴물", 18, 140, 150, 30, 35,
                 18, 21, 4, 10, 15, 15, 20);
-    set();
+    if(set() == 0) return;
     clrscr();
     printf("\n 뽀너스: Light Healing Potion +1");
     user.item[0] += 1;
@@ -1267,7 +1269,7 @@ void Q2_4()
     l_m = 0;
     set_monster("롯데리우스", 20, 220, 230, 40, 45,
                 25, 26, 5, 80, 160, 180, 230);
-    set();
+    if(set() == 0) return;
     clrscr();
     printf("\n 참깨빵위에 순쇠고기 패티 두 장...");
     printf("\n\n 뽀너스: Super Healing Potion +1");
@@ -1293,23 +1295,23 @@ void Q2_5()
     {
         set_monster("치어 좀비", 16, 60, 80, 15, 25,
                     12, 16, 2, 18, 19, 25, 35);
-        set();
+        if(set() == 0) return;
     }
     for (i = 0; i < 4; i++)
     {
         set_monster("200dB 악단", 17, 70, 90, 14, 19,
                     14, 18, 3, 15, 40, 25, 50);
-        set();
+        if(set() == 0) return;
     }
     for (i = 0; i < 3; i++)
     {
         set_monster("블랙 치어리더", 18, 120, 160, 25, 40,
                     16, 22, 4, 20, 25, 30, 45);
-        set();
+        if(set() == 0) return;
     }
     set_monster("응원단의 악령", 19, 180, 220, 40, 60,
                 20, 25, 5, 50, 70, 80, 120);
-    set();
+    if(set() == 0) return;
     clrscr();
     printf("\n치어데몬: 자~! 목소리 안 들려요! 더 크게!!!");
     delay(500);
@@ -1320,7 +1322,7 @@ void Q2_5()
 
     set_monster("[응원단장] 치어 데몬", 20, 420, 500, 70, 100,
         20, 28, 6, 90, 160, 200, 300);
-    set();
+    if(set() == 0) return;
     clrscr();
     printf("\n응원봉이 부러지고, 지옥 응원가가 멈췄다...");
     printf("\n당신의 귀에는 아직도 메아리가 남아 있다.");
@@ -1347,21 +1349,21 @@ void Q2_6()
     {
         set_monster("Frozen Stew Chunk", 19, 80, 100, 20,
                     30, 14, 18, 2, 10, 25, 30, 50);
-        set();
+        if(set() == 0) return;
     }
     for (i = 0; i < 4; i++)
     {
         set_monster("Frozen Cucumber", 19, 70, 90, 25,
                     35, 15, 19, 3, 15, 30, 35, 55);
-        set();
+        if(set() == 0) return;
     }
     for (i = 0; i < 3; i++)
     {
         set_monster("Spirit of Frozen Kimchi", 20, 120, 160, 40,
                     50, 17, 23, 4, 25, 45, 50, 80);
-        set();
+        if(set() == 0) return;
     }
-    set();
+    if(set() == 0) return;
     clrscr();
     delay(500);
     printf("\n듀리엘: 흐윽... 따뜻한 인간의 체온이라니... 불쾌하군...");
@@ -1371,7 +1373,7 @@ void Q2_6()
     getch();
     set_monster("냉장고 듀리엘", 22, 450, 600, 100, 130,
                 24, 32, 6, 0, 0, 0, 0);
-    set();
+    if(set() == 0) return;
     clrscr();
     printf("\n듀리엘: 네 영혼을 급속 냉동 보관해주지..!!");
     delay(500);
@@ -1382,7 +1384,7 @@ void Q2_6()
 
     set_monster("냉장고 듀리엘", 22, 550, 650, 100, 130,
                 26, 32, 6, 400, 600, 760, 900);
-    set();
+    if(set() == 0) return;
     clrscr();
     printf("\n듀리엘이 녹아내린다... 하수구의 냉기가 사라진다.");
     printf("\n\n보상: Great Healing Potion +1");
@@ -1403,19 +1405,19 @@ void Q3_1()
 
     set_monster("Ink_Rebel", 18, 420, 640, 420, 640,
                 70, 120, 45, 120, 200, 140, 220);
-    set();
+    if(set() == 0) return;
     set_monster("Salted_Veteran", 18, 480, 730, 480, 730,
                 80, 120, 55, 130, 190, 150, 220);
-    set();
+    if(set() == 0) return;
     set_monster("Sashimi_Berserker", 18, 530, 789, 530, 789,
                 95, 150, 60, 150, 240, 170, 260);
-    set();
+    if(set() == 0) return;
     set_monster("Boiled_Enforcer", 18, 570, 870, 570, 870,
                 100, 160, 65, 170, 250, 190, 290);
-    set();
+    if(set() == 0) return;
     set_monster("King_Squid", 18, 900, 1300, 900, 1300,
                 120, 190, 80, 220, 339, 210, 330);
-    set();
+    if(set() == 0) return;
 
     if (user.wh == 13) user.wh++;
     return;
@@ -1429,22 +1431,22 @@ void Q3_2()
 
     set_monster("Crab_Militia", 20, 520, 780, 520, 780,
                 85, 139, 70, 150, 240, 180, 270);
-    set();
+    if(set() == 0) return;
     set_monster("Shell_Guardian", 20, 560, 880, 560, 880,
                 90, 150, 90, 170, 280, 190, 290);
-    set();
+    if(set() == 0) return;
     set_monster("Tax_Collector", 20, 600, 940, 600, 940,
                 95, 165, 95, 200, 320, 210, 310);
-    set();
+    if(set() == 0) return;
     set_monster("Claw_Senator", 20, 640, 1000, 640, 1000,
                 100, 180, 110, 220, 360, 220, 330);
-    set();
+    if(set() == 0) return;
     set_monster("Republic_Hammer", 20, 700, 1120, 700, 1120,
                 115, 195, 120, 260, 400, 230, 350);
-    set();
+    if(set() == 0) return;
     set_monster("President_Gestin", 20, 1100, 1600, 1100, 1600,
                 150, 240, 140, 280, 460, 260, 400);
-    set();
+    if(set() == 0) return;
 
     if (user.wh == 14) user.wh++;
     return;
@@ -1458,19 +1460,19 @@ void Q3_3()
 
     set_monster("Demonic_LineCook", 22, 640, 1000, 640, 1000,
                 110, 180, 100, 210, 330, 210, 330);
-    set();
+    if(set() == 0) return;
     set_monster("Sous_Chef", 22, 680, 1060, 680, 1060,
                 120, 200, 115, 240, 360, 220, 350);
-    set();
+    if(set() == 0) return;
     set_monster("Sashimi_Wraith", 22, 720, 1140, 720, 1140,
                 130, 220, 120, 250, 400, 240, 380);
-    set();
+    if(set() == 0) return;
     textcolor(9);
     printf("\n셰프 마고로시: \"신선함의 비결은... 방금 죽은 손님이죠.\"");
     textcolor(15);
     set_monster("Chef_Magoroshi", 22, 900, 1420, 900, 1420,
                 170, 280, 140, 260, 440, 280, 440);
-    set();
+    if(set() == 0) return;
 
     if (user.wh == 15) user.wh++;
     return;
@@ -1484,13 +1486,13 @@ void Q3_4()
 
     set_monster("Rotwave_Whale", 24, 900, 1420, 900, 1420,
                 140, 240, 150, 260, 420, 260, 430);
-    set();
+    if(set() == 0) return;
     set_monster("Sonic_Leviathan", 24, 980, 1540, 980, 1540,
                 160, 270, 160, 300, 480, 280, 460);
-    set();
+    if(set() == 0) return;
     set_monster("Blood_Whale", 24, 1300, 1100, 1300, 1100,
                 190, 330, 190, 340, 560, 320, 540);
-    set();
+    if(set() == 0) return;
 
     if (user.wh == 16) user.wh++;
     return;
@@ -1504,19 +1506,19 @@ void Q3_5()
 
     set_monster("Hooked_Spirit", 25, 880, 1400, 880, 1400,
                 150, 260, 160, 280, 440, 290, 410);
-    set();
+    if(set() == 0) return;
     set_monster("Line_Binder", 25, 950, 1510, 950, 1510,
                 160, 280, 170, 300, 480, 300, 480);
-    set();
+    if(set() == 0) return;
     set_monster("Soul_Net", 25, 1000, 1600, 1000, 1600,
                 170, 300, 180, 320, 510, 320, 540);
-    set();
+    if(set() == 0) return;
     textcolor(9);
     printf("\n조낚귀: \"낚싯줄은 이미 네 심장에 닿아 있다.\"");
     textcolor(15);
     set_monster("JoNakGwi", 25, 1400, 2100, 1400, 2100,
                 200, 350, 200, 360, 540, 350, 570);
-    set();
+    if(set() == 0) return;
 
     if (user.wh == 17) user.wh++;
     return;
@@ -1553,7 +1555,7 @@ void Q3_6()
     l_m = 0;
     set_monster("MEPHISTO", user.lv + 8, 4200, 4900, 4200, 4900,
                 600, 850, 320, 500, 720, 650, 950);
-    set();
+    if(set() == 0) return;
 
     if (user.wh == 18) user.wh++;
     return;
@@ -1569,7 +1571,7 @@ void Q4_1() { // 아정
         monster.gold = my_random(330) + 540;
         monster.defence = 300;
         monster.exp = my_random(330) + 525;
-        set();
+        if(set() == 0) return;
     }
     if (user.wh == 19) user.wh++;
     return; }
@@ -1583,7 +1585,7 @@ void Q4_2() {
         monster.gold = my_random(400) + 650;
         monster.defence = 360;
         monster.exp = my_random(600) + 630;
-        set();
+        if(set() == 0) return;
     }
     strcpy(monster.name, "곽팀장");
         monster.attack = my_random(300) + 400;
@@ -1591,7 +1593,7 @@ void Q4_2() {
         monster.gold = my_random(435) + 710;
         monster.defence = 400;
         monster.exp = my_random(430) + 700;
-        set();
+        if(set() == 0) return;
     if (user.wh == 20) user.wh++;
     return; }
 void Q4_3() {
@@ -1628,7 +1630,7 @@ void Q4_3() {
         monster.attack = my_random(366) + 666;
         monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 3000;
         monster.defence = 900;
-        set();
+        if(set() == 0) return;
 
     }else{ //페이즈 2
         clrscr();
@@ -1641,7 +1643,7 @@ void Q4_3() {
         monster.gold = my_random(700) + 1140;
         monster.defence = 570;
         monster.exp = my_random(700) + 1110;
-        set();
+        if(set() == 0) return;
     }
     //if (user.wh == 21) user.wh++;
     return; }
