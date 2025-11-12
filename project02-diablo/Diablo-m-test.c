@@ -110,6 +110,17 @@ void gotoxy(int x, int y)
     printf("\033[%d;%dH", y, x);
 }
 
+void gotoxy_rel(int dx, int dy)
+{
+    if (dy < 0)      printf("\033[%dA", -dy);  // 위로
+    else if (dy > 0) printf("\033[%dB",  dy);  // 아래로
+
+    if (dx > 0)      printf("\033[%dC",  dx);  // 오른쪽
+    else if (dx < 0) printf("\033[%dD", -dx);  // 왼쪽
+
+    // fflush(stdout); // 바로 반영되게 버퍼 flush
+}
+
 void delay(int ms)
 {
     // ms 단위 딜레이
@@ -1796,15 +1807,20 @@ void Mg()
     }
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
 xx:
-    printf("\n0.Cancel ,Magic Order(1~%d):", s);
+    printf("\n0.Cancel, Magic Order(1~%d):", s);
     in = scani(); // scanf -> scani
 
-    if (in < 0 || in > s || magic[in - 1].ump > user.nmp) goto xx;
-    if (in == 0)
+    if (in < 0 || in > s || magic[in - 1].ump > user.nmp)
     {
         printf("\n 그런것은 불가능 합니다.<Enter>");
+        goto xx;
+    }
+    if (in == 0)
+    {
+        printf("\n Magic canceled. <Enter>");
         getch();
-        set();
+        // set(); // 필요없음
+        return;
     }
     else
     {
