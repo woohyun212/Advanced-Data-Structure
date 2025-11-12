@@ -49,7 +49,22 @@ void Mg();
 int my_random(int n);
 int scani();
 void Func_HWND();
+void set_monster(const char* name, int lv,
+                 int hp_min, int hp_max,
+                 int mp_min, int mp_max,
+                 int att_min, int att_max,
+                 int def,
+                 int gold_min, int gold_max,
+                 int exp_min, int exp_max);
 
+
+void flush_stdin(void)
+{
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF)
+    {
+    }
+}
 
 void clrscr()
 {
@@ -704,6 +719,7 @@ void Condition()
 {
     int i;
     clrscr();
+    flush_stdin();
     textcolor(15);
     printf("\n");
     printf("          N   a  m   e: %s\n", user.name);
@@ -729,9 +745,7 @@ void Condition()
     textcolor(15);
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
     printf("\n\n\n  < E N T E R >");
-    fflush(stdin);
     getch();
-    //getch();
     return;
 }
 
@@ -1292,6 +1306,9 @@ void Q2_3()
     monster.defence = 3;
     monster.exp = my_random(40) + 30;
     set();
+
+    set_monster("고지방 감자튀김", 15, 30, 40, 10, 15,
+                    10, 14, 3, 10, 15, 15, 20);
     strcpy(monster.name, "BabyOfSun");
     monster.attack = my_random(10) + 8;
     monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 1550;
@@ -1783,7 +1800,7 @@ void Q4_1() { // 아정
         set();
     }
     if (user.wh == 19) user.wh++;
-    return; } 
+    return; }
 void Q4_2() {
     l_m = 4;
     monster.lv = 29;
@@ -1805,7 +1822,7 @@ void Q4_2() {
         set();
     if (user.wh == 20) user.wh++;
     return; }
-void Q4_3() { 
+void Q4_3() {
     if (user.wh > 21)
     {
         printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
@@ -1836,9 +1853,9 @@ void Q4_3() {
     l_m = 0;
     if(monster.nhp > 666){ //페이즈 1
         strcpy(monster.name, "DIABLO");
-        monster.attack = my_random(350) + 480;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(830) + 1660;        
-        monster.defence = 480;
+        monster.attack = my_random(366) + 666;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 3000;
+        monster.defence = 900;
         set();
 
     }else{ //페이즈 2
