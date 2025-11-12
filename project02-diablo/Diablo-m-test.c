@@ -48,6 +48,13 @@ void M_A();
 void Mg();
 int my_random(int n);
 
+void flush_stdin(void)
+{
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF)
+    {
+    }
+}
 
 void clrscr()
 {
@@ -644,6 +651,7 @@ void Condition()
 {
     int i;
     clrscr();
+    flush_stdin();
     textcolor(15);
     printf("\n");
     printf("          N   a  m   e: %s\n", user.name);
@@ -669,7 +677,6 @@ void Condition()
     textcolor(15);
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
     printf("\n\n\n  < E N T E R >");
-    getch();
     getch();
     return;
 }
@@ -1721,7 +1728,7 @@ void Q4_1() { // 아정
         set();
     }
     if (user.wh == 19) user.wh++;
-    return; } 
+    return; }
 void Q4_2() {
     l_m = 4;
     for(int i=0;i<3;i++){
@@ -1742,7 +1749,7 @@ void Q4_2() {
         set();
     if (user.wh == 20) user.wh++;
     return; }
-void Q4_3() { 
+void Q4_3() {
     if (user.wh > 21)
     {
         printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
@@ -1774,7 +1781,7 @@ void Q4_3() {
     if(monster.nhp > 666){ //페이즈 1
         strcpy(monster.name, "DIABLO");
         monster.attack = my_random(366) + 666;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 3000;        
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 3000;
         monster.defence = 900;
         set();
 
