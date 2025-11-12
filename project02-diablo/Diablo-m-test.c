@@ -733,7 +733,7 @@ void Condition()
 {
     int i;
     clrscr();
-    flush_stdin();
+    // flush_stdin();
     textcolor(15);
     printf("\n");
     printf("          N   a  m   e: %s\n", user.name);
