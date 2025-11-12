@@ -865,7 +865,7 @@ void Opening()
         delay(50);
     }
     getch();
-
+    /*
     clrscr();
     printf("\n\n\n\n\n");
     printf("\n           ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
@@ -880,8 +880,65 @@ void Opening()
     printf("\n           ┃                                          ┃");
     printf("\n           ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
     gotoxy(37, 15);
-    ch = scani(); // scanf -> scani
+    */
+    //ch = scani();
     user.gold = 0;
+    while(1){ // 기존에 다른 정수 입력 시 세그폴트 문제를 해결(예외처리)
+        clrscr();
+        printf("\n\n\n\n\n");
+        printf("\n           ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+        printf("\n           ┃                                          ┃");
+        printf("\n           ┃                                          ┃");
+        printf("\n           ┃            Choose Your Character         ┃");
+        printf("\n           ┃                                          ┃");
+        printf("\n           ┃                 1. Amazon                ┃");
+        printf("\n           ┃                 2. Sorceress             ┃");
+        printf("\n           ┃                 3. Necromancer           ┃");
+        printf("\n           ┃   Press Input number:                    ┃");
+        printf("\n           ┃                                          ┃");
+        printf("\n           ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+        gotoxy(37, 15);
+        ch = scani(); // scanf -> scani
+        switch(ch){
+            case 1:
+                strcpy(user.name, "Amazon");
+                user.cs = 1;
+                user.lv = 1;
+                user.nhp = user.hp = my_random(28) + 25;
+                user.nmp = user.mp = my_random(15) + 5;
+                user.attack = my_random(8) + 10;
+                user.exp = my_random(8 * user.lv * user.lv) + 100;
+                user.defence = 0;
+                user.wh = 1;
+                break;
+            case 2:
+                strcpy(user.name, "Sorceress");
+                user.cs = 2;
+                user.lv = 1;
+                user.nhp = user.hp = my_random(20) + 10;
+                user.nmp = user.mp = my_random(20) + 30;
+                user.attack = my_random(8) + 5;
+                user.exp = my_random(8 * user.lv * user.lv) + 100;
+                user.defence = 0;
+                user.wh = 1;
+                break;
+            case 3:
+                strcpy(user.name, "Necromancer");
+                user.cs = 3;
+                user.lv = 1;
+                user.nhp = user.hp = my_random(20) + 15;
+                user.nmp = user.mp = my_random(20) + 25;
+                user.attack = my_random(8) + 7;
+                user.exp = my_random(8 * user.lv * user.lv) + 100;
+                user.defence = 0;
+                user.wh = 1;
+                break;
+            default:
+                continue;
+        }
+        break;
+    }
+    /*
     if (ch == 1)
     {
         strcpy(user.name, "Amazon");
@@ -919,6 +976,7 @@ void Opening()
         user.defence = 0;
         user.wh = 1;
     }
+    */
     user.gold = 500;
     for (i = 0; i < 8; i++)
         user.item[i] = 0;
