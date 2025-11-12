@@ -36,7 +36,7 @@ void Load();
 void Insert_magic();
 void Insert_weapon();
 void Insert_defence();
-void Play_1();
+int Play_1();
 void Item_store();
 void Defence_Store();
 void Save_option();
@@ -48,6 +48,7 @@ void M_A();
 void Mg();
 int my_random(int n);
 int scani();
+void Func_HWND();
 
 
 void clrscr()
@@ -139,7 +140,7 @@ int scani()
     int digits; // 입력된 숫자 자리수
     int value; // 최종 반환할 값
 
-    while (1) // 0~999 범위의 숫자가 들어올 때까지 반복
+    while (1) // 0~99 범위의 숫자가 들어올 때까지 반복
     {
         if (fgets(buffer, sizeof(buffer), stdin) == NULL) // 잘못된 입력 처리
         {
@@ -167,6 +168,24 @@ int scani()
             return value; // 0~99 범위 값 반환. 세자릿수부터는 조건에 걸림
         else
             printf("\n0 ~ 99 사이의 숫자만 입력해 주세요."); // 입력 재요청
+    }
+}
+
+void Func_HWND(){
+    int Func_set = 0;
+    while(Func_set != -1){
+        switch (Func_set){
+            case 0: Func_set = Play_1(); break; // Play_1()은 사용자 입력을 q로 반환하는 int 함수로 변경. exit == q
+            case 1: Condition(); Func_set = 0; break;
+            case 2: Item_store(); Func_set = 0; break;
+            case 3: Weapon_Store(); Func_set = 0; break;
+            case 4: Defence_Store(); Func_set = 0; break;
+            case 5: Battle(); Func_set = 0; break;
+            case 6: Save_option(); Func_set = 0; break;
+            case 7: Func_set = -1; break;
+            case 99: cheatcenter(); Func_set = 0; break; // 원래 1008인데 일단 99로 설정
+            default: Func_set = -1;
+        }
     }
 }
 
@@ -263,7 +282,7 @@ int main()
     Insert_magic();
     Insert_weapon();
     Insert_defence();
-    Play_1();
+    Func_HWND(); //Play_1();
     return 0;
 }
 
@@ -291,7 +310,7 @@ void Insert_defence()
     return;
 }
 
-void Play_1()
+int Play_1()
 {
     int i, q;
     clrscr();
@@ -323,6 +342,7 @@ void Play_1()
     printf("   Please Insert Number:                          \n");
     gotoxy(26, 10);
     q = scani(); // scanf -> scani
+    /*
     if (q == 2) Item_store();
     if (q == 4) Defence_Store();
     if (q == 6) Save_option();
@@ -332,7 +352,8 @@ void Play_1()
     if (q == 5) Battle();
     if (q == 99) cheatcenter(); // 원래 1008인데 일단 99로 설정
     Play_1();
-    return;
+    */
+    return q;
 }
 
 void cheatcenter()
@@ -506,10 +527,10 @@ void Potion()
             if (user.nmp > user.mp) user.nmp = user.mp;
             user.item[5]--;
             break;
-        case 7: user.nhp = user.hp;
+        case 7: user.nhp = user.hp; // 기존에는 현재 체력을 최대 체력만큼 덧셈 연산을 했다. 오버플로우 가능성
             user.item[6]--;
             break;
-        case 8: user.nmp = user.mp;
+        case 8: user.nmp = user.mp; // 기존에는 현재 마나를 두배로 만드는 연산을 했다. 오버플로우 가능성
             user.item[7]--;
             break;
         }
@@ -708,8 +729,9 @@ void Condition()
     textcolor(15);
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
     printf("\n\n\n  < E N T E R >");
+    fflush(stdin);
     getch();
-    getch();
+    //getch();
     return;
 }
 
