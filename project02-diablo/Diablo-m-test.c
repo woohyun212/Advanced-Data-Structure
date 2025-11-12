@@ -909,7 +909,7 @@ void set()
             getch();
             user.exp -= monster.exp;
             user.gold += monster.gold;
-            l_m--;
+            if(l_m>0){l_m--};
             if (user.exp <= 0)
             {
                 clrscr();
