@@ -425,6 +425,10 @@ void Battle()
                                 "QUEST2_1.DAT", "QUEST2_2.DAT", "QUEST2_3.DAT", "QUEST2_4.DAT", "QUEST2_5.DAT", "QUEST2_6.DAT",
                                 "QUEST3_1.DAT", "QUEST3_2.DAT", "QUEST3_3.DAT", "QUEST3_4.DAT", "QUEST3_5.DAT", "QUEST3_6.DAT", 
                                 "QUEST4_1.DAT", "QUEST4_2.DAT", "QUEST4_3.DAT"};
+    void (*QuestFuncName[22])() = {NULL, Q1_1, Q1_2, Q1_3, Q1_4, Q1_5, Q1_6,
+                                   Q2_1, Q2_2, Q2_3, Q2_4, Q2_5, Q2_6,
+                                   Q3_1, Q3_2, Q3_3, Q3_4, Q3_5, Q3_6,
+                                   Q4_1, Q4_2, Q4_3};
     FILE* fp24;
     while (1)
     {
@@ -453,7 +457,7 @@ void Battle()
         }
         if (l == 0) break;
         fp24 = fopen(QuestFileName[l], "rt");
-        
+
         if (l > 0 && l <= user.wh)
         {
             clrscr();
@@ -468,27 +472,7 @@ void Battle()
             if (time == 0) getch();
             getch();
         }
-        if (l == 1) Q1_1();
-        if (l == 2) Q1_2();
-        if (l == 3) Q1_3();
-        if (l == 4) Q1_4();
-        if (l == 5) Q1_5();
-        if (l == 6) Q1_6();
-        if (l == 7) Q2_1();
-        if (l == 8) Q2_2();
-        if (l == 9) Q2_3();
-        if (l == 10) Q2_4();
-        if (l == 11) Q2_5();
-        if (l == 12) Q2_6();
-        if (l == 13) Q3_1();
-        if (l == 14) Q3_2();
-        if (l == 15) Q3_3();
-        if (l == 16) Q3_4();
-        if (l == 17) Q3_5();
-        if (l == 18) Q3_6();
-        if (l == 19) Q4_1();
-        if (l == 20) Q4_2();
-        if (l == 21) Q4_3();
+        QuestFuncName[l]();
     }
     return;
 }
