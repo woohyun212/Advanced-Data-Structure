@@ -326,7 +326,8 @@ void state_handler(){
             case 6: Save_option(); Func_set = 0; break;
             case 7: Func_set = -1; break;
             case 99: cheatcenter(); Func_set = 0; break; // 원래 1008인데 일단 99로 설정
-            default: Func_set = -1;
+            default: Func_set = 0;break;;
+            // default: Func_set = -1;
         }
     }
 }
@@ -477,7 +478,6 @@ void Battle()
         }
         if (l == 0) break;
         fp24 = fopen(QuestFileName[l], "rt");
-
         if (l > 0 && l <= user.wh)
         {
             clrscr();
