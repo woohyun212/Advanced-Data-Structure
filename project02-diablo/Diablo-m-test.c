@@ -942,7 +942,7 @@ void set()
             clrscr();
             printf("\n Game Over");
             getch();
-            exit(1);
+            exit(0); // exit(1)에서 exit(0)으로 수정
         }
         textcolor(15);
         gotoxy(1, 1);
