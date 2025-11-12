@@ -48,6 +48,14 @@ void M_A();
 void Mg();
 int my_random(int n);
 int scani();
+void set_monster(const char* name, int lv,
+                 int hp_min, int hp_max,
+                 int mp_min, int mp_max,
+                 int att_min, int att_max,
+                 int def,
+                 int gold_min, int gold_max,
+                 int exp_min, int exp_max);
+
 
 void flush_stdin(void)
 {
@@ -1277,6 +1285,9 @@ void Q2_3()
     monster.defence = 3;
     monster.exp = my_random(40) + 30;
     set();
+
+    set_monster("고지방 감자튀김", 15, 30, 40, 10, 15,
+                    10, 14, 3, 10, 15, 15, 20);
     strcpy(monster.name, "BabyOfSun");
     monster.attack = my_random(10) + 8;
     monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 1550;
@@ -1821,9 +1832,9 @@ void Q4_3() {
     l_m = 0;
     if(monster.nhp > 666){ //페이즈 1
         strcpy(monster.name, "DIABLO");
-        monster.attack = my_random(350) + 480;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(830) + 1660;        
-        monster.defence = 480;
+        monster.attack = my_random(366) + 666;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 3000;
+        monster.defence = 900;
         set();
 
     }else{ //페이즈 2
