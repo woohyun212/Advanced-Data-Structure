@@ -285,8 +285,6 @@ int main()
 
 void state_handler(){
     int Func_set = 0;
-    user.nhp = user.hp;
-    user.nmp = user.mp;
     while(Func_set != -1){
         switch (Func_set){
             case 0: Func_set = Play_1(); break; // Play_1()은 사용자 입력을 q로 반환하는 int 함수로 변경. exit == q
@@ -515,49 +513,59 @@ void Potion()
     printf("\n━━━━━━━━━━━━━━━━━━━━━");
     printf("\nWhat you eat? :  ");
     l = scani(); // scanf -> scani
-    if (l == 9) set();
-    if(l>=1 && l<=8){
-        switch (user.item[l - 1] != 0)
-        {
-        case 1: user.nhp += 25;
-            if (user.nhp > user.hp) user.nhp = user.hp;
-            user.item[0]--;
-            break;
-        case 2: user.nmp += 25;
-            if (user.nmp > user.mp) user.nmp = user.mp;
-            user.item[1]--;
-            break;
-        case 3: user.nhp += 50;
-            if (user.nhp > user.hp) user.nhp = user.hp;
-            user.item[2]--;
-            break;
-        case 4: user.nmp += 50;
-            if (user.nmp > user.mp) user.nmp = user.mp;
-            user.item[3]--;
-            break;
-        case 5: user.nhp += 100;
-            if (user.nhp > user.hp) user.nhp = user.hp;
-            user.item[4]--;
-            break;
-        case 6: user.nmp += 100;
-            if (user.nmp > user.mp) user.nmp = user.mp;
-            user.item[5]--;
-            break;
-        case 7: user.nhp = user.hp; // 기존에는 현재 체력을 최대 체력만큼 덧셈 연산을 했다. 오버플로우 가능성
-            user.item[6]--;
-            break;
-        case 8: user.nmp = user.mp; // 기존에는 현재 마나를 두배로 만드는 연산을 했다. 오버플로우 가능성
-            user.item[7]--;
-            break;
-        }
-      h_m();
+    if (l == 9)
+    {
+        //set(); 필요없음
+        return;
     }
-    else
+    if (l < 1 || l > 8)
+    {
+        printf("잘못된 입력입니다.");
+        getch();
+        return;
+    }
+    if (user.item[l - 1] == 0)
     {
         printf("You don't have that potion!!!");
         getch();
-        set();
+        //set();
+        return;
     }
+
+    switch (l)
+    {
+    case 1: user.nhp += 25;
+        if (user.nhp > user.hp) user.nhp = user.hp;
+        user.item[0]--;
+        break;
+    case 2: user.nmp += 25;
+        if (user.nmp > user.mp) user.nmp = user.mp;
+        user.item[1]--;
+        break;
+    case 3: user.nhp += 50;
+        if (user.nhp > user.hp) user.nhp = user.hp;
+        user.item[2]--;
+        break;
+    case 4: user.nmp += 50;
+        if (user.nmp > user.mp) user.nmp = user.mp;
+        user.item[3]--;
+        break;
+    case 5: user.nhp += 100;
+        if (user.nhp > user.hp) user.nhp = user.hp;
+        user.item[4]--;
+        break;
+    case 6: user.nmp += 100;
+        if (user.nmp > user.mp) user.nmp = user.mp;
+        user.item[5]--;
+        break;
+    case 7: user.nhp = user.hp; // 기존에는 현재 체력을 최대 체력만큼 덧셈 연산을 했다. 오버플로우 가능성
+        user.item[6]--;
+        break;
+    case 8: user.nmp = user.mp; // 기존에는 현재 마나를 두배로 만드는 연산을 했다. 오버플로우 가능성
+        user.item[7]--;
+        break;
+    }
+    h_m();
     return;
 }
 
