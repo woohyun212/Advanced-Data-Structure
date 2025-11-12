@@ -1003,33 +1003,20 @@ void Q1_1()
     l_m = 29;
     for (i = 0; i < 10; i++)
     {
-        strcpy(monster.name, "Skel_Hasu");
-        monster.nhp = monster.hp = my_random(7) + 10;
-        monster.attack = my_random(4) + 3;
-        monster.nmp = monster.mp = my_random(7) + 1;
-        monster.exp = my_random(4) + 1;
-        monster.gold = my_random(6) + 1;
-        monster.defence = 0;
+        set_monster("Skel_Hasu", 1, 10, 17, 1, 8,
+                    3, 7, 0, 1, 7, 1, 5);
         set();
     }
     for (i = 0; i < 10; i++)
     {
-        strcpy(monster.name, "Skel_Mid");
-        monster.mp = monster.nmp = monster.nhp = monster.nhp = monster.hp = my_random(14) + 7;
-        monster.attack = my_random(5) + 2;
-        monster.gold = my_random(5) + 3;
-        monster.defence = 2;
-        monster.exp = my_random(5) + 1;
+        set_monster("Skel_Mid", 1, 7, 20, 7, 20,
+                    2, 7, 2, 3, 8, 1, 6);
         set();
     }
     for (i = 0; i < 9; i++)
     {
-        strcpy(monster.name, "Skel_Gosu");
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(20) + 9;
-        monster.attack = my_random(1) + 3;
-        monster.gold = my_random(3) + 1;
-        monster.defence = 3;
-        monster.exp = my_random(7) + 2;
+        set_monster("Skel_Gosu", 1, 9, 30, 9, 30,
+                    3, 4, 3, 1, 4, 2, 9);
         set();
     }
     clrscr();
@@ -1038,11 +1025,8 @@ void Q1_1()
     getch();
     monster.lv = 3;
     strcpy(monster.name, "Skel_Boss");
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(5) + 60;
-    monster.attack = my_random(4) + 5;
-    monster.gold = my_random(7) + 1;
-    monster.defence = 1;
-    monster.exp = my_random(35) + 7;
+    set_monster("Skel_Boss", 3, 60, 65, 60, 65,
+                5, 9, 1, 1, 8, 7, 42);
     set();
     if (user.wh == 1) user.wh++;
     return;
@@ -1051,21 +1035,11 @@ void Q1_1()
 void Q1_2()
 {
     l_m = 1;
-    monster.lv = 3;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(10) + 150;
-    strcpy(monster.name, "Iron_Fish");
-    monster.attack = my_random(5) + 5;
-    monster.gold = my_random(7) + 50;
-    monster.defence = 2;
-    monster.exp = my_random(7) + 22;
+    set_monster("Iron_Fish", 3, 150, 160, 150, 160,
+                5, 10, 2, 50, 56, 22, 28);
     set();
-    monster.lv = 8;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(40) + 210;
-    strcpy(monster.name, "Gold_Fish");
-    monster.attack = my_random(6) + 5;
-    monster.gold = my_random(7) + 45;
-    monster.defence = 6;
-    monster.exp = my_random(8) + 30;
+    set_monster("Gold_Fish", 8, 210, 250, 210, 250,
+                5, 10, 6, 45, 51, 30, 37);
     set();
     if (user.wh == 2) user.wh++;
     return;
@@ -1074,13 +1048,8 @@ void Q1_2()
 void Q1_3()
 {
     l_m = 0;
-    monster.lv = 10;
-    strcpy(monster.name, "Saladin");
-    monster.attack = my_random(7) + 4;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(70) + 250;
-    monster.gold = 100;
-    monster.defence = 3;
-    monster.exp = my_random(37) + 45;
+    set_monster("Saladin", 10, 250, 320, 250, 320,
+                4, 10, 3, 100, 100, 45, 81);
     set();
     if (user.wh == 3) user.wh++;
     return;
@@ -1093,21 +1062,13 @@ void Q1_4()
     l_m = 2;
     for (i = 0; i < 2; i++)
     {
-        strcpy(monster.name, "케인똘마니");
-        monster.attack = my_random(6) + 10;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(50) + 150;
-        monster.gold = 50;
-        monster.defence = 0;
-        monster.exp = my_random(6) + 14;
+        set_monster("케인똘마니", 12, 150, 200, 150, 200,
+                    10, 16, 0, 50, 50, 14, 20);
         set();
-        l_m = l_m;
+        //l_m = l_m; // 쓸데없는 배정문 삭제
     }
-    strcpy(monster.name, "데까드케인");
-    monster.attack = my_random(6) + 4;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(60) + 400;
-    monster.gold = 60;
-    monster.defence = 5;
-    monster.exp = my_random(70) + 37;
+    set_monster("데까드케인", 12, 400, 460, 400, 460,
+                4, 9, 5, 60, 60, 37, 107);
     set();
     if (user.wh == 4) user.wh++;
     return;
@@ -1121,32 +1082,20 @@ void Q1_5()
     monster.lv = 11;
     for (i = 0; i < 3; i++)
     {
-        strcpy(monster.name, "각목사나이");
-        monster.attack = my_random(6) + 2;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(60) + 100;
-        monster.gold = 10;
-        monster.defence = 1;
-        monster.exp = my_random(7) + 10;
+        set_monster("각목사나이", 11, 100, 160, 100, 160,
+                    2, 7, 1, 10, 10, 10, 16);
         set();
     }
     for (i = 0; i < 4; i++)
     {
-        strcpy(monster.name, "사시미군단");
-        monster.attack = my_random(6) + 15;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(20) + 10;
-        monster.gold = 30;
-        monster.defence = 2;
-        monster.exp = my_random(7) + 10;
+        set_monster("사시미군단", 11, 10, 30, 10, 30,
+                    15, 20, 2, 30, 30, 10, 16);
         set();
     }
     for (i = 0; i < 3; i++)
     {
-        strcpy(monster.name, "장관급부하");
-        monster.attack = my_random(6) + 11;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(30) + 70;
-        monster.gold = 10;
-        monster.defence = 4;
-        monster.exp = my_random(7) + 20;
+        set_monster("장관급부하", 11, 70, 100, 70, 100,
+                    11, 16, 4, 10, 10, 20, 26);
         set();
     }
     if (user.wh == 5) user.wh++;
@@ -1177,12 +1126,8 @@ void Q1_6()
     getch();
 
     l_m = 0;
-    strcpy(monster.name, "안때리얼");
-    monster.attack = my_random(6) + 14;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(300) + 770;
-    monster.gold = 10;
-    monster.defence = 3;
-    monster.exp = my_random(400) + 200;
+    set_monster("안때리얼", user.lv + 10, 770, 1070, 770, 1070,
+                14, 20, 3, 10, 10, 200, 600);
     set();
     if (user.wh == 6) user.wh++;
     return;
@@ -1192,47 +1137,23 @@ void Q2_1()
 {
     monster.lv = 12;
     l_m = 5;
-    strcpy(monster.name, "Turtle_1");
-    monster.attack = my_random(20) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 50;
-    monster.defence = 8;
-    monster.exp = my_random(30) + 6;
+    set_monster("Turtle_1", 12, 150, 250, 150, 250,
+                6, 26, 8, 50, 100, 6, 35);
     set();
-    strcpy(monster.name, "Turtle_2");
-    monster.attack = my_random(20) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 50;
-    monster.defence = 6;
-    monster.exp = my_random(30) + 6;
+    set_monster("Turtle_2", 12, 150, 250, 150, 250,
+                6, 26, 6, 50, 100, 6, 35);
     set();
-    strcpy(monster.name, "Turtle_3");
-    monster.attack = my_random(20) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 50;
-    monster.defence = 7;
-    monster.exp = my_random(30) + 6;
+    set_monster("Turtle_3", 12, 150, 250, 150, 250,
+                6, 26, 7, 50, 100, 6, 35);
     set();
-    strcpy(monster.name, "Turtle_4");
-    monster.attack = my_random(20) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 50;
-    monster.defence = 4;
-    monster.exp = my_random(30) + 6;
+    set_monster("Turtle_4", 12, 150, 250, 150, 250,
+                6, 26, 4, 50, 100, 6, 35);
     set();
-    strcpy(monster.name, "Turtle_5");
-    monster.attack = my_random(30) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(30) + 10;
-    monster.defence = 5;
-    monster.exp = my_random(50) + 20;
+    set_monster("Turtle_5", 12, 150, 250, 150, 250,
+                6, 36, 5, 10, 39, 20, 70);
     set();
-    strcpy(monster.name, "동상 단군");
-    monster.attack = my_random(10) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 250;
-    monster.gold = my_random(50) + 150;
-    monster.defence = 9;
-    monster.exp = my_random(40) + 40;
+    set_monster("동상 단군", 12, 250, 350, 250, 350,
+                16, 26, 9, 150, 200, 40, 80);
     set();
 
     if (user.wh == 7) user.wh++;
@@ -1242,33 +1163,17 @@ void Q2_1()
 void Q2_2()
 {
     l_m = 4;
-    strcpy(monster.name, "GoldHamster");
-    monster.attack = my_random(20) + 8;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 7;
-    monster.exp = my_random(40) + 8;
+    set_monster("GoldHamster", 9, 150, 250, 150, 250,
+                8, 28, 7, 10, 60, 8, 47);
     set();
-    strcpy(monster.name, "Jangarian");
-    monster.attack = my_random(20) + 10;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 250;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 4;
-    monster.exp = my_random(30) + 5;
+    set_monster("Jangarian", 9, 250, 350, 250, 350,
+                10, 30, 4, 10, 60, 5, 34);
     set();
-    strcpy(monster.name, "기니피그");
-    monster.attack = my_random(20) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 50;
-    monster.defence = 6;
-    monster.exp = my_random(30) + 10;
+    set_monster("기니피그", 9, 150, 250, 150, 250,
+                            6, 26, 6, 50, 100, 10, 40);
     set();
-    strcpy(monster.name, "~시궁쥐~");
-    monster.attack = my_random(46) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 350;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 3;
-    monster.exp = my_random(40) + 40;
+    set_monster("~시궁쥐~", 9, 350, 450, 350, 450,
+                            16, 62, 3, 10, 60, 40, 80);
     set();
     if (user.wh == 8) user.wh++;
     return;
@@ -1277,43 +1182,20 @@ void Q2_2()
 void Q2_3()
 {
     l_m = 4;
-    strcpy(monster.name, "Boradolei");
-    monster.attack = my_random(36) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 350;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 8;
-    monster.exp = my_random(40) + 30;
+    set_monster("Boradolei", 10, 350, 450, 350, 450,
+                            16, 52, 3, 10, 60, 30, 70);
     set();
-    strcpy(monster.name, "Ddubi");
-    monster.attack = my_random(36) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 350;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 4;
-    monster.exp = my_random(40) + 30;
+    set_monster("Ddubi", 10, 350, 450, 350, 450,
+                        16, 52, 3, 10, 60, 30, 70);
     set();
-    strcpy(monster.name, "NaNa");
-    monster.attack = my_random(36) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 350;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 4;
-    monster.exp = my_random(40) + 30;
+    set_monster("NaNa", 10, 350, 450, 350, 450,
+                        16, 52, 3, 10, 60, 30, 70);
     set();
-    strcpy(monster.name, "Bo");
-    monster.attack = my_random(36) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 350;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 3;
-    monster.exp = my_random(40) + 30;
+    set_monster("Bo", 10, 350, 450, 350, 450,
+                        16, 52, 3, 10, 60, 30, 70);
     set();
-
-    set_monster("고지방 감자튀김", 15, 30, 40, 10, 15,
-                    10, 14, 3, 10, 15, 15, 20);
-    strcpy(monster.name, "BabyOfSun");
-    monster.attack = my_random(10) + 8;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 1550;
-    monster.gold = my_random(500) + 100;
-    monster.defence = 6;
-    monster.exp = my_random(40) + 130;
+    set_monster("BabyOfSun", 10, 1550, 1650, 1550, 1650,
+                    8, 18, 6, 100, 600, 130, 170);
     set();
     if (user.wh == 9) user.wh++;
     return;
@@ -1436,7 +1318,8 @@ void Q2_5()
     getch();
     getch();
 
-    set_monster("[응원단장] 치어 데몬", 20, 420, 500, 70, 100, 20, 28, 6, 90, 160, 200, 300);
+    set_monster("[응원단장] 치어 데몬", 20, 420, 500, 70, 100,
+        20, 28, 6, 90, 160, 200, 300);
     set();
     clrscr();
     printf("\n응원봉이 부러지고, 지옥 응원가가 멈췄다...");
@@ -1518,44 +1401,20 @@ void Q3_1()
     l_m = 5;
     monster.lv = 18;
 
-    strcpy(monster.name, "Ink_Rebel");
-    monster.attack = my_random(50) + 70;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(220) + 420;
-    monster.gold = my_random(80) + 120;
-    monster.defence = 45;
-    monster.exp = my_random(80) + 140;
+    set_monster("Ink_Rebel", 18, 420, 640, 420, 640,
+                70, 120, 45, 120, 200, 140, 220);
     set();
-
-    strcpy(monster.name, "Salted_Veteran");
-    monster.attack = my_random(40) + 80;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(250) + 480;
-    monster.gold = my_random(60) + 130;
-    monster.defence = 55;
-    monster.exp = my_random(70) + 150;
+    set_monster("Salted_Veteran", 18, 480, 730, 480, 730,
+                80, 120, 55, 130, 190, 150, 220);
     set();
-
-    strcpy(monster.name, "Sashimi_Berserker");
-    monster.attack = my_random(55) + 95;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(260) + 530;
-    monster.gold = my_random(90) + 150;
-    monster.defence = 60;
-    monster.exp = my_random(90) + 170;
+    set_monster("Sashimi_Berserker", 18, 530, 789, 530, 789,
+                95, 150, 60, 150, 240, 170, 260);
     set();
-
-    strcpy(monster.name, "Boiled_Enforcer");
-    monster.attack = my_random(60) + 100;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(300) + 570;
-    monster.gold = my_random(80) + 170;
-    monster.defence = 65;
-    monster.exp = my_random(100) + 190;
+    set_monster("Boiled_Enforcer", 18, 570, 870, 570, 870,
+                100, 160, 65, 170, 250, 190, 290);
     set();
-
-    strcpy(monster.name, "King_Squid");
-    monster.attack = my_random(70) + 120;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 900;
-    monster.gold = my_random(120) + 220;
-    monster.defence = 80;
-    monster.exp = my_random(120) + 210;
+    set_monster("King_Squid", 18, 900, 1300, 900, 1300,
+                120, 190, 80, 220, 339, 210, 330);
     set();
 
     if (user.wh == 13) user.wh++;
@@ -1568,52 +1427,23 @@ void Q3_2()
     l_m = 6;
     monster.lv = 20;
 
-    strcpy(monster.name, "Crab_Militia");
-    monster.attack = my_random(55) + 85;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(260) + 520;
-    monster.gold = my_random(90) + 150;
-    monster.defence = 70;
-    monster.exp = my_random(90) + 180;
+    set_monster("Crab_Militia", 20, 520, 780, 520, 780,
+                85, 139, 70, 150, 240, 180, 270);
     set();
-
-    strcpy(monster.name, "Shell_Guardian");
-    monster.attack = my_random(60) + 90;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(320) + 560;
-    monster.gold = my_random(110) + 170;
-    monster.defence = 90;
-    monster.exp = my_random(100) + 190;
+    set_monster("Shell_Guardian", 20, 560, 880, 560, 880,
+                90, 150, 90, 170, 280, 190, 290);
     set();
-
-    strcpy(monster.name, "Tax_Collector");
-    monster.attack = my_random(70) + 95;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(340) + 600;
-    monster.gold = my_random(120) + 200;
-    monster.defence = 95;
-    monster.exp = my_random(100) + 210;
+    set_monster("Tax_Collector", 20, 600, 940, 600, 940,
+                95, 165, 95, 200, 320, 210, 310);
     set();
-
-    strcpy(monster.name, "Claw_Senator");
-    monster.attack = my_random(80) + 100;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(360) + 640;
-    monster.gold = my_random(140) + 220;
-    monster.defence = 110;
-    monster.exp = my_random(110) + 220;
+    set_monster("Claw_Senator", 20, 640, 1000, 640, 1000,
+                100, 180, 110, 220, 360, 220, 330);
     set();
-
-    strcpy(monster.name, "Republic_Hammer");
-    monster.attack = my_random(80) + 115;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(420) + 700;
-    monster.gold = my_random(140) + 260;
-    monster.defence = 120;
-    monster.exp = my_random(120) + 230;
+    set_monster("Republic_Hammer", 20, 700, 1120, 700, 1120,
+                115, 195, 120, 260, 400, 230, 350);
     set();
-
-    strcpy(monster.name, "President_Gestin");
-    monster.attack = my_random(90) + 150;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(500) + 1100;
-    monster.gold = my_random(180) + 280;
-    monster.defence = 140;
-    monster.exp = my_random(140) + 260;
+    set_monster("President_Gestin", 20, 1100, 1600, 1100, 1600,
+                150, 240, 140, 280, 460, 260, 400);
     set();
 
     if (user.wh == 14) user.wh++;
@@ -1626,39 +1456,20 @@ void Q3_3()
     l_m = 4;
     monster.lv = 22;
 
-    strcpy(monster.name, "Demonic_LineCook");
-    monster.attack = my_random(70) + 110;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(360) + 640;
-    monster.gold = my_random(120) + 210;
-    monster.defence = 100;
-    monster.exp = my_random(120) + 210;
+    set_monster("Demonic_LineCook", 22, 640, 1000, 640, 1000,
+                110, 180, 100, 210, 330, 210, 330);
     set();
-
-    strcpy(monster.name, "Sous_Chef");
-    monster.attack = my_random(80) + 120;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(380) + 680;
-    monster.gold = my_random(120) + 240;
-    monster.defence = 115;
-    monster.exp = my_random(130) + 220;
+    set_monster("Sous_Chef", 22, 680, 1060, 680, 1060,
+                120, 200, 115, 240, 360, 220, 350);
     set();
-
-    strcpy(monster.name, "Sashimi_Wraith");
-    monster.attack = my_random(90) + 130;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(420) + 720;
-    monster.gold = my_random(150) + 250;
-    monster.defence = 120;
-    monster.exp = my_random(140) + 240;
+    set_monster("Sashimi_Wraith", 22, 720, 1140, 720, 1140,
+                130, 220, 120, 250, 400, 240, 380);
     set();
-
     textcolor(9);
     printf("\n셰프 마고로시: \"신선함의 비결은... 방금 죽은 손님이죠.\"");
     textcolor(15);
-    strcpy(monster.name, "Chef_Magoroshi");
-    monster.attack = my_random(110) + 170;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(520) + 900;
-    monster.gold = my_random(180) + 260;
-    monster.defence = 140;
-    monster.exp = my_random(160) + 280;
+    set_monster("Chef_Magoroshi", 22, 900, 1420, 900, 1420,
+                170, 280, 140, 260, 440, 280, 440);
     set();
 
     if (user.wh == 15) user.wh++;
@@ -1671,28 +1482,14 @@ void Q3_4()
     l_m = 3;
     monster.lv = 24;
 
-    strcpy(monster.name, "Rotwave_Whale");
-    monster.attack = my_random(100) + 140;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(520) + 900;
-    monster.gold = my_random(160) + 260;
-    monster.defence = 150;
-    monster.exp = my_random(170) + 260;
+    set_monster("Rotwave_Whale", 24, 900, 1420, 900, 1420,
+                140, 240, 150, 260, 420, 260, 430);
     set();
-
-    strcpy(monster.name, "Sonic_Leviathan");
-    monster.attack = my_random(110) + 160;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(560) + 980;
-    monster.gold = my_random(180) + 300;
-    monster.defence = 160;
-    monster.exp = my_random(180) + 280;
+    set_monster("Sonic_Leviathan", 24, 980, 1540, 980, 1540,
+                160, 270, 160, 300, 480, 280, 460);
     set();
-
-    strcpy(monster.name, "Blood_Whale");
-    monster.attack = my_random(140) + 190;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(700) + 1300;
-    monster.gold = my_random(220) + 340;
-    monster.defence = 190;
-    monster.exp = my_random(220) + 320;
+    set_monster("Blood_Whale", 24, 1300, 1100, 1300, 1100,
+                190, 330, 190, 340, 560, 320, 540);
     set();
 
     if (user.wh == 16) user.wh++;
@@ -1705,39 +1502,20 @@ void Q3_5()
     l_m = 4;
     monster.lv = 25;
 
-    strcpy(monster.name, "Hooked_Spirit");
-    monster.attack = my_random(110) + 150;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(520) + 880;
-    monster.gold = my_random(160) + 280;
-    monster.defence = 160;
-    monster.exp = my_random(170) + 290;
+    set_monster("Hooked_Spirit", 25, 880, 1400, 880, 1400,
+                150, 260, 160, 280, 440, 290, 410);
     set();
-
-    strcpy(monster.name, "Line_Binder");
-    monster.attack = my_random(120) + 160;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(560) + 950;
-    monster.gold = my_random(180) + 300;
-    monster.defence = 170;
-    monster.exp = my_random(180) + 300;
+    set_monster("Line_Binder", 25, 950, 1510, 950, 1510,
+                160, 280, 170, 300, 480, 300, 480);
     set();
-
-    strcpy(monster.name, "Soul_Net");
-    monster.attack = my_random(130) + 170;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(600) + 1000;
-    monster.gold = my_random(190) + 320;
-    monster.defence = 180;
-    monster.exp = my_random(200) + 320;
+    set_monster("Soul_Net", 25, 1000, 1600, 1000, 1600,
+                170, 300, 180, 320, 510, 320, 540);
     set();
-
     textcolor(9);
     printf("\n조낚귀: \"낚싯줄은 이미 네 심장에 닿아 있다.\"");
     textcolor(15);
-    strcpy(monster.name, "JoNakGwi");
-    monster.attack = my_random(150) + 200;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(700) + 1400;
-    monster.gold = my_random(220) + 360;
-    monster.defence = 200;
-    monster.exp = my_random(220) + 350;
+    set_monster("JoNakGwi", 25, 1400, 2100, 1400, 2100,
+                200, 350, 200, 360, 540, 350, 570);
     set();
 
     if (user.wh == 17) user.wh++;
@@ -1750,7 +1528,7 @@ void Q3_6()
     if (user.wh > 18)
     {
         printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
-        getch();
+        getch();    
         return;
     }
 
@@ -1773,13 +1551,8 @@ void Q3_6()
     getch();
 
     l_m = 0;
-    strcpy(monster.name, "MEPHISTO");
-    monster.lv = user.lv + 8;
-    monster.attack = my_random(250) + 600;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(700) + 4200;
-    monster.gold = my_random(220) + 500;
-    monster.defence = 320;
-    monster.exp = my_random(300) + 650;
+    set_monster("MEPHISTO", user.lv + 8, 4200, 4900, 4200, 4900,
+                600, 850, 320, 500, 720, 650, 950);
     set();
 
     if (user.wh == 18) user.wh++;
