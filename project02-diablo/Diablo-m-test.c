@@ -1026,6 +1026,24 @@ int set()
     return 1;
 }
 
+void set_monster(const char* name, int lv,
+                 int hp_min, int hp_max,
+                 int mp_min, int mp_max,
+                 int att_min, int att_max,
+                 int def,
+                 int gold_min, int gold_max,
+                 int exp_min, int exp_max)
+{
+    strcpy(monster.name, name);
+    monster.lv = lv;
+    monster.nhp = monster.hp = my_random(hp_max - hp_min + 1) + hp_min;
+    monster.nmp = monster.mp = my_random(mp_max - mp_min + 1) + mp_min;
+    monster.attack = my_random(att_max - att_min + 1) + att_min;
+    monster.defence = def;
+    monster.gold = my_random(gold_max - gold_min + 1) + gold_min;
+    monster.exp = my_random(exp_max - exp_min + 1) + exp_min;
+}
+
 void Q1_1()
 {
     int i;
@@ -1036,7 +1054,7 @@ void Q1_1()
         return;
     }
     clrscr();
-    monster.lv = 1;
+    // monster.lv = 1;
     l_m = 29;
     for (i = 0; i < 10; i++)
     {
@@ -1060,7 +1078,7 @@ void Q1_1()
     printf("\n 뽀너스: Light Healing Potion +1");
     user.item[0] += 1;
     getch();
-    monster.lv = 3;
+    // monster.lv = 3;
     strcpy(monster.name, "Skel_Boss");
     set_monster("Skel_Boss", 3, 60, 65, 60, 65,
                 5, 9, 1, 1, 8, 7, 42);
@@ -1095,7 +1113,7 @@ void Q1_3()
 void Q1_4()
 {
     int i;
-    monster.lv = 12;
+    // monster.lv = 12;
     l_m = 2;
     for (i = 0; i < 2; i++)
     {
@@ -1115,8 +1133,8 @@ void Q1_5()
 {
     int i;
     l_m = 10;
-    monster.lv = 11; //이거 왜 두개?
-    //monster.lv = 11;
+    // monster.lv = 11; //이거 왜 두개?
+    // monster.lv = 11;
     for (i = 0; i < 3; i++)
     {
         set_monster("각목사나이", 11, 100, 160, 100, 160,
@@ -1172,7 +1190,7 @@ void Q1_6()
 
 void Q2_1()
 {
-    monster.lv = 12;
+    // monster.lv = 12;
     l_m = 5;
     set_monster("Turtle_1", 12, 150, 250, 150, 250,
                 6, 26, 8, 50, 100, 6, 35);
@@ -1238,23 +1256,6 @@ void Q2_3()
     return;
 }
 
-void set_monster(const char* name, int lv,
-                 int hp_min, int hp_max,
-                 int mp_min, int mp_max,
-                 int att_min, int att_max,
-                 int def,
-                 int gold_min, int gold_max,
-                 int exp_min, int exp_max)
-{
-    strcpy(monster.name, name);
-    monster.lv = lv;
-    monster.nhp = monster.hp = my_random(hp_max - hp_min + 1) + hp_min;
-    monster.nmp = monster.mp = my_random(mp_max - mp_min + 1) + mp_min;
-    monster.attack = my_random(att_max - att_min + 1) + att_min;
-    monster.defence = def;
-    monster.gold = my_random(gold_max - gold_min + 1) + gold_min;
-    monster.exp = my_random(exp_max - exp_min + 1) + exp_min;
-}
 
 void Q2_4()
 {
@@ -1266,7 +1267,6 @@ void Q2_4()
         return;
     }
     clrscr();
-    monster.lv = 20;
     l_m = 14;
     for (i = 0; i < 6; i++)
     {
@@ -1324,7 +1324,6 @@ void Q2_5()
         return;
     }
     clrscr();
-    monster.lv = 15;
     l_m = 14;
     for (i = 0; i < 6; i++)
     {
@@ -1378,7 +1377,6 @@ void Q2_6()
         return;
     }
     clrscr();
-    monster.lv = 15;
     l_m = 14;
     for (i = 0; i < 5; i++)
     {
@@ -1436,7 +1434,6 @@ void Q2_6()
 void Q3_1()
 {
     l_m = 5;
-    monster.lv = 18;
 
     set_monster("Ink_Rebel", 18, 420, 640, 420, 640,
                 70, 120, 45, 120, 200, 140, 220);
@@ -1462,7 +1459,6 @@ void Q3_1()
 void Q3_2()
 {
     l_m = 6;
-    monster.lv = 20;
 
     set_monster("Crab_Militia", 20, 520, 780, 520, 780,
                 85, 139, 70, 150, 240, 180, 270);
@@ -1491,7 +1487,6 @@ void Q3_2()
 void Q3_3()
 {
     l_m = 4;
-    monster.lv = 22;
 
     set_monster("Demonic_LineCook", 22, 640, 1000, 640, 1000,
                 110, 180, 100, 210, 330, 210, 330);
@@ -1517,7 +1512,6 @@ void Q3_3()
 void Q3_4()
 {
     l_m = 3;
-    monster.lv = 24;
 
     set_monster("Rotwave_Whale", 24, 900, 1420, 900, 1420,
                 140, 240, 150, 260, 420, 260, 430);
@@ -1537,7 +1531,6 @@ void Q3_4()
 void Q3_5()
 {
     l_m = 4;
-    monster.lv = 25;
 
     set_monster("Hooked_Spirit", 25, 880, 1400, 880, 1400,
                 150, 260, 160, 280, 440, 290, 410);
