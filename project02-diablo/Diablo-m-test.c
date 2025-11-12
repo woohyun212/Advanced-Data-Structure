@@ -36,7 +36,7 @@ void Load();
 void Insert_magic();
 void Insert_weapon();
 void Insert_defence();
-void Play_1();
+int Play_1();
 void Item_store();
 void Defence_Store();
 void Save_option();
@@ -47,7 +47,24 @@ void cheatcenter();
 void M_A();
 void Mg();
 int my_random(int n);
+int scani();
+void state_handler();
+void set_monster(const char* name, int lv,
+                 int hp_min, int hp_max,
+                 int mp_min, int mp_max,
+                 int att_min, int att_max,
+                 int def,
+                 int gold_min, int gold_max,
+                 int exp_min, int exp_max);
 
+
+void flush_stdin(void)
+{
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF)
+    {
+    }
+}
 
 void clrscr()
 {
@@ -129,6 +146,62 @@ int my_random(int n)
 void randomize()
 {
     srand(time(NULL));
+}
+
+int scani()
+{
+    char buffer[64]; // 입력을 임시로 저장할 버퍼
+    int i; // 문자 검사 인덱스
+    int digits; // 입력된 숫자 자리수
+    int value; // 최종 반환할 값
+
+    while (1) // 0~99 범위의 숫자가 들어올 때까지 반복
+    {
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) // 잘못된 입력 처리
+        {
+            printf("\n입력 오류가 발생했습니다.");
+            return -1;
+        }
+
+        i = 0;
+        while (buffer[i] == ' ' || buffer[i] == '\t')
+            i++; // 선행 공백 제거
+
+        digits = 0;
+        value = 0;
+        while (buffer[i] >= '0' && buffer[i] <= '9' && digits < 2) // 두자릿수까지만 입력받음
+        {
+            value = value * 10 + (buffer[i] - '0');
+            i++;
+            digits++;
+        }
+
+        while (buffer[i] == ' ' || buffer[i] == '\t' || buffer[i] == '\r')
+            i++; // 후행 공백 및 CR 제거
+
+        if ((buffer[i] == '\n' || buffer[i] == '\0') && digits > 0)
+            return value; // 0~99 범위 값 반환. 세자릿수부터는 조건에 걸림
+        else
+            printf("\n0 ~ 99 사이의 숫자만 입력해 주세요."); // 입력 재요청
+    }
+}
+
+void state_handler(){
+    int Func_set = 0;
+    while(Func_set != -1){
+        switch (Func_set){
+            case 0: Func_set = Play_1(); break; // Play_1()은 사용자 입력을 q로 반환하는 int 함수로 변경. exit == q
+            case 1: Condition(); Func_set = 0; break;
+            case 2: Item_store(); Func_set = 0; break;
+            case 3: Weapon_Store(); Func_set = 0; break;
+            case 4: Defence_Store(); Func_set = 0; break;
+            case 5: Battle(); Func_set = 0; break;
+            case 6: Save_option(); Func_set = 0; break;
+            case 7: Func_set = -1; break;
+            case 99: cheatcenter(); Func_set = 0; break; // 원래 1008인데 일단 99로 설정
+            default: Func_set = -1;
+        }
+    }
 }
 
 struct monster_struct
@@ -215,7 +288,7 @@ int main()
         printf("\n            ┃                          Copy Left 2025    ┃");
         printf("\n            ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
         gotoxy(35, 16);
-        scanf("%d", &a);
+        a = scani(); // scani: 메인 메뉴 입력을 두자리 정수로 제한
         if (a > 0 && a <= 3) break;
     }
     if (a == 1) Opening();
@@ -224,7 +297,7 @@ int main()
     Insert_magic();
     Insert_weapon();
     Insert_defence();
-    Play_1();
+    state_handler(); //Play_1();
     return 0;
 }
 
@@ -243,7 +316,7 @@ void Insert_weapon()
 void Insert_defence()
 {
     int i;
-    FILE* fp56 = fopen("defence.qwe", "rt");
+    FILE* fp56 = fopen("DEFENCE.QWE", "rt"); // 리눅스 환경에서는 대소문자 구분을 해야함. 대문자로 수정
     fscanf(fp56, "%d", &count2);
     for (i = 0; i < count2; i++)
         fscanf(fp56, "%s %d %d %d %d", defence[i].name, &defence[i].defence, &defence[i].hp, &defence[i].mp,
@@ -252,7 +325,7 @@ void Insert_defence()
     return;
 }
 
-void Play_1()
+int Play_1()
 {
     int i, q;
     clrscr();
@@ -283,7 +356,8 @@ void Play_1()
     printf("                    7. Exit                       \n");
     printf("   Please Insert Number:                          \n");
     gotoxy(26, 10);
-    scanf("%d", &q);
+    q = scani(); // scanf -> scani
+    /*
     if (q == 2) Item_store();
     if (q == 4) Defence_Store();
     if (q == 6) Save_option();
@@ -291,9 +365,10 @@ void Play_1()
     if (q == 1) Condition();
     if (q == 3) Weapon_Store();
     if (q == 5) Battle();
-    if (q == 1008) cheatcenter();
+    if (q == 99) cheatcenter(); // 원래 1008인데 일단 99로 설정
     Play_1();
-    return;
+    */
+    return q;
 }
 
 void cheatcenter()
@@ -309,7 +384,7 @@ void cheatcenter()
         printf("\n5.Waypoint +1");
         printf("\nInput Number:");
         gotoxy(14, 7);
-        scanf("%d", &ca);
+        ca = scani(); // scanf -> scani
         if (ca < 1 || ca > 5) continue;
         switch (ca)
         {
@@ -353,7 +428,7 @@ void Battle()
         printf("  ┗━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━┛\n");
         printf("Select Quest Number(1~%2d):", user.wh);
         gotoxy(27, 11);
-        scanf("%d", &l);
+        l = scani(); // scanf -> scani
         if (l < 0 || l > user.wh)
         {
             printf("\n You can't go there....");
@@ -437,46 +512,43 @@ void Potion()
     printf("\n  9.OUT  		         ");
     printf("\n━━━━━━━━━━━━━━━━━━━━━");
     printf("\nWhat you eat? :  ");
-    scanf("%d", &l);
+    l = scani(); // scanf -> scani
     if (l == 9) set();
     if(l>=1 && l<=8){
         if (user.item[l - 1] != 0)
         {
-            switch (l)
-            {
-            case 1: user.nhp += 25;
-                if (user.nhp > user.hp) user.nhp = user.hp;
-                user.item[0]--;
-                break;
-            case 2: user.nmp += 25;
-                if (user.nmp > user.mp) user.nmp = user.mp;
-                user.item[1]--;
-                break;
-            case 3: user.nhp += 50;
-                if (user.nhp > user.hp) user.nhp = user.hp;
-                user.item[2]--;
-                break;
-            case 4: user.nmp += 50;
-                if (user.nmp > user.mp) user.nmp = user.mp;
-                user.item[3]--;
-                break;
-            case 5: user.nhp += 100;
-                if (user.nhp > user.hp) user.nhp = user.hp;
-                user.item[4]--;
-                break;
-            case 6: user.nmp += 100;
-                if (user.nmp > user.mp) user.nmp = user.mp;
-                user.item[5]--;
-                break;
-            case 7: user.nhp += user.hp;
-                user.item[6]--;
-                break;
-            case 8: user.nmp += user.nmp;
-                user.item[7]--;
-                break;
-            }
-            h_m();
+        case 1: user.nhp += 25;
+            if (user.nhp > user.hp) user.nhp = user.hp;
+            user.item[0]--;
+            break;
+        case 2: user.nmp += 25;
+            if (user.nmp > user.mp) user.nmp = user.mp;
+            user.item[1]--;
+            break;
+        case 3: user.nhp += 50;
+            if (user.nhp > user.hp) user.nhp = user.hp;
+            user.item[2]--;
+            break;
+        case 4: user.nmp += 50;
+            if (user.nmp > user.mp) user.nmp = user.mp;
+            user.item[3]--;
+            break;
+        case 5: user.nhp += 100;
+            if (user.nhp > user.hp) user.nhp = user.hp;
+            user.item[4]--;
+            break;
+        case 6: user.nmp += 100;
+            if (user.nmp > user.mp) user.nmp = user.mp;
+            user.item[5]--;
+            break;
+        case 7: user.nhp = user.hp; // 기존에는 현재 체력을 최대 체력만큼 덧셈 연산을 했다. 오버플로우 가능성
+            user.item[6]--;
+            break;
+        case 8: user.nmp = user.mp; // 기존에는 현재 마나를 두배로 만드는 연산을 했다. 오버플로우 가능성
+            user.item[7]--;
+            break;
         }
+      h_m();
     }
     else
     {
@@ -502,7 +574,7 @@ void Weapon_Store()
         printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         printf("\nWhat do you Need? :    GOLD: %5d", user.gold);
         gotoxy(20, 5 + count1);
-        scanf("%d", &l);
+        l = scani(); // scanf -> scani
         if (l < 1 || l > count1 + 1) continue;
         if (l == count1 + 1) break;
         if (weapon[l - 1].cost > user.gold && l > 0 && l < count1 + 1)
@@ -543,7 +615,7 @@ void Defence_Store()
         printf("\n*디펜스는 20 까지로 제한됩니다.");
         printf("\nWhat do you Need? :    GOLD: %5d", user.gold);
         gotoxy(20, 6 + count2);
-        scanf("%d", &l);
+        l = scani(); // scanf -> scani
         if (l < 1 || l > count2 + 1) continue;
         if (l == count2 + 1) break;
         if (defence[l - 1].cost > user.gold && l > 0 && l < count1 + 1)
@@ -590,7 +662,7 @@ void Item_store()
         printf("\n━━━━━━━━━━━━━━━━━━━━━━");
         printf("\nWhat do you Need? :    GOLD: %5d", user.gold);
         gotoxy(20, 14);
-        scanf("%d", &l);
+        l = scani(); // scanf -> scani
         if (l <= 0 || l >= 10) continue;
         if (l == 9) break;
         if (cost[l - 1] > user.gold && l > 0 && l < 9)
@@ -646,6 +718,7 @@ void Condition()
 {
     int i;
     clrscr();
+    flush_stdin();
     textcolor(15);
     printf("\n");
     printf("          N   a  m   e: %s\n", user.name);
@@ -671,7 +744,6 @@ void Condition()
     textcolor(15);
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
     printf("\n\n\n  < E N T E R >");
-    getch();
     getch();
     return;
 }
@@ -771,7 +843,7 @@ void Opening()
     printf("\n           ┃                                          ┃");
     printf("\n           ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
     gotoxy(37, 15);
-    scanf("%d", &ch);
+    ch = scani(); // scanf -> scani
     user.gold = 0;
     if (ch == 1)
     {
@@ -901,7 +973,7 @@ void set()
         printf("Leave Monster: %d", l_m);
         gotoxy(1, 11);
         printf("Battle Order(1~4): ");
-        scanf("%d", &input);
+        input = scani(); // scanf -> scani
         if (input < 1 || input > 4) continue;
         switch (input)
         {
@@ -1233,6 +1305,9 @@ void Q2_3()
     monster.defence = 3;
     monster.exp = my_random(40) + 30;
     set();
+
+    set_monster("고지방 감자튀김", 15, 30, 40, 10, 15,
+                    10, 14, 3, 10, 15, 15, 20);
     strcpy(monster.name, "BabyOfSun");
     monster.attack = my_random(10) + 8;
     monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 1550;
@@ -1724,7 +1799,7 @@ void Q4_1() { // 아정
         set();
     }
     if (user.wh == 19) user.wh++;
-    return; } 
+    return; }
 void Q4_2() {
     l_m = 4;
     monster.lv = 29;
@@ -1746,7 +1821,7 @@ void Q4_2() {
         set();
     if (user.wh == 20) user.wh++;
     return; }
-void Q4_3() { 
+void Q4_3() {
     if (user.wh > 21)
     {
         printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
@@ -1777,9 +1852,9 @@ void Q4_3() {
     l_m = 0;
     if(monster.nhp > 666){ //페이즈 1
         strcpy(monster.name, "DIABLO");
-        monster.attack = my_random(350) + 480;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(830) + 1660;        
-        monster.defence = 480;
+        monster.attack = my_random(366) + 666;
+        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 3000;
+        monster.defence = 900;
         set();
 
     }else{ //페이즈 2
@@ -1881,7 +1956,7 @@ void Mg()
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
 xx:
     printf("\n0.Cancel ,Magic Order(1~%d):", s);
-    scanf(" %d", &in);
+    in = scani(); // scanf -> scani
 
     if (in < 0 || in > s || magic[in - 1].ump > user.nmp) goto xx;
     if (in == 0)
