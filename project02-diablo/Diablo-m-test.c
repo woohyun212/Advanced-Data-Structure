@@ -1576,36 +1576,20 @@ void Q3_6()
 
 void Q4_1() { // 아정
     l_m = 5;
-    monster.lv = 27;
     for(int i=0;i<5;i++){
-        strcpy(monster.name, "악마 공무원");
-        monster.attack = my_random(225) + 300;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1050) + 2100;
-        monster.gold = my_random(330) + 540;
-        monster.defence = 300;
-        monster.exp = my_random(330) + 525;
+       set_monster("악마 공무원", 27, 1100, 2,150, 1100, 2,150, 300, 525, 300, 540, 870, 525, 855);
         if(set() == 0) return;
     }
     if (user.wh == 19) user.wh++;
     return; }
 void Q4_2() {
     l_m = 4;
-    monster.lv = 29;
+
     for(int i=0;i<3;i++){
-        strcpy(monster.name, "악마 공무원");
-        monster.attack = my_random(270) + 360;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1260) + 2520;
-        monster.gold = my_random(400) + 650;
-        monster.defence = 360;
-        monster.exp = my_random(600) + 630;
+        set_monster("악마 공무원", 29, 1520, 2780, 1520, 2780, 360, 630, 360, 650, 1050, 630, 1230);
         if(set() == 0) return;
     }
-    strcpy(monster.name, "곽팀장");
-        monster.attack = my_random(300) + 400;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1400) + 2700;
-        monster.gold = my_random(435) + 710;
-        monster.defence = 400;
-        monster.exp = my_random(430) + 700;
+    set_monster("곽팀장" 29, 1700, 3100, 1700, 3100, 400, 700, 400, 710, 1142, 700, 1130);
         if(set() == 0) return;
     if (user.wh == 20) user.wh++;
     return; }
@@ -1639,10 +1623,7 @@ void Q4_3() {
 
     l_m = 0;
     if(monster.nhp > 666){ //페이즈 1
-        strcpy(monster.name, "DIABLO");
-        monster.attack = my_random(366) + 666;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(666) + 3000;
-        monster.defence = 900;
+        set_monster("DIABLO", 35, 1660, 2490, 1660, 2490, 480, 830, 480, 0, 0, 0, 0);
         if(set() == 0) return;
 
     }else{ //페이즈 2
@@ -1650,12 +1631,7 @@ void Q4_3() {
         textcolor(9);
         printf("\nDiablo: 생각보다 강하군...그럼 진심으로 널 상대해볼까?");
         delay(1200);
-    strcpy(monster.name, "DIABLO[각성]");
-        monster.attack = my_random(530) + 720;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1660) + 3330;
-        monster.gold = my_random(700) + 1140;
-        monster.defence = 570;
-        monster.exp = my_random(700) + 1110;
+    set_monster("DIABLO[각성]", 35, 3330, 4990, 3330, 4990, 720, 1250, 570, 1140, 1840, 1110, 1810);
         if(set() == 0) return;
     }
     //if (user.wh == 21) user.wh++;
