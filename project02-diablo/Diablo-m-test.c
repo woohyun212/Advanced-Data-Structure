@@ -4,21 +4,114 @@
 #include <math.h>
 #include <time.h>
 #include <unistd.h>
-#include <termios.h>
-#include <fcntl.h>
+#ifdef _WIN32
+    #include <conio.h>
+#else
+    #include <termios.h>
+    #include <fcntl.h>
+#endif
 
 
-void Q1_1(); void Q1_2(); void Q1_3(); void Q1_4(); void Q1_5(); void Q1_6();
-void Q2_1(); void Q2_2(); void Q2_3(); void Q2_4(); void Q2_5(); void Q2_6();
-void Q3_1(); void Q3_2(); void Q3_3(); void Q3_4(); void Q3_5(); void Q3_6();
-void Q4_1(); void Q4_2(); void Q4_3();
-void h_m(); void set();
-void Opening(); void Load(); void Insert_magic(); void Insert_weapon(); void Insert_defence();
-void Play_1(); void Item_store(); void Defence_Store(); void Save_option(); void Condition();
-void Weapon_Store(); void Battle(); void cheatcenter();
-void M_A(); void Mg();
+void Q1_1();
+void Q1_2();
+void Q1_3();
+void Q1_4();
+void Q1_5();
+void Q1_6();
+void Q2_1();
+void Q2_2();
+void Q2_3();
+void Q2_4();
+void Q2_5();
+void Q2_6();
+void Q3_1();
+void Q3_2();
+void Q3_3();
+void Q3_4();
+void Q3_5();
+void Q3_6();
+void Q4_1();
+void Q4_2();
+void Q4_3();
+void h_m();
+int set(); // 전투의 결과를 알려주도록 Set() 반환값을 void -> int로 변경
+void Opening();
+void Load();
+void Insert_magic();
+void Insert_weapon();
+void Insert_defence();
+int Play_1();
+void Item_store();
+void Defence_Store();
+void Save_option();
+void Condition();
+void Weapon_Store();
+void Battle();
+void cheatcenter();
+void M_A();
+void Mg();
 int my_random(int n);
+int scani();
+void state_handler();
+void set_monster(const char* name, int lv,
+                 int hp_min, int hp_max,
+                 int mp_min, int mp_max,
+                 int att_min, int att_max,
+                 int def,
+                 int gold_min, int gold_max,
+                 int exp_min, int exp_max);
+void game_over(void);
 
+typedef struct
+{
+    const char *file_name; // 파일명 수정 접근 const로 막기
+    void (*func_name)(void);
+} QuestInfo;
+
+static const QuestInfo quest_map[] =
+{
+    {NULL, NULL},
+    {"QUEST1_1.DAT", Q1_1},
+    {"QUEST1_2.DAT", Q1_2},
+    {"QUEST1_3.DAT", Q1_3},
+    [4]  = {"QUEST1_4.DAT", Q1_4},
+    {"QUEST1_5.DAT", Q1_5},
+    {"QUEST1_6.DAT", Q1_6},
+    {"QUEST2_1.DAT", Q2_1},
+    {"QUEST2_2.DAT", Q2_2},
+    {"QUEST2_3.DAT", Q2_3},
+    {"QUEST2_4.DAT", Q2_4},
+    {"QUEST2_5.DAT", Q2_5},
+    {"QUEST2_6.DAT", Q2_6},
+    {"QUEST3_1.DAT", Q3_1},
+    {"QUEST3_2.DAT", Q3_2},
+    {"QUEST3_3.DAT", Q3_3},
+    {"QUEST3_4.DAT", Q3_4},
+    {"QUEST3_5.DAT", Q3_5},
+    {"QUEST3_6.DAT", Q3_6},
+    {"QUEST4_1.DAT", Q4_1},
+    {"QUEST4_2.DAT", Q4_2},
+    {"QUEST4_3.DAT", Q4_3},
+};
+
+static const int QUEST_COUNT = (int)(sizeof(quest_map) / sizeof(quest_map[0]));
+
+static const QuestInfo *get_quest_info(int quest_id)
+{
+    if (quest_id < 0 || quest_id >= QUEST_COUNT)
+    {
+        return NULL;
+    }
+    return &quest_map[quest_id];
+}
+
+void flush_stdin(void)
+{
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF)
+    {
+    }
+}
 
 void clrscr()
 {
@@ -29,12 +122,46 @@ void clrscr()
 void textcolor(int color)
 {
     // 색깔바꾸기
+    if(color<20){
+        printf("\033[%dm", color + 30); //텍스트의 전경색 계산
+    }else{
+        printf("\033[%dm", color + 70); //텍스트의 밝은 전경색 계산
+    }
+// Black	30	40
+// Red	    31	41
+// Green	32	42
+// Yellow	33	43
+// Blue	    34	44
+// Magenta	35	45
+// Cyan	    36	46
+// White	37	47
+// Default	39	49
+
+// Bright Black	90	100
+// Bright Red	91	101
+// Bright Green	92	102
+// Bright Yellow93	103
+// Bright Blue	94	104
+// Bright Magenta   95	105
+// Bright Cyan	96	106
+// Bright White	97	107
 }
 
 void gotoxy(int x, int y)
 {
     // 커서 이동
     printf("\033[%d;%dH", y, x);
+}
+
+void gotoxy_rel(int dx, int dy)
+{
+    if (dy < 0)      printf("\033[%dA", -dy);  // 위로
+    else if (dy > 0) printf("\033[%dB",  dy);  // 아래로
+
+    if (dx > 0)      printf("\033[%dC",  dx);  // 오른쪽
+    else if (dx < 0) printf("\033[%dD", -dx);  // 왼쪽
+
+    // fflush(stdout); // 바로 반영되게 버퍼 flush
 }
 
 void delay(int ms)
@@ -45,7 +172,7 @@ void delay(int ms)
     usleep(ms * 1);
 }
 
-
+#if !defined(_WIN32)
 int kbhit(void)
 {
     // 키 입력 여부 반환 함수
@@ -88,7 +215,7 @@ int getch(void)
     tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
     return ch;
 }
-
+#endif
 
 int my_random(int n)
 {
@@ -102,6 +229,42 @@ void randomize()
     srand(time(NULL));
 }
 
+int scani()
+{
+    char buffer[10000]; // 입력을 임시로 저장할 버퍼
+    int i; // 문자 검사 인덱스
+    int digits; // 입력된 숫자 자리수
+    int value; // 최종 반환할 값
+
+    while (1) // 0~9999 범위의 숫자가 들어올 때까지 반복
+    {
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) // 잘못된 입력 처리
+        {
+            printf("\n입력 오류가 발생했습니다.");
+            return -1;
+        }
+
+        i = 0;
+        while (buffer[i] == ' ' || buffer[i] == '\t')
+            i++; // 선행 공백 제거
+
+        digits = 0;
+        value = 0;
+        while (buffer[i] >= '0' && buffer[i] <= '9' && digits < 4) // 네자릿수까지만 입력받음
+        {
+            value = value * 10 + (buffer[i] - '0');
+            i++;
+            digits++;
+        }
+
+        while (buffer[i] == ' ' || buffer[i] == '\t' || buffer[i] == '\r')
+            i++; // 후행 공백 및 CR 제거
+
+        if ((buffer[i] == '\n' || buffer[i] == '\0') && digits > 0)
+            return value; // 0~9999 범위 값 반환. 세자릿수부터는 조건에 걸림
+    }
+}
+
 struct monster_struct
 {
     char name[100];
@@ -112,8 +275,8 @@ struct monster_struct
     int exp;
     int gold;
     int defence;
-    int nhp;
-    int nmp;
+    int nhp; // 남은 HP
+    int nmp; // 남은 MP
 } monster;
 
 struct magic_sturct
@@ -166,12 +329,15 @@ int cheat = 0, l_m, count1, count2;
 int main()
 {
     int a;
+    #ifdef _WIN32 
+        system("chcp 65001");
+    #endif
     randomize();
     cheat = 0;
     while (1)
     {
         clrscr();
-        textcolor(15);
+        textcolor(7);
         clrscr();
         printf("\n\n\n\n\n\n");
         printf("\n            ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
@@ -186,7 +352,7 @@ int main()
         printf("\n            ┃                          Copy Left 2025    ┃");
         printf("\n            ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
         gotoxy(35, 16);
-        scanf("%d", &a);
+        a = scani(); // scani: 메인 메뉴 입력을 두자리 정수로 제한
         if (a > 0 && a <= 3) break;
     }
     if (a == 1) Opening();
@@ -195,14 +361,33 @@ int main()
     Insert_magic();
     Insert_weapon();
     Insert_defence();
-    Play_1();
+    state_handler(); //Play_1();
     return 0;
+}
+
+void state_handler(){
+    int Func_set = 0;
+    while(Func_set != -1){
+        switch (Func_set){
+            case 0: Func_set = Play_1(); break; // Play_1()은 사용자 입력을 q로 반환하는 int 함수로 변경. exit == q
+            case 1: Condition(); Func_set = 0; break;
+            case 2: Item_store(); Func_set = 0; break;
+            case 3: Weapon_Store(); Func_set = 0; break;
+            case 4: Defence_Store(); Func_set = 0; break;
+            case 5: Battle(); Func_set = 0; break;
+            case 6: Save_option(); Func_set = 0; break;
+            case 7: Func_set = -1; break;
+            case 1008: cheatcenter(); Func_set = 0; break;
+            default: Func_set = 0;break;;
+            // default: Func_set = -1;
+        }
+    }
 }
 
 void Insert_weapon()
 {
     int i;
-    FILE* fp13 = fopen("weapon.qwe", "r");
+    FILE* fp13 = fopen("WEAPON.QWE", "r");
     fscanf(fp13, "%d", &count1);
     for (i = 0; i < 100; i++)
         fscanf(fp13, "%s %d %d %d %d", weapon[i].name, &weapon[i].power, &weapon[i].hp_bonus, &weapon[i].mp_bonus,
@@ -214,7 +399,7 @@ void Insert_weapon()
 void Insert_defence()
 {
     int i;
-    FILE* fp56 = fopen("defence.qwe", "rt");
+    FILE* fp56 = fopen("DEFENCE.QWE", "rt"); // 리눅스 환경에서는 대소문자 구분을 해야함. 대문자로 수정
     fscanf(fp56, "%d", &count2);
     for (i = 0; i < count2; i++)
         fscanf(fp56, "%s %d %d %d %d", defence[i].name, &defence[i].defence, &defence[i].hp, &defence[i].mp,
@@ -223,12 +408,13 @@ void Insert_defence()
     return;
 }
 
-void Play_1()
+int Play_1()
 {
     int i, q;
     clrscr();
-    user.nhp = user.hp;
-    user.nmp = user.mp;
+    //user.nhp = user.hp; //배틀 중에 변경된 체력과 마나로 유지하기 위해 초기화 로직을 지움.
+    //user.nmp = user.mp;
+    /*
     for (i = 0; i < 8; i++)
         if (user.item[i] > 20)
         {
@@ -244,6 +430,7 @@ void Play_1()
         getch();
         clrscr();
     }
+    */
     printf("     ━━━━━━━━━ Camp ━━━━━━━━\n\n");
     printf("                    1. Condition                  \n");
     printf("                    2. Item Store                 \n");
@@ -254,7 +441,8 @@ void Play_1()
     printf("                    7. Exit                       \n");
     printf("   Please Insert Number:                          \n");
     gotoxy(26, 10);
-    scanf("%d", &q);
+    q = scani(); // scanf -> scani
+    /*
     if (q == 2) Item_store();
     if (q == 4) Defence_Store();
     if (q == 6) Save_option();
@@ -262,9 +450,10 @@ void Play_1()
     if (q == 1) Condition();
     if (q == 3) Weapon_Store();
     if (q == 5) Battle();
-    if (q == 1008) cheatcenter();
+    if (q == 99) cheatcenter(); // 원래 1008인데 일단 99로 설정
     Play_1();
-    return;
+    */
+    return q;
 }
 
 void cheatcenter()
@@ -280,7 +469,7 @@ void cheatcenter()
         printf("\n5.Waypoint +1");
         printf("\nInput Number:");
         gotoxy(14, 7);
-        scanf("%d", &ca);
+        ca = scani(); // scanf -> scani
         if (ca < 1 || ca > 5) continue;
         switch (ca)
         {
@@ -304,13 +493,14 @@ void cheatcenter()
 
 void Battle()
 {
-    int i, j, k, l, time;
+    int l, time;
     FILE* fp24;
     while (1)
     {
-        int i;
         char data;
-        textcolor(15);
+        const QuestInfo *quest;
+        if (user.wh >= QUEST_COUNT) user.wh = QUEST_COUNT - 1;
+        textcolor(7);
         clrscr();
         printf("  ┏━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┓\n");
         printf("  ┃  A C T 1 ┃  A C T 2 ┃  A C T 3 ┃  A C T 4 ┃\n");
@@ -324,70 +514,41 @@ void Battle()
         printf("  ┗━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━┛\n");
         printf("Select Quest Number(1~%2d):", user.wh);
         gotoxy(27, 11);
-        scanf("%d", &l);
+        l = scani(); // scanf -> scani
         if (l < 0 || l > user.wh)
         {
-            printf("\n You can't go there....");
+            printf("\n눈을 뜨세요 용사여... 웨이포인트 숫자를 좀 읽으세요!!!!");
             getch();
             continue;
         }
-        if (l == 1) fp24 = fopen("Quest1_1.dat", "rt");
-        if (l == 2) fp24 = fopen("Quest1_2.dat", "rt");
-        if (l == 3) fp24 = fopen("Quest1_3.dat", "rt");
-        if (l == 4) fp24 = fopen("Quest1_4.dat", "rt");
-        if (l == 5) fp24 = fopen("Quest1_5.dat", "rt");
-        if (l == 6) fp24 = fopen("Quest1_6.dat", "rt");
-        if (l == 7) fp24 = fopen("Quest2_1.dat", "rt");
-        if (l == 8) fp24 = fopen("Quest2_2.dat", "rt");
-        if (l == 9) fp24 = fopen("Quest2_3.dat", "rt");
-        if (l == 10) fp24 = fopen("Quest2_4.dat", "rt");
-        if (l == 11) fp24 = fopen("Quest2_5.dat", "rt");
-        if (l == 12) fp24 = fopen("Quest2_6.dat", "rt");
-        if (l == 13) fp24 = fopen("Quest3_1.dat", "rt");
-        if (l == 14) fp24 = fopen("Quest3_2.dat", "rt");
-        if (l == 15) fp24 = fopen("Quest3_3.dat", "rt");
-        if (l == 16) fp24 = fopen("Quest3_4.dat", "rt");
-        if (l == 17) fp24 = fopen("Quest3_5.dat", "rt");
-        if (l == 18) fp24 = fopen("Quest3_6.dat", "rt");
-        if (l == 19) fp24 = fopen("Quest4_1.dat", "rt");
-        if (l == 20) fp24 = fopen("Quest4_2.dat", "rt");
-        if (l == 21) fp24 = fopen("Quest4_3.dat", "rt");
         if (l == 0) break;
-        if (l > 0 && l <= user.wh)
+        quest = get_quest_info(l);
+        if (quest == NULL || quest->file_name == NULL || quest->func_name == NULL)
         {
-            clrscr();
-            printf("\n ");
-            time = 30;
-            while (fscanf(fp24, "%c", &data) != EOF)
-            {
-                if (kbhit()) time = 0;
-                printf("%c", data);
-                delay(time);
-            }
-            if (time == 0) getch();
+            printf("\n Invalid quest selection....");
             getch();
+            continue;
         }
-        if (l == 1) Q1_1();
-        if (l == 2) Q1_2();
-        if (l == 3) Q1_3();
-        if (l == 4) Q1_4();
-        if (l == 5) Q1_5();
-        if (l == 6) Q1_6();
-        if (l == 7) Q2_1();
-        if (l == 8) Q2_2();
-        if (l == 9) Q2_3();
-        if (l == 10) Q2_4();
-        if (l == 11) Q2_5();
-        if (l == 12) Q2_6();
-        if (l == 13) Q3_1();
-        if (l == 14) Q3_2();
-        if (l == 15) Q3_3();
-        if (l == 16) Q3_4();
-        if (l == 17) Q3_5();
-        if (l == 18) Q3_6();
-        if (l == 19) Q4_1();
-        if (l == 20) Q4_2();
-        if (l == 21) Q4_3();
+        fp24 = fopen(quest->file_name, "rt");
+        if (fp24 == NULL)
+        {
+            printf("\n Failed to open quest file");
+            getch();
+            continue;
+        }
+        clrscr();
+        printf("\n ");
+        time = 30;
+        while (fscanf(fp24, "%c", &data) != EOF)
+        {
+            if (kbhit()) time = 0;
+            printf("%c", data);
+            delay(time);
+        }
+        fclose(fp24);
+        if (time == 0) getch();
+        getch();
+        quest->func_name();
     }
     return;
 }
@@ -408,51 +569,60 @@ void Potion()
     printf("\n  9.OUT  		         ");
     printf("\n━━━━━━━━━━━━━━━━━━━━━");
     printf("\nWhat you eat? :  ");
-    scanf("%d", &l);
-    if (l == 9) set();
-    if (user.item[l - 1] != 0)
+    l = scani(); // scanf -> scani
+    if (l == 9)
     {
-        switch (l)
-        {
-        case 1: user.nhp += 25;
-            if (user.nhp > user.hp) user.nhp = user.hp;
-            user.item[0]--;
-            break;
-        case 2: user.nmp += 25;
-            if (user.nmp > user.mp) user.nmp = user.mp;
-            user.item[1]--;
-            break;
-        case 3: user.nhp += 50;
-            if (user.nhp > user.hp) user.nhp = user.hp;
-            user.item[2]--;
-            break;
-        case 4: user.nmp += 50;
-            if (user.nmp > user.mp) user.nmp = user.mp;
-            user.item[3]--;
-            break;
-        case 5: user.nhp += 100;
-            if (user.nhp > user.hp) user.nhp = user.hp;
-            user.item[4]--;
-            break;
-        case 6: user.nmp += 100;
-            if (user.nmp > user.mp) user.nmp = user.mp;
-            user.item[5]--;
-            break;
-        case 7: user.nhp += user.hp;
-            user.item[6]--;
-            break;
-        case 8: user.nmp += user.nmp;
-            user.item[7]--;
-            break;
-        }
-        h_m();
+        //set(); 필요없음
+        return;
     }
-    else
+    if (l < 1 || l > 8)
+    {
+        printf("잘못된 입력입니다.");
+        getch();
+        return;
+    }
+    if (user.item[l - 1] == 0)
     {
         printf("You don't have that potion!!!");
         getch();
-        set();
+        //set();
+        return;
     }
+
+    switch (l)
+    {
+    case 1: user.nhp += 25;
+        if (user.nhp > user.hp) user.nhp = user.hp;
+        user.item[0]--;
+        break;
+    case 2: user.nmp += 25;
+        if (user.nmp > user.mp) user.nmp = user.mp;
+        user.item[1]--;
+        break;
+    case 3: user.nhp += 50;
+        if (user.nhp > user.hp) user.nhp = user.hp;
+        user.item[2]--;
+        break;
+    case 4: user.nmp += 50;
+        if (user.nmp > user.mp) user.nmp = user.mp;
+        user.item[3]--;
+        break;
+    case 5: user.nhp += 100;
+        if (user.nhp > user.hp) user.nhp = user.hp;
+        user.item[4]--;
+        break;
+    case 6: user.nmp += 100;
+        if (user.nmp > user.mp) user.nmp = user.mp;
+        user.item[5]--;
+        break;
+    case 7: user.nhp = user.hp; // 기존에는 현재 체력을 최대 체력만큼 덧셈 연산을 했다. 오버플로우 가능성
+        user.item[6]--;
+        break;
+    case 8: user.nmp = user.mp; // 기존에는 현재 마나를 두배로 만드는 연산을 했다. 오버플로우 가능성
+        user.item[7]--;
+        break;
+    }
+    h_m();
     return;
 }
 
@@ -471,7 +641,7 @@ void Weapon_Store()
         printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         printf("\nWhat do you Need? :    GOLD: %5d", user.gold);
         gotoxy(20, 5 + count1);
-        scanf("%d", &l);
+        l = scani(); // scanf -> scani
         if (l < 1 || l > count1 + 1) continue;
         if (l == count1 + 1) break;
         if (weapon[l - 1].cost > user.gold && l > 0 && l < count1 + 1)
@@ -484,6 +654,7 @@ void Weapon_Store()
         {
             user.gold -= weapon[l - 1].cost;
             user.hp += weapon[l - 1].hp_bonus;
+            if (user.nhp > user.hp) user.nhp = user.hp; // 현재 체력이 최대 체력을 넘는 경우, 최대 보정
             user.mp += weapon[l - 1].mp_bonus;
             user.attack += weapon[l - 1].power;
             clrscr();
@@ -491,6 +662,16 @@ void Weapon_Store()
             printf("\nM    P: %3d + %3d -> %3d", user.mp - weapon[l - 1].mp_bonus, weapon[l - 1].mp_bonus, user.mp);
             printf("\nATTACK: %3d + %3d -> %3d", user.attack - weapon[l - 1].power, weapon[l - 1].power, user.attack);
             getch();
+            if (l==10 && user.nhp <= 0)
+            {
+                clrscr();
+                printf("\n아아.. 당신은 검의 힘을 견뎌내지 못하고 ");
+                textcolor(13);textcolor(21);printf("주화입마");
+                textcolor(9);textcolor(19);
+                printf("에 빠져 죽었습니다.\n");
+                getch();
+                game_over();
+            }
         }
     }
     return;
@@ -512,7 +693,7 @@ void Defence_Store()
         printf("\n*디펜스는 20 까지로 제한됩니다.");
         printf("\nWhat do you Need? :    GOLD: %5d", user.gold);
         gotoxy(20, 6 + count2);
-        scanf("%d", &l);
+        l = scani(); // scanf -> scani
         if (l < 1 || l > count2 + 1) continue;
         if (l == count2 + 1) break;
         if (defence[l - 1].cost > user.gold && l > 0 && l < count1 + 1)
@@ -533,6 +714,13 @@ void Defence_Store()
             printf("\nDEFENCE: %3d + %3d -> %3d", user.defence - defence[l - 1].defence, defence[l - 1].defence,
                    user.defence);
             getch();
+            if(user.defence > 20){ // Play_1()의 디펜스 하락 로직 상점에서 방어구 구매 시점으로 이동
+                user.defence = 20;
+                clrscr();
+                printf("\n디펜스가 20이상이 되면 자동으로 디펜스가 하락됩니다.");
+                getch();
+                clrscr();
+            }
         }
     }
     return;
@@ -559,13 +747,19 @@ void Item_store()
         printf("\n━━━━━━━━━━━━━━━━━━━━━━");
         printf("\nWhat do you Need? :    GOLD: %5d", user.gold);
         gotoxy(20, 14);
-        scanf("%d", &l);
+        l = scani(); // scanf -> scani
         if (l <= 0 || l >= 10) continue;
         if (l == 9) break;
-        if (cost[l - 1] > user.gold && l > 0 && l < 9)
+        if (cost[l - 1] > user.gold) // && l > 0 && l < 9 전처리 있으므로 삭제
         {
             clrscr();
             printf("\n Need More Money");
+            getch();
+            continue;
+        }
+        else if(user.item[l-1] >= 20){ // Play_1의 물약 개수 검증 상점에 구현
+            clrscr();
+            printf("\n You can't buy item more than 20");
             getch();
             continue;
         }
@@ -583,7 +777,7 @@ void Save_option()
     FILE* fp3;
     clrscr();
     user.code = (user.lv + user.cs + user.nhp + user.nmp + user.gold + user.exp) / user.lv + user.lv;
-    fp3 = fopen("savedata.sav", "w+");
+    fp3 = fopen("SAVEDATA.SAV", "w+");
     fprintf(fp3, "%s", user.name);
     fprintf(fp3, "\n%d", user.lv);
     fprintf(fp3, "\n%d", user.cs);
@@ -615,7 +809,8 @@ void Condition()
 {
     int i;
     clrscr();
-    textcolor(15);
+    // flush_stdin();
+    textcolor(7);
     printf("\n");
     printf("          N   a  m   e: %s\n", user.name);
     printf("          L e  v  e  l: %d\n", user.lv);
@@ -625,10 +820,10 @@ void Condition()
     printf("          DefencePoint: %d\n", user.defence);
     printf("          Need     Exp: %d \n", user.exp);
     printf("          G   O  L   D: %d \n", user.gold);
-    textcolor(15);
+    textcolor(7);
     printf("     Can Private Magic: \n ");
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━");
-    textcolor(15);
+    textcolor(7);
     for (i = 0; i < 8; i++)
     {
         if (magic[i].lv <= user.lv)
@@ -637,10 +832,10 @@ void Condition()
                    magic[i].lv);
         }
     }
-    textcolor(15);
+    textcolor(7);
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
     printf("\n\n\n  < E N T E R >");
-    getch();getch();
+    getch();
     return;
 }
 
@@ -648,9 +843,9 @@ void Insert_magic()
 {
     FILE* fp2;
     int i;
-    if (user.cs == 1) fp2 = fopen("Amamagic.dat", "rt");
-    if (user.cs == 2) fp2 = fopen("Socmagic.dat", "rt");
-    if (user.cs == 3) fp2 = fopen("Necmagic.dat", "rt");
+    if (user.cs == 1) fp2 = fopen("AMAMAGIC.DAT", "rt");
+    if (user.cs == 2) fp2 = fopen("SOCMAGIC.DAT", "rt");
+    if (user.cs == 3) fp2 = fopen("NECMAGIC.DAT", "rt");
     for (i = 0; i < 8; i++)
         fscanf(fp2, "%s %d %d %d", magic[i].name, &magic[i].power, &magic[i].ump, &magic[i].lv);
     fclose(fp2);
@@ -664,7 +859,7 @@ void Load()
     int code, lv, cs, nmp, defence, gold, mp, nhp, hp, exp, attack, wh;
     FILE* fp1;
     clrscr();
-    fp1 = fopen("savedata.sav", "rt");
+    fp1 = fopen("SAVEDATA.SAV", "rt");
     fscanf(fp1, "%s", name);
     fscanf(fp1, "%d", &lv);
     fscanf(fp1, "%d", &cs);
@@ -713,7 +908,7 @@ void Load()
 
 void Opening()
 {
-    FILE* fp0 = fopen("Opening.qwe", "rt");
+    FILE* fp0 = fopen("OPENING.QWE", "rt");
     int ch, i;
     char data;
     randomize();
@@ -724,7 +919,7 @@ void Opening()
         delay(50);
     }
     getch();
-
+    /*
     clrscr();
     printf("\n\n\n\n\n");
     printf("\n           ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
@@ -739,8 +934,65 @@ void Opening()
     printf("\n           ┃                                          ┃");
     printf("\n           ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
     gotoxy(37, 15);
-    scanf("%d", &ch);
+    */
+    //ch = scani();
     user.gold = 0;
+    while(1){ // 기존에 다른 정수 입력 시 세그폴트 문제를 해결(예외처리)
+        clrscr();
+        printf("\n\n\n\n\n");
+        printf("\n           ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+        printf("\n           ┃                                          ┃");
+        printf("\n           ┃                                          ┃");
+        printf("\n           ┃            Choose Your Character         ┃");
+        printf("\n           ┃                                          ┃");
+        printf("\n           ┃                 1. Amazon                ┃");
+        printf("\n           ┃                 2. Sorceress             ┃");
+        printf("\n           ┃                 3. Necromancer           ┃");
+        printf("\n           ┃   Press Input number:                    ┃");
+        printf("\n           ┃                                          ┃");
+        printf("\n           ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+        gotoxy(37, 15);
+        ch = scani(); // scanf -> scani
+        switch(ch){
+            case 1:
+                strcpy(user.name, "Amazon");
+                user.cs = 1;
+                user.lv = 1;
+                user.nhp = user.hp = my_random(28) + 25;
+                user.nmp = user.mp = my_random(15) + 5;
+                user.attack = my_random(8) + 10;
+                user.exp = my_random(8 * user.lv * user.lv) + 100;
+                user.defence = 0;
+                user.wh = 1;
+                break;
+            case 2:
+                strcpy(user.name, "Sorceress");
+                user.cs = 2;
+                user.lv = 1;
+                user.nhp = user.hp = my_random(20) + 10;
+                user.nmp = user.mp = my_random(20) + 30;
+                user.attack = my_random(8) + 5;
+                user.exp = my_random(8 * user.lv * user.lv) + 100;
+                user.defence = 0;
+                user.wh = 1;
+                break;
+            case 3:
+                strcpy(user.name, "Necromancer");
+                user.cs = 3;
+                user.lv = 1;
+                user.nhp = user.hp = my_random(20) + 15;
+                user.nmp = user.mp = my_random(20) + 25;
+                user.attack = my_random(8) + 7;
+                user.exp = my_random(8 * user.lv * user.lv) + 100;
+                user.defence = 0;
+                user.wh = 1;
+                break;
+            default:
+                continue;
+        }
+        break;
+    }
+    /*
     if (ch == 1)
     {
         strcpy(user.name, "Amazon");
@@ -778,6 +1030,7 @@ void Opening()
         user.defence = 0;
         user.wh = 1;
     }
+    */
     user.gold = 500;
     for (i = 0; i < 8; i++)
         user.item[i] = 0;
@@ -785,7 +1038,18 @@ void Opening()
     return;
 }
 
-void set()
+void game_over(void)
+{
+    clrscr();
+    printf("\n 으억! 이렇게 당하다니 이세계의 미래는.....");
+    getch();
+    clrscr();
+    printf("\n Game Over ");
+    getch();
+    exit(0); // exit(1)에서 exit(0)으로 수정
+}
+
+int set()
 {
     int re, input;
     randomize();
@@ -800,11 +1064,11 @@ void set()
             getch();
             user.exp -= monster.exp;
             user.gold += monster.gold;
-            l_m--;
+            if(l_m>0){l_m--;};
             if (user.exp <= 0)
             {
                 clrscr();
-                textcolor(15);
+                textcolor(7);
                 printf("\n Level Up!");
 
                 switch (user.cs)
@@ -833,14 +1097,9 @@ void set()
         }
         if (user.nhp <= 0)
         {
-            printf("\n 으억! 이렇게 당하다니 이세계의 미래는.....");
-            getch();
-            clrscr();
-            printf("\n Game Over");
-            getch();
-            exit(1);
+            game_over();
         }
-        textcolor(15);
+        textcolor(7);
         gotoxy(1, 1);
         printf("                               ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
         gotoxy(1, 2);
@@ -869,7 +1128,7 @@ void set()
         printf("Leave Monster: %d", l_m);
         gotoxy(1, 11);
         printf("Battle Order(1~4): ");
-        scanf("%d", &input);
+        input = scani(); // scanf -> scani
         if (input < 1 || input > 4) continue;
         switch (input)
         {
@@ -879,9 +1138,28 @@ void set()
             break;
         case 3: Potion();
             break;
+        case 4: return 0; // Run Away 구현
         }
     }
-    return;
+    return 1;
+}
+
+void set_monster(const char* name, int lv,
+                 int hp_min, int hp_max,
+                 int mp_min, int mp_max,
+                 int att_min, int att_max,
+                 int def,
+                 int gold_min, int gold_max,
+                 int exp_min, int exp_max)
+{
+    strcpy(monster.name, name);
+    monster.lv = lv;
+    monster.nhp = monster.hp = my_random(hp_max - hp_min + 1) + hp_min;
+    monster.nmp = monster.mp = my_random(mp_max - mp_min + 1) + mp_min;
+    monster.attack = my_random(att_max - att_min + 1) + att_min;
+    monster.defence = def;
+    monster.gold = my_random(gold_max - gold_min + 1) + gold_min;
+    monster.exp = my_random(exp_max - exp_min + 1) + exp_min;
 }
 
 void Q1_1()
@@ -894,51 +1172,35 @@ void Q1_1()
         return;
     }
     clrscr();
-    monster.lv = 1;
+    // monster.lv = 1;
     l_m = 29;
     for (i = 0; i < 10; i++)
     {
-        strcpy(monster.name, "Skel_Hasu");
-        monster.nhp = monster.hp = my_random(7) + 10;
-        monster.attack = my_random(4) + 3;
-        monster.nmp = monster.mp = my_random(7) + 1;
-        monster.exp = my_random(4) + 1;
-        monster.gold = my_random(6) + 1;
-        monster.defence = 0;
-        set();
+        set_monster("Skel_Hasu", 1, 10, 17, 1, 8,
+                    3, 7, 0, 1, 7, 1, 5);
+        if(set() == 0) return;
     }
     for (i = 0; i < 10; i++)
     {
-        strcpy(monster.name, "Skel_Mid");
-        monster.mp = monster.nmp = monster.nhp = monster.nhp = monster.hp = my_random(14) + 7;
-        monster.attack = my_random(5) + 2;
-        monster.gold = my_random(5) + 3;
-        monster.defence = 2;
-        monster.exp = my_random(5) + 1;
-        set();
+        set_monster("Skel_Mid", 1, 7, 20, 7, 20,
+                    2, 7, 2, 3, 8, 1, 6);
+        if(set() == 0) return;
     }
     for (i = 0; i < 9; i++)
     {
-        strcpy(monster.name, "Skel_Gosu");
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(20) + 9;
-        monster.attack = my_random(1) + 3;
-        monster.gold = my_random(3) + 1;
-        monster.defence = 3;
-        monster.exp = my_random(7) + 2;
-        set();
+        set_monster("Skel_Gosu", 1, 9, 30, 9, 30,
+                    3, 4, 3, 1, 4, 2, 9);
+        if(set() == 0) return;
     }
     clrscr();
     printf("\n 뽀너스: Light Healing Potion +1");
     user.item[0] += 1;
     getch();
-    monster.lv = 3;
+    // monster.lv = 3;
     strcpy(monster.name, "Skel_Boss");
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(5) + 60;
-    monster.attack = my_random(4) + 5;
-    monster.gold = my_random(7) + 1;
-    monster.defence = 1;
-    monster.exp = my_random(35) + 7;
-    set();
+    set_monster("Skel_Boss", 3, 60, 65, 60, 65,
+                5, 9, 1, 1, 8, 7, 42);
+    if(set() == 0) return;
     if (user.wh == 1) user.wh++;
     return;
 }
@@ -946,22 +1208,12 @@ void Q1_1()
 void Q1_2()
 {
     l_m = 1;
-    monster.lv = 3;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(10) + 150;
-    strcpy(monster.name, "Iron_Fish");
-    monster.attack = my_random(5) + 5;
-    monster.gold = my_random(7) + 50;
-    monster.defence = 2;
-    monster.exp = my_random(7) + 22;
-    set();
-    monster.lv = 8;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(40) + 210;
-    strcpy(monster.name, "Gold_Fish");
-    monster.attack = my_random(6) + 5;
-    monster.gold = my_random(7) + 45;
-    monster.defence = 6;
-    monster.exp = my_random(8) + 30;
-    set();
+    set_monster("Iron_Fish", 3, 150, 160, 150, 160,
+                5, 10, 2, 50, 56, 22, 28);
+    if(set() == 0) return;
+    set_monster("Gold_Fish", 8, 210, 250, 210, 250,
+                5, 10, 6, 45, 51, 30, 37);
+    if(set() == 0) return;
     if (user.wh == 2) user.wh++;
     return;
 }
@@ -969,14 +1221,9 @@ void Q1_2()
 void Q1_3()
 {
     l_m = 0;
-    monster.lv = 10;
-    strcpy(monster.name, "Saladin");
-    monster.attack = my_random(7) + 4;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(70) + 250;
-    monster.gold = 100;
-    monster.defence = 3;
-    monster.exp = my_random(37) + 45;
-    set();
+    set_monster("Saladin", 10, 250, 320, 250, 320,
+                4, 10, 3, 100, 100, 45, 81);
+    if(set() == 0) return;
     if (user.wh == 3) user.wh++;
     return;
 }
@@ -984,26 +1231,18 @@ void Q1_3()
 void Q1_4()
 {
     int i;
-    monster.lv = 12;
+    // monster.lv = 12;
     l_m = 2;
     for (i = 0; i < 2; i++)
     {
-        strcpy(monster.name, "케인똘마니");
-        monster.attack = my_random(6) + 10;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(50) + 150;
-        monster.gold = 50;
-        monster.defence = 0;
-        monster.exp = my_random(6) + 14;
-        set();
-        l_m = l_m;
+        set_monster("케인똘마니", 12, 150, 200, 150, 200,
+                    10, 16, 0, 50, 50, 14, 20);
+        if(set() == 0) return;
+        //l_m = l_m; // 쓸데없는 배정문 삭제
     }
-    strcpy(monster.name, "데까드케인");
-    monster.attack = my_random(6) + 4;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(60) + 400;
-    monster.gold = 60;
-    monster.defence = 5;
-    monster.exp = my_random(70) + 37;
-    set();
+    set_monster("데까드케인", 12, 400, 460, 400, 460,
+                4, 9, 5, 60, 60, 37, 107);
+    if(set() == 0) return;
     if (user.wh == 4) user.wh++;
     return;
 }
@@ -1012,37 +1251,25 @@ void Q1_5()
 {
     int i;
     l_m = 10;
-    monster.lv = 11; //이거 왜 두개?
-    monster.lv = 11;
+    // monster.lv = 11; //이거 왜 두개?
+    // monster.lv = 11;
     for (i = 0; i < 3; i++)
     {
-        strcpy(monster.name, "각목사나이");
-        monster.attack = my_random(6) + 2;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(60) + 100;
-        monster.gold = 10;
-        monster.defence = 1;
-        monster.exp = my_random(7) + 10;
-        set();
+        set_monster("각목사나이", 11, 100, 160, 100, 160,
+                    2, 7, 1, 10, 10, 10, 16);
+        if(set() == 0) return;
     }
     for (i = 0; i < 4; i++)
     {
-        strcpy(monster.name, "사시미군단");
-        monster.attack = my_random(6) + 15;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(20) + 10;
-        monster.gold = 30;
-        monster.defence = 2;
-        monster.exp = my_random(7) + 10;
-        set();
+        set_monster("사시미군단", 11, 10, 30, 10, 30,
+                    15, 20, 2, 30, 30, 10, 16);
+        if(set() == 0) return;
     }
     for (i = 0; i < 3; i++)
     {
-        strcpy(monster.name, "장관급부하");
-        monster.attack = my_random(6) + 11;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(30) + 70;
-        monster.gold = 10;
-        monster.defence = 4;
-        monster.exp = my_random(7) + 20;
-        set();
+        set_monster("장관급부하", 11, 70, 100, 70, 100,
+                    11, 16, 4, 10, 10, 20, 26);
+        if(set() == 0) return;
     }
     if (user.wh == 5) user.wh++;
     return;
@@ -1072,63 +1299,35 @@ void Q1_6()
     getch();
 
     l_m = 0;
-    strcpy(monster.name, "안때리얼");
-    monster.attack = my_random(6) + 14;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(300) + 770;
-    monster.gold = 10;
-    monster.defence = 3;
-    monster.exp = my_random(400) + 200;
-    set();
+    set_monster("안때리얼", user.lv + 10, 770, 1070, 770, 1070,
+                14, 20, 3, 10, 10, 200, 600);
+    if(set() == 0) return;
     if (user.wh == 6) user.wh++;
     return;
 }
 
 void Q2_1()
 {
-    monster.lv = 12;
+    // monster.lv = 12;
     l_m = 5;
-    strcpy(monster.name, "Turtle_1");
-    monster.attack = my_random(20) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 50;
-    monster.defence = 8;
-    monster.exp = my_random(30) + 6;
-    set();
-    strcpy(monster.name, "Turtle_2");
-    monster.attack = my_random(20) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 50;
-    monster.defence = 6;
-    monster.exp = my_random(30) + 6;
-    set();
-    strcpy(monster.name, "Turtle_3");
-    monster.attack = my_random(20) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 50;
-    monster.defence = 7;
-    monster.exp = my_random(30) + 6;
-    set();
-    strcpy(monster.name, "Turtle_4");
-    monster.attack = my_random(20) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 50;
-    monster.defence = 4;
-    monster.exp = my_random(30) + 6;
-    set();
-    strcpy(monster.name, "Turtle_5");
-    monster.attack = my_random(30) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(30) + 10;
-    monster.defence = 5;
-    monster.exp = my_random(50) + 20;
-    set();
-    strcpy(monster.name, "동상 단군");
-    monster.attack = my_random(10) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 250;
-    monster.gold = my_random(50) + 150;
-    monster.defence = 9;
-    monster.exp = my_random(40) + 40;
-    set();
+    set_monster("Turtle_1", 12, 150, 250, 150, 250,
+                6, 26, 8, 50, 100, 6, 35);
+    if(set() == 0) return;
+    set_monster("Turtle_2", 12, 150, 250, 150, 250,
+                6, 26, 6, 50, 100, 6, 35);
+    if(set() == 0) return;
+    set_monster("Turtle_3", 12, 150, 250, 150, 250,
+                6, 26, 7, 50, 100, 6, 35);
+    if(set() == 0) return;
+    set_monster("Turtle_4", 12, 150, 250, 150, 250,
+                6, 26, 4, 50, 100, 6, 35);
+    if(set() == 0) return;
+    set_monster("Turtle_5", 12, 150, 250, 150, 250,
+                6, 36, 5, 10, 39, 20, 70);
+    if(set() == 0) return;
+    set_monster("동상 단군", 12, 250, 350, 250, 350,
+                16, 26, 9, 150, 200, 40, 80);
+    if(set() == 0) return;
 
     if (user.wh == 7) user.wh++;
     return;
@@ -1137,34 +1336,18 @@ void Q2_1()
 void Q2_2()
 {
     l_m = 4;
-    strcpy(monster.name, "GoldHamster");
-    monster.attack = my_random(20) + 8;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 7;
-    monster.exp = my_random(40) + 8;
-    set();
-    strcpy(monster.name, "Jangarian");
-    monster.attack = my_random(20) + 10;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 250;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 4;
-    monster.exp = my_random(30) + 5;
-    set();
-    strcpy(monster.name, "기니피그");
-    monster.attack = my_random(20) + 6;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 150;
-    monster.gold = my_random(50) + 50;
-    monster.defence = 6;
-    monster.exp = my_random(30) + 10;
-    set();
-    strcpy(monster.name, "~시궁쥐~");
-    monster.attack = my_random(46) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 350;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 3;
-    monster.exp = my_random(40) + 40;
-    set();
+    set_monster("GoldHamster", 9, 150, 250, 150, 250,
+                8, 28, 7, 10, 60, 8, 47);
+    if(set() == 0) return;
+    set_monster("Jangarian", 9, 250, 350, 250, 350,
+                10, 30, 4, 10, 60, 5, 34);
+    if(set() == 0) return;
+    set_monster("기니피그", 9, 150, 250, 150, 250,
+                            6, 26, 6, 50, 100, 10, 40);
+    if(set() == 0) return;
+    set_monster("~시궁쥐~", 9, 350, 450, 350, 450,
+                            16, 62, 3, 10, 60, 40, 80);
+    if(set() == 0) return;
     if (user.wh == 8) user.wh++;
     return;
 }
@@ -1172,358 +1355,372 @@ void Q2_2()
 void Q2_3()
 {
     l_m = 4;
-    strcpy(monster.name, "Boradolei");
-    monster.attack = my_random(36) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 350;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 8;
-    monster.exp = my_random(40) + 30;
-    set();
-    strcpy(monster.name, "Ddubi");
-    monster.attack = my_random(36) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 350;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 4;
-    monster.exp = my_random(40) + 30;
-    set();
-    strcpy(monster.name, "NaNa");
-    monster.attack = my_random(36) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 350;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 4;
-    monster.exp = my_random(40) + 30;
-    set();
-    strcpy(monster.name, "Bo");
-    monster.attack = my_random(36) + 16;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 350;
-    monster.gold = my_random(50) + 10;
-    monster.defence = 3;
-    monster.exp = my_random(40) + 30;
-    set();
-    strcpy(monster.name, "BabyOfSun");
-    monster.attack = my_random(10) + 8;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(100) + 1550;
-    monster.gold = my_random(500) + 100;
-    monster.defence = 6;
-    monster.exp = my_random(40) + 130;
-    set();
+    set_monster("Boradolei", 10, 350, 450, 350, 450,
+                            16, 52, 3, 10, 60, 30, 70);
+    if(set() == 0) return;
+    set_monster("Ddubi", 10, 350, 450, 350, 450,
+                        16, 52, 3, 10, 60, 30, 70);
+    if(set() == 0) return;
+    set_monster("NaNa", 10, 350, 450, 350, 450,
+                        16, 52, 3, 10, 60, 30, 70);
+    if(set() == 0) return;
+    set_monster("Bo", 10, 350, 450, 350, 450,
+                        16, 52, 3, 10, 60, 30, 70);
+    if(set() == 0) return;
+    set_monster("BabyOfSun", 10, 1550, 1650, 1550, 1650,
+                    8, 18, 6, 100, 600, 130, 170);
+    if(set() == 0) return;
     if (user.wh == 9) user.wh++;
     return;
 }
 
 
-void Q2_4() { return; }// 우현
-void Q2_5() { return; }
-void Q2_6() { return; }
+void Q2_4()
+{
+    int i;
+    if (user.lv >= 25)
+    {
+        printf("\n당신은 레벨이 높아 더이상 출입 불가능합니다.<Enter>");
+        getch();
+        return;
+    }
+    clrscr();
+    l_m = 13;
+    for (i = 0; i < 6; i++)
+    {
+        set_monster("고지방 감자튀김", 15, 30, 40, 10, 15,
+                    10, 14, 3, 10, 15, 15, 20);
+        if(set() == 0) return;
+    }
+    for (i = 0; i < 3; i++)
+    {
+        set_monster("유당 콜라", 16, 32, 42, 14, 19,
+                    12, 16, 3, 13, 18, 18, 23);
+        if(set() == 0) return;
+    }
+    for (i = 0; i < 3; i++)
+    {
+        set_monster("치즈 슬라임", 17, 80, 90, 15, 20,
+                    10, 15, 4, 10, 15, 15, 20);
+        if(set() == 0) return;
+    }
+    set_monster("불타는 치즈버거 괴물", 18, 140, 150, 30, 35,
+                18, 21, 4, 10, 15, 15, 20);
+    if(set() == 0) return;
+    clrscr();
+    printf("\n 뽀너스: Light Healing Potion +1");
+    user.item[0] += 1;
+    getch();
+    clrscr();
+    printf("\n롯데리우스: 리아 올뉴 한우 콰트로 치즈 맥시멈 쉐프의 초이스 단일 상품 29,900원!");
+    delay(1200);
+    printf("\n%s: 그걸 먹을 이유가 있나?", user.name);
+    delay(1200);
+    printf("\n롯데리우스: 알빠노?\n<ENTER>");
+    getch();
 
-// Act 3-1: rebellious squids from QUEST3_1.DAT
+    l_m = 0;
+    set_monster("롯데리우스", 20, 220, 230, 40, 45,
+                25, 26, 5, 80, 160, 180, 230);
+    if(set() == 0) return;
+    clrscr();
+    printf("\n 참깨빵위에 순쇠고기 패티 두 장...");
+    printf("\n\n 뽀너스: Super Healing Potion +1");
+    user.item[2] += 1;
+    getch();
+    if (user.wh == 10) user.wh++;
+    return;
+} // 우현
+
+void Q2_5()
+{
+    int i;
+    if (user.lv >= 26)
+    {
+        printf("\n당신은 레벨이 높아 더이상 출입 불가능합니다.<Enter>");
+        getch();
+        return;
+    }
+    clrscr();
+    l_m = 14;
+    for (i = 0; i < 6; i++)
+    {
+        set_monster("치어 좀비", 16, 60, 80, 15, 25,
+                    12, 16, 2, 18, 19, 25, 35);
+        if(set() == 0) return;
+    }
+    for (i = 0; i < 4; i++)
+    {
+        set_monster("200dB 악단", 17, 70, 90, 14, 19,
+                    14, 18, 3, 15, 40, 25, 50);
+        if(set() == 0) return;
+    }
+    for (i = 0; i < 3; i++)
+    {
+        set_monster("블랙 치어리더", 18, 120, 160, 25, 40,
+                    16, 22, 4, 20, 25, 30, 45);
+        if(set() == 0) return;
+    }
+    set_monster("응원단의 악령", 19, 180, 220, 40, 60,
+                20, 25, 5, 50, 70, 80, 120);
+    if(set() == 0) return;
+    clrscr();
+    printf("\n치어데몬: 자~! 목소리 안 들려요! 더 크게!!!");
+    delay(500);
+    printf("\n칭칭언니 준비됐어요? 출발합시다~ 라일러 라일러~");
+    delay(1200);
+    getch();
+    getch();
+
+    set_monster("[응원단장] 치어 데몬", 20, 420, 500, 70, 100,
+        20, 28, 6, 90, 160, 200, 300);
+    if(set() == 0) return;
+    clrscr();
+    printf("\n응원봉이 부러지고, 지옥 응원가가 멈췄다...");
+    printf("\n당신의 귀에는 아직도 메아리가 남아 있다.");
+    printf("\n보상: Super Healing Potion +1");
+    user.item[2] += 1;
+    getch();
+    if (user.wh == 11) user.wh++;
+    return;
+}
+
+void Q2_6()
+{
+    int i;
+    if (user.lv >= 26)
+    {
+        printf("\n당신은 레벨이 높아 더이상 출입 불가능합니다.<Enter>");
+        getch();
+        return;
+    }
+    clrscr();
+    l_m = 12;
+    for (i = 0; i < 5; i++)
+    {
+        set_monster("Frozen Stew Chunk", 19, 80, 100, 20,
+                    30, 14, 18, 2, 10, 25, 30, 50);
+        if(set() == 0) return;
+    }
+    for (i = 0; i < 4; i++)
+    {
+        set_monster("Frozen Cucumber", 19, 70, 90, 25,
+                    35, 15, 19, 3, 15, 30, 35, 55);
+        if(set() == 0) return;
+    }
+    for (i = 0; i < 3; i++)
+    {
+        set_monster("Spirit of Frozen Kimchi", 20, 120, 160, 40,
+                    50, 17, 23, 4, 25, 45, 50, 80);
+        if(set() == 0) return;
+    }
+    if(set() == 0) return;
+    clrscr();
+    delay(500);
+    printf("\n듀리엘: 흐윽... 따뜻한 인간의 체온이라니... 불쾌하군...");
+    delay(1000);
+    getch();
+    getch();
+    getch();
+    set_monster("냉장고 듀리엘", 22, 450, 600, 100, 130,
+                24, 32, 6, 0, 0, 0, 0);
+    if(set() == 0) return;
+    clrscr();
+    printf("\n듀리엘: 네 영혼을 급속 냉동 보관해주지..!!");
+    delay(500);
+    printf("\n냉기야, 퍼져라!!");
+    delay(1200);
+    getch();
+    getch();
+
+    set_monster("냉장고 듀리엘", 22, 550, 650, 100, 130,
+                26, 32, 6, 400, 600, 760, 900);
+    if(set() == 0) return;
+    clrscr();
+    printf("\n듀리엘이 녹아내린다... 하수구의 냉기가 사라진다.");
+    printf("\n\n보상: Great Healing Potion +1");
+    printf("\n보상: Great Mana Potion +1");
+    user.item[4] += 1;
+    user.item[5] += 1;
+    getch();
+
+    if (user.wh == 12) user.wh++;
+    return;
+}
+
 void Q3_1()
 {
     l_m = 5;
-    monster.lv = 18;
 
-    strcpy(monster.name, "Ink_Rebel");
-    monster.attack = my_random(50) + 70;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(220) + 420;
-    monster.gold = my_random(80) + 120;
-    monster.defence = 45;
-    monster.exp = my_random(80) + 140;
-    set();
-
-    strcpy(monster.name, "Salted_Veteran");
-    monster.attack = my_random(40) + 80;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(250) + 480;
-    monster.gold = my_random(60) + 130;
-    monster.defence = 55;
-    monster.exp = my_random(70) + 150;
-    set();
-
-    strcpy(monster.name, "Sashimi_Berserker");
-    monster.attack = my_random(55) + 95;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(260) + 530;
-    monster.gold = my_random(90) + 150;
-    monster.defence = 60;
-    monster.exp = my_random(90) + 170;
-    set();
-
-    strcpy(monster.name, "Boiled_Enforcer");
-    monster.attack = my_random(60) + 100;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(300) + 570;
-    monster.gold = my_random(80) + 170;
-    monster.defence = 65;
-    monster.exp = my_random(100) + 190;
-    set();
-
-    strcpy(monster.name, "King_Squid");
-    monster.attack = my_random(70) + 120;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 900;
-    monster.gold = my_random(120) + 220;
-    monster.defence = 80;
-    monster.exp = my_random(120) + 210;
-    set();
+    set_monster("Ink_Rebel", 18, 420, 640, 420, 640,
+                70, 120, 45, 120, 200, 140, 220);
+    if(set() == 0) return;
+    set_monster("Salted_Veteran", 18, 480, 730, 480, 730,
+                80, 120, 55, 130, 190, 150, 220);
+    if(set() == 0) return;
+    set_monster("Sashimi_Berserker", 18, 530, 789, 530, 789,
+                95, 150, 60, 150, 240, 170, 260);
+    if(set() == 0) return;
+    set_monster("Boiled_Enforcer", 18, 570, 870, 570, 870,
+                100, 160, 65, 170, 250, 190, 290);
+    if(set() == 0) return;
+    set_monster("King_Squid", 18, 900, 1300, 900, 1300,
+                120, 190, 80, 220, 339, 210, 330);
+    if(set() == 0) return;
 
     if (user.wh == 13) user.wh++;
     return;
 }
 
-// Act 3-2: crab republic from QUEST3_2.DAT
 void Q3_2()
 {
     l_m = 6;
-    monster.lv = 20;
 
-    strcpy(monster.name, "Crab_Militia");
-    monster.attack = my_random(55) + 85;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(260) + 520;
-    monster.gold = my_random(90) + 150;
-    monster.defence = 70;
-    monster.exp = my_random(90) + 180;
-    set();
-
-    strcpy(monster.name, "Shell_Guardian");
-    monster.attack = my_random(60) + 90;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(320) + 560;
-    monster.gold = my_random(110) + 170;
-    monster.defence = 90;
-    monster.exp = my_random(100) + 190;
-    set();
-
-    strcpy(monster.name, "Tax_Collector");
-    monster.attack = my_random(70) + 95;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(340) + 600;
-    monster.gold = my_random(120) + 200;
-    monster.defence = 95;
-    monster.exp = my_random(100) + 210;
-    set();
-
-    strcpy(monster.name, "Claw_Senator");
-    monster.attack = my_random(80) + 100;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(360) + 640;
-    monster.gold = my_random(140) + 220;
-    monster.defence = 110;
-    monster.exp = my_random(110) + 220;
-    set();
-
-    strcpy(monster.name, "Republic_Hammer");
-    monster.attack = my_random(80) + 115;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(420) + 700;
-    monster.gold = my_random(140) + 260;
-    monster.defence = 120;
-    monster.exp = my_random(120) + 230;
-    set();
-
-    strcpy(monster.name, "President_Gestin");
-    monster.attack = my_random(90) + 150;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(500) + 1100;
-    monster.gold = my_random(180) + 280;
-    monster.defence = 140;
-    monster.exp = my_random(140) + 260;
-    set();
+    set_monster("Crab_Militia", 20, 520, 780, 520, 780,
+                85, 139, 70, 150, 240, 180, 270);
+    if(set() == 0) return;
+    set_monster("Shell_Guardian", 20, 560, 880, 560, 880,
+                90, 150, 90, 170, 280, 190, 290);
+    if(set() == 0) return;
+    set_monster("Tax_Collector", 20, 600, 940, 600, 940,
+                95, 165, 95, 200, 320, 210, 310);
+    if(set() == 0) return;
+    set_monster("Claw_Senator", 20, 640, 1000, 640, 1000,
+                100, 180, 110, 220, 360, 220, 330);
+    if(set() == 0) return;
+    set_monster("Republic_Hammer", 20, 700, 1120, 700, 1120,
+                115, 195, 120, 260, 400, 230, 350);
+    if(set() == 0) return;
+    set_monster("President_Gestin", 20, 1100, 1600, 1100, 1600,
+                150, 240, 140, 280, 460, 260, 400);
+    if(set() == 0) return;
 
     if (user.wh == 14) user.wh++;
     return;
 }
 
-// Act 3-3: demon chefs from QUEST3_3.DAT
 void Q3_3()
 {
-    l_m = 4;
-    monster.lv = 22;
+    l_m = 3;
 
-    strcpy(monster.name, "Demonic_LineCook");
-    monster.attack = my_random(70) + 110;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(360) + 640;
-    monster.gold = my_random(120) + 210;
-    monster.defence = 100;
-    monster.exp = my_random(120) + 210;
-    set();
-
-    strcpy(monster.name, "Sous_Chef");
-    monster.attack = my_random(80) + 120;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(380) + 680;
-    monster.gold = my_random(120) + 240;
-    monster.defence = 115;
-    monster.exp = my_random(130) + 220;
-    set();
-
-    strcpy(monster.name, "Sashimi_Wraith");
-    monster.attack = my_random(90) + 130;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(420) + 720;
-    monster.gold = my_random(150) + 250;
-    monster.defence = 120;
-    monster.exp = my_random(140) + 240;
-    set();
-
-    textcolor(9);
+    set_monster("Demonic_LineCook", 22, 640, 1000, 640, 1000,
+                110, 180, 100, 210, 330, 210, 330);
+    if(set() == 0) return;
+    set_monster("Sous_Chef", 22, 680, 1060, 680, 1060,
+                120, 200, 115, 240, 360, 220, 350);
+    if(set() == 0) return;
+    set_monster("Sashimi_Wraith", 22, 720, 1140, 720, 1140,
+                130, 220, 120, 250, 400, 240, 380);
+    if(set() == 0) return;
+    clrscr();
     printf("\n셰프 마고로시: \"신선함의 비결은... 방금 죽은 손님이죠.\"");
-    textcolor(15);
-    strcpy(monster.name, "Chef_Magoroshi");
-    monster.attack = my_random(110) + 170;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(520) + 900;
-    monster.gold = my_random(180) + 260;
-    monster.defence = 140;
-    monster.exp = my_random(160) + 280;
-    set();
+    getch();
+    set_monster("Chef_Magoroshi", 22, 900, 1420, 900, 1420,
+                170, 280, 140, 260, 440, 280, 440);
+    if(set() == 0) return;
 
     if (user.wh == 15) user.wh++;
     return;
 }
 
-// Act 3-4: awakened whales from QUEST3_4.DAT
 void Q3_4()
 {
     l_m = 3;
-    monster.lv = 24;
 
-    strcpy(monster.name, "Rotwave_Whale");
-    monster.attack = my_random(100) + 140;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(520) + 900;
-    monster.gold = my_random(160) + 260;
-    monster.defence = 150;
-    monster.exp = my_random(170) + 260;
-    set();
-
-    strcpy(monster.name, "Sonic_Leviathan");
-    monster.attack = my_random(110) + 160;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(560) + 980;
-    monster.gold = my_random(180) + 300;
-    monster.defence = 160;
-    monster.exp = my_random(180) + 280;
-    set();
-
-    strcpy(monster.name, "Blood_Whale");
-    monster.attack = my_random(140) + 190;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(700) + 1300;
-    monster.gold = my_random(220) + 340;
-    monster.defence = 190;
-    monster.exp = my_random(220) + 320;
-    set();
+    set_monster("Rotwave_Whale", 24, 900, 1420, 900, 1420,
+                140, 240, 150, 260, 420, 260, 430);
+    if(set() == 0) return;
+    set_monster("Sonic_Leviathan", 24, 980, 1540, 980, 1540,
+                160, 270, 160, 300, 480, 280, 460);
+    if(set() == 0) return;
+    set_monster("Blood_Whale", 24, 1300, 1100, 1300, 1100,
+                190, 330, 190, 340, 560, 320, 540);
+    if(set() == 0) return;
 
     if (user.wh == 16) user.wh++;
     return;
 }
 
-// Act 3-5: soul angler from QUEST3_5.DAT
 void Q3_5()
 {
-    l_m = 4;
-    monster.lv = 25;
+    l_m = 3;
 
-    strcpy(monster.name, "Hooked_Spirit");
-    monster.attack = my_random(110) + 150;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(520) + 880;
-    monster.gold = my_random(160) + 280;
-    monster.defence = 160;
-    monster.exp = my_random(170) + 290;
-    set();
-
-    strcpy(monster.name, "Line_Binder");
-    monster.attack = my_random(120) + 160;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(560) + 950;
-    monster.gold = my_random(180) + 300;
-    monster.defence = 170;
-    monster.exp = my_random(180) + 300;
-    set();
-
-    strcpy(monster.name, "Soul_Net");
-    monster.attack = my_random(130) + 170;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(600) + 1000;
-    monster.gold = my_random(190) + 320;
-    monster.defence = 180;
-    monster.exp = my_random(200) + 320;
-    set();
-
-    textcolor(9);
+    set_monster("Hooked_Spirit", 25, 880, 1400, 880, 1400,
+                150, 260, 160, 280, 440, 290, 410);
+    if(set() == 0) return;
+    set_monster("Line_Binder", 25, 950, 1510, 950, 1510,
+                160, 280, 170, 300, 480, 300, 480);
+    if(set() == 0) return;
+    set_monster("Soul_Net", 25, 1000, 1600, 1000, 1600,
+                170, 300, 180, 320, 510, 320, 540);
+    if(set() == 0) return;
+    clrscr();
     printf("\n조낚귀: \"낚싯줄은 이미 네 심장에 닿아 있다.\"");
-    textcolor(15);
-    strcpy(monster.name, "JoNakGwi");
-    monster.attack = my_random(150) + 200;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(700) + 1400;
-    monster.gold = my_random(220) + 360;
-    monster.defence = 200;
-    monster.exp = my_random(220) + 350;
-    set();
+    getch();
+    set_monster("JoNakGwi", 25, 1400, 2100, 1400, 2100,
+                200, 350, 200, 360, 540, 350, 570);
+    if(set() == 0) return;
 
     if (user.wh == 17) user.wh++;
     return;
 }
 
-// Act 3-6: Mephisto encounter from QUEST3_6.DAT
 void Q3_6()
 {
     if (user.wh > 18)
     {
         printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
-        getch();
+        getch();    
         return;
     }
 
     clrscr();
-    textcolor(9);
+    textcolor(4);
     printf("\n메피스토: \"어서 오세요. 오늘은 손님이 회가 되는 날입니다.\"");
     delay(1200);
-    textcolor(15);
-    printf("\n%s: 이 수조에서 사람 머리가 떠다니는 걸 보니 입맛이 싹 달아나는군.", user.name);
+    textcolor(7);
+    printf("\n%s: 사실 물회도 제가 먼저 만들었어유~", user.name);
     delay(1200);
-    textcolor(9);
-    printf("\n메피스토: 불결함과 청결, 둘 다 내 것이다. 넌 마지막 재료다.");
+    textcolor(4);
+    printf("\n메피스토: 단단히 미쳤군. 그 쓸모없는 두뇌로 사시미를 만들어 주지.");
     delay(1200);
-    textcolor(15);
-    printf("\n%s: 네 앞치마에 내 피는 묻지 않을거다. 칼을 내려놔라.", user.name);
+    textcolor(7);
+    printf("\n%s: 회가 대한민국의 문화라는 것은 고구려 고분의 수박도에도 나와있는 사실이다.", user.name);
     delay(1200);
-    textcolor(9);
-    printf("\n메피스토: 그럼 직접 썰어주지... \n <Enter> ");
+    textcolor(4);
+    printf("\n메피스토: 난 이미 회 다 팜~~ \n <Enter> ");
     getch();
     getch();
 
     l_m = 0;
-    strcpy(monster.name, "MEPHISTO");
-    monster.lv = user.lv + 8;
-    monster.attack = my_random(250) + 600;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(700) + 4200;
-    monster.gold = my_random(220) + 500;
-    monster.defence = 320;
-    monster.exp = my_random(300) + 650;
-    set();
+    set_monster("MEPHISTO", user.lv + 8, 4200, 4900, 4200, 4900,
+                600, 850, 320, 500, 720, 650, 950);
+    if(set() == 0) return;
 
     if (user.wh == 18) user.wh++;
     return;
 }
 
 void Q4_1() { // 아정
-    l_m = 4;
-    for(int i=0;i<3;i++){
-        strcpy(monster.name, "Griffin");
-        monster.attack = my_random(100) + 100;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 600;
-        monster.gold = my_random(50) + 150;
-        monster.defence = 650;
-        monster.exp = my_random(300) + 420;
-        set();
-    }
-    strcpy(monster.name, "Ttirael");
-    monster.attack = my_random(300) + 200;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 1000;
-    monster.gold = my_random(50) + 200;
-    monster.defence = 740;
-    monster.exp = my_random(380) + 440;
-    set();
-    if (user.wh == 19) user.wh++;
-    return; } 
-void Q4_2() {
     l_m = 5;
     for(int i=0;i<5;i++){
-        strcpy(monster.name, "Nephalem");
-        monster.attack = my_random(360) + 200;
-        monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(400) + 570;
-        monster.gold = my_random(220) + 100;
-        monster.defence = 760;
-        monster.exp = my_random(400) + 460;
-        set();
+       set_monster("악마 공무원", 27, 1100, 2150, 1100, 2150, 300, 525, 300, 540, 870, 525, 855);
+        if(set() == 0) return;
     }
+    if (user.wh == 19) user.wh++;
+    return; }
+void Q4_2() {
+    l_m = 3;
+
+    for(int i=0;i<3;i++){
+        set_monster("악마 공무원", 29, 1520, 2780, 1520, 2780, 360, 630, 360, 650, 1050, 630, 1230);
+        if(set() == 0) return;
+    }
+    set_monster("곽팀장", 29, 1700, 3100, 1700, 3100, 400, 700, 400, 710, 1142, 700, 1130);
+        if(set() == 0) return;
     if (user.wh == 20) user.wh++;
     return; }
-void Q4_3() { 
+void Q4_3() {
     if (user.wh > 21)
     {
         printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
@@ -1531,34 +1728,43 @@ void Q4_3() {
         return;
     }
     clrscr();
-    textcolor(9);
-    printf("\nDiablo: 너희가 감히 나를 잡을 수 있을 것이라고 생각하느냐.");
+    textcolor(7);
+    printf("\n%s: 결제? 웃기고 있네ㅋㅋㅋ창원시가 그렇게 쉽게 넘어갈거 같냐?", user.name);
     delay(1200);
-    textcolor(15);
-    printf("\n%s: 디아블로, 나는 이미 당신의 수많은 부하를 죽이고 왔다.", user.name);
+    textcolor(4);
+    printf("\nDiablo: 이미 창원시는 나의 행정력에 무릎을 꿇었다.");
     delay(1200);
-    textcolor(9);
-    printf("\nDiablo: 너희의 그 모험이 얼마나 어리석은 짓이였는지 알려주마.");
+    textcolor(4);
+    printf("\nDiablo: 이제 네 놈의 죽이고 네 놈의 피로 결제를 해야겠다.");
     delay(1200);
-    textcolor(15);
+    textcolor(7);
     printf("\n%s: ㅋㅋㅋㅋㅋ이제 곧 죽을 녀석의 말은 듣지 않는다.", user.name);
     delay(1200);
-    textcolor(9);
-    printf("\n%s: 현재 내 레벨은 %d, 너를 죽이기엔 충분한 경험을 쌓았지... 조용히 죽어라 디아블로!",user.name, user.lv);
+    textcolor(4);
+    printf("\n%s: 이제 창원의 행정을 바로 잡을 시간이다. 디아블로!",user.name);
     delay(1200);
-    textcolor(15);
+    textcolor(7);
     printf("\nDiablo: 해볼테면 해봐라 나약한 인간... \n <Enter> ");
     getch();
     getch();
 
     l_m = 0;
-    strcpy(monster.name, "DIABLO");
-    monster.attack = my_random(400) + 850;
-    monster.mp = monster.nmp = monster.mp = monster.nhp = monster.hp = my_random(1000) + 6500;        monster.gold = my_random(220) + 100;
-    monster.defence = 700;
-    monster.exp = my_random(400) + 1000;
-    set();
-    //if (user.wh == 21) user.wh++;
+    set_monster("DIABLO", 35, 1660, 2490, 1660, 2490, 480, 830, 480, 0, 0, 0, 0); //페이즈1
+    if(set() == 0) return;
+    if(monster.nhp < 1){ 
+        clrscr();
+        textcolor(4);
+        printf("\n%s: 이제 끝이다 디아블로!", user.name);
+        delay(1200);
+        textcolor(7);
+        printf("\nDiablo: 하하하...생각보다 강하군...흐흥흥흥... \n 내가 각성하면 어떻게 될지 보자고!!");
+        delay(1200);
+        getch();
+    }
+        clrscr();
+        set_monster("DIABLO[각성]", 35, 3330, 4990, 3330, 4990, 720, 1250, 570, 1140, 1840, 1110, 1810); //페이즈2
+        if(set() == 0) return;
+    if (user.wh == 21) user.wh++;
     return; }
 
 
@@ -1643,15 +1849,20 @@ void Mg()
     }
     printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
 xx:
-    printf("\n0.Cancel ,Magic Order(1~%d):", s);
-    scanf(" %d", &in);
+    printf("\n0.Cancel, Magic Order(1~%d):", s);
+    in = scani(); // scanf -> scani
 
-    if (in < 0 || in > s || magic[in - 1].ump > user.nmp) goto xx;
-    if (in == 0)
+    if (in < 0 || in > s || magic[in - 1].ump > user.nmp)
     {
         printf("\n 그런것은 불가능 합니다.<Enter>");
+        goto xx;
+    }
+    if (in == 0)
+    {
+        printf("\n Magic canceled. <Enter>");
         getch();
-        set();
+        // set(); // 필요없음
+        return;
     }
     else
     {
@@ -1661,13 +1872,13 @@ xx:
         if (user.cs == 3) bonus = my_random(magic[in - 1].power + user.lv * 6);
         switch (w)
         {
-        case 0: textcolor(15);
+        case 0: textcolor(7);
             printf("\n 피에 굶주린 자들이여 성스러운 %s 를 받아라~~~", magic[in - 1].name);
             break;
-        case 1: textcolor(15);
+        case 1: textcolor(7);
             printf("\n 나의 주먹을 맛 보아라~~~~%s!!!!", magic[in - 1].name);
             break;
-        case 2: textcolor(15);
+        case 2: textcolor(7);
             printf("\n %s!!! 하핫 아프지? ", magic[in - 1].name);
             break;
         }
