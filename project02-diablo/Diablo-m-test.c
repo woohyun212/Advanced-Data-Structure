@@ -75,7 +75,7 @@ static const QuestInfo quest_map[] =
     {"QUEST1_1.DAT", Q1_1},
     {"QUEST1_2.DAT", Q1_2},
     {"QUEST1_3.DAT", Q1_3},
-    [4]  = {"QUEST1_4.DAT", Q1_4},
+    {"QUEST1_4.DAT", Q1_4},
     {"QUEST1_5.DAT", Q1_5},
     {"QUEST1_6.DAT", Q1_6},
     {"QUEST2_1.DAT", Q2_1},
