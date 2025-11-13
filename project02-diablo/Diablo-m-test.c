@@ -62,6 +62,49 @@ void set_monster(const char* name, int lv,
                  int exp_min, int exp_max);
 void game_over(void);
 
+typedef struct
+{
+    const char *file_name; // 파일명 수정 접근 const로 막기
+    void (*func_name)(void);
+} QuestInfo;
+
+static const QuestInfo quest_map[] =
+{
+    [0]  = {NULL, NULL},
+    [1]  = {"QUEST1_1.DAT", Q1_1},
+    [2]  = {"QUEST1_2.DAT", Q1_2},
+    [3]  = {"QUEST1_3.DAT", Q1_3},
+    [4]  = {"QUEST1_4.DAT", Q1_4},
+    [5]  = {"QUEST1_5.DAT", Q1_5},
+    [6]  = {"QUEST1_6.DAT", Q1_6},
+    [7]  = {"QUEST2_1.DAT", Q2_1},
+    [8]  = {"QUEST2_2.DAT", Q2_2},
+    [9]  = {"QUEST2_3.DAT", Q2_3},
+    [10] = {"QUEST2_4.DAT", Q2_4},
+    [11] = {"QUEST2_5.DAT", Q2_5},
+    [12] = {"QUEST2_6.DAT", Q2_6},
+    [13] = {"QUEST3_1.DAT", Q3_1},
+    [14] = {"QUEST3_2.DAT", Q3_2},
+    [15] = {"QUEST3_3.DAT", Q3_3},
+    [16] = {"QUEST3_4.DAT", Q3_4},
+    [17] = {"QUEST3_5.DAT", Q3_5},
+    [18] = {"QUEST3_6.DAT", Q3_6},
+    [19] = {"QUEST4_1.DAT", Q4_1},
+    [20] = {"QUEST4_2.DAT", Q4_2},
+    [21] = {"QUEST4_3.DAT", Q4_3},
+};
+
+static const int QUEST_COUNT = (int)(sizeof(quest_map) / sizeof(quest_map[0]));
+
+static const QuestInfo *get_quest_info(int quest_id)
+{
+    if (quest_id < 0 || quest_id >= QUEST_COUNT)
+    {
+        return NULL;
+    }
+    return &quest_map[quest_id];
+}
+
 void flush_stdin(void)
 {
     int ch;
@@ -452,20 +495,13 @@ void cheatcenter()
 
 void Battle()
 {
-    int i, j, k, l, time;
-    char *QuestFileName[22] = {"", "QUEST1_1.DAT", "QUEST1_2.DAT", "QUEST1_3.DAT", "QUEST1_4.DAT", "QUEST1_5.DAT", "QUEST1_6.DAT",
-                                "QUEST2_1.DAT", "QUEST2_2.DAT", "QUEST2_3.DAT", "QUEST2_4.DAT", "QUEST2_5.DAT", "QUEST2_6.DAT",
-                                "QUEST3_1.DAT", "QUEST3_2.DAT", "QUEST3_3.DAT", "QUEST3_4.DAT", "QUEST3_5.DAT", "QUEST3_6.DAT", 
-                                "QUEST4_1.DAT", "QUEST4_2.DAT", "QUEST4_3.DAT"};
-    void (*QuestFuncName[22])() = {NULL, Q1_1, Q1_2, Q1_3, Q1_4, Q1_5, Q1_6,
-                                   Q2_1, Q2_2, Q2_3, Q2_4, Q2_5, Q2_6,
-                                   Q3_1, Q3_2, Q3_3, Q3_4, Q3_5, Q3_6,
-                                   Q4_1, Q4_2, Q4_3};
+    int l, time;
     FILE* fp24;
     while (1)
     {
-        int i;
         char data;
+        const QuestInfo *quest;
+        if (user.wh >= QUEST_COUNT) user.wh = QUEST_COUNT - 1;
         textcolor(7);
         clrscr();
         printf("  ┏━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┓\n");
@@ -483,27 +519,38 @@ void Battle()
         l = scani(); // scanf -> scani
         if (l < 0 || l > user.wh)
         {
-            printf("\n You can't go there....");
+            printf("\n 이전 퀘스트부터 깨고 오세요.");
             getch();
             continue;
         }
         if (l == 0) break;
-        fp24 = fopen(QuestFileName[l], "rt");
-        if (l > 0 && l <= user.wh)
+        quest = get_quest_info(l);
+        if (quest == NULL || quest->file_name == NULL || quest->func_name == NULL)
         {
-            clrscr();
-            printf("\n ");
-            time = 30;
-            while (fscanf(fp24, "%c", &data) != EOF)
-            {
-                if (kbhit()) time = 0;
-                printf("%c", data);
-                delay(time);
-            }
-            if (time == 0) getch();
+            printf("\n Invalid quest selection....");
             getch();
+            continue;
         }
-        QuestFuncName[l]();
+        fp24 = fopen(quest->file_name, "rt");
+        if (fp24 == NULL)
+        {
+            printf("\n Failed to open quest file");
+            getch();
+            continue;
+        }
+        clrscr();
+        printf("\n ");
+        time = 30;
+        while (fscanf(fp24, "%c", &data) != EOF)
+        {
+            if (kbhit()) time = 0;
+            printf("%c", data);
+            delay(time);
+        }
+        fclose(fp24);
+        if (time == 0) getch();
+        getch();
+        quest->func_name();
     }
     return;
 }
