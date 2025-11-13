@@ -231,12 +231,12 @@ void randomize()
 
 int scani()
 {
-    char buffer[64]; // 입력을 임시로 저장할 버퍼
+    char buffer[10000]; // 입력을 임시로 저장할 버퍼
     int i; // 문자 검사 인덱스
     int digits; // 입력된 숫자 자리수
     int value; // 최종 반환할 값
 
-    while (1) // 0~99 범위의 숫자가 들어올 때까지 반복
+    while (1) // 0~9999 범위의 숫자가 들어올 때까지 반복
     {
         if (fgets(buffer, sizeof(buffer), stdin) == NULL) // 잘못된 입력 처리
         {
@@ -250,7 +250,7 @@ int scani()
 
         digits = 0;
         value = 0;
-        while (buffer[i] >= '0' && buffer[i] <= '9' && digits < 2) // 두자릿수까지만 입력받음
+        while (buffer[i] >= '0' && buffer[i] <= '9' && digits < 4) // 네자릿수까지만 입력받음
         {
             value = value * 10 + (buffer[i] - '0');
             i++;
@@ -261,9 +261,7 @@ int scani()
             i++; // 후행 공백 및 CR 제거
 
         if ((buffer[i] == '\n' || buffer[i] == '\0') && digits > 0)
-            return value; // 0~99 범위 값 반환. 세자릿수부터는 조건에 걸림
-        else
-            printf("\n0 ~ 99 사이의 숫자만 입력해 주세요."); // 입력 재요청
+            return value; // 0~9999 범위 값 반환. 세자릿수부터는 조건에 걸림
     }
 }
 
@@ -379,8 +377,8 @@ void state_handler(){
             case 5: Battle(); Func_set = 0; break;
             case 6: Save_option(); Func_set = 0; break;
             case 7: Func_set = -1; break;
-            case 99: cheatcenter(); Func_set = 0; break; // 원래 1008인데 일단 99로 설정
-            default: Func_set = 0;break;;
+            case 1008: cheatcenter(); Func_set = 0; break;
+            default: Func_set = 0;break;
             // default: Func_set = -1;
         }
     }
@@ -1550,7 +1548,6 @@ void Q2_6()
     return;
 }
 
-// Act 3-1: rebellious squids from QUEST3_1.DAT
 void Q3_1()
 {
     l_m = 5;
@@ -1575,7 +1572,6 @@ void Q3_1()
     return;
 }
 
-// Act 3-2: crab republic from QUEST3_2.DAT
 void Q3_2()
 {
     l_m = 6;
@@ -1603,7 +1599,6 @@ void Q3_2()
     return;
 }
 
-// Act 3-3: demon chefs from QUEST3_3.DAT
 void Q3_3()
 {
     l_m = 3;
@@ -1628,7 +1623,6 @@ void Q3_3()
     return;
 }
 
-// Act 3-4: awakened whales from QUEST3_4.DAT
 void Q3_4()
 {
     l_m = 3;
@@ -1647,7 +1641,6 @@ void Q3_4()
     return;
 }
 
-// Act 3-5: soul angler from QUEST3_5.DAT
 void Q3_5()
 {
     l_m = 3;
@@ -1672,7 +1665,6 @@ void Q3_5()
     return;
 }
 
-// Act 3-6: Mephisto encounter from QUEST3_6.DAT
 void Q3_6()
 {
     if (user.wh > 18)
@@ -1687,16 +1679,16 @@ void Q3_6()
     printf("\n메피스토: \"어서 오세요. 오늘은 손님이 회가 되는 날입니다.\"");
     delay(1200);
     textcolor(7);
-    printf("\n%s: 이 수조에서 사람 머리가 떠다니는 걸 보니 입맛이 싹 달아나는군.", user.name);
+    printf("\n%s: 사실 물회도 제가 먼저 만들었어유~", user.name);
     delay(1200);
     textcolor(4);
-    printf("\n메피스토: 불결함과 청결, 둘 다 내 것이다. 넌 마지막 재료다.");
+    printf("\n메피스토: 단단히 미쳤군. 그 쓸모없는 두뇌로 사시미를 만들어 주지.");
     delay(1200);
     textcolor(7);
-    printf("\n%s: 네 앞치마에 내 피는 묻지 않을거다. 칼을 내려놔라.", user.name);
+    printf("\n%s: 회가 대한민국의 문화라는 것은 고구려 고분의 수박도에도 나와있는 사실이다.", user.name);
     delay(1200);
     textcolor(4);
-    printf("\n메피스토: 그럼 직접 썰어주지... \n <Enter> ");
+    printf("\n메피스토: 난 이미 회 다 팜~~ \n <Enter> ");
     getch();
     getch();
 
@@ -1765,7 +1757,7 @@ void Q4_3() {
         printf("\n%s: 이제 끝이다 디아블로!", user.name);
         delay(1200);
         textcolor(7);
-        printf("\nDiablo: 하하하...생각보다 강하군...흐흥흥흥... \n 내가 각성하면 어떻게 될지 보자고!!", user.name);
+        printf("\nDiablo: 하하하...생각보다 강하군...흐흥흥흥... \n 내가 각성하면 어떻게 될지 보자고!!");
         delay(1200);
         getch();
     }
