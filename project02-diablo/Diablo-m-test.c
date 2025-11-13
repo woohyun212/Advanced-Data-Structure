@@ -106,14 +106,6 @@ static const QuestInfo *get_quest_info(int quest_id)
     return &quest_map[quest_id];
 }
 
-void flush_stdin(void)
-{
-    int ch;
-    while ((ch = getchar()) != '\n' && ch != EOF)
-    {
-    }
-}
-
 void clrscr()
 {
     // 화면 clear
@@ -168,13 +160,11 @@ void gotoxy_rel(int dx, int dy)
 void delay(int ms)
 {
     // ms 단위 딜레이
-    // usleep(ms * 1000);
-    // TODO: 제출 시 원상 복구
     #ifdef _WIN32
         Sleep(ms);
         return;
     #else 
-        usleep(ms * 1);
+        usleep(ms * 1000);
     #endif
 }
 
@@ -480,7 +470,7 @@ void cheatcenter()
         if (ca < 1 || ca > 5) continue;
         switch (ca)
         {
-        case 1: user.gold += 1000000; // TODO: 10000으로 수정
+        case 1: user.gold += 10000;
             break;
         case 2: user.attack += 1;
             break;
@@ -912,8 +902,7 @@ void Load()
     {
         printf("이런 치사한넘 .. 이런 게임을 에디트 하려 하다니... !!");
         getch();
-        // TODO: 제출 시 원상 복구
-        // exit(0);
+        exit(0);
     }
     return;
 }

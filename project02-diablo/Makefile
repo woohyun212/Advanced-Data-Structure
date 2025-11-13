@@ -26,7 +26,7 @@ ifeq ($(HOST_OS),Windows)
   REMOVE_CMD := del
 else ifeq ($(HOST_OS),macOS)
   # macOS 전용 설정
-#  TARGET=
+  TARGET := $(TARGET)
   REMOVE_CMD := rm
 else ifeq ($(HOST_OS),Linux)
   # Linux 전용 설정
