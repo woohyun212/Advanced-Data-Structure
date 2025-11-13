@@ -529,9 +529,9 @@ void Battle()
         fp24 = fopen(quest->file_name, "rt");
         if (fp24 == NULL)
         {
-            printf("\n Failed to open quest file");
-            getch();
-            continue;
+            printf("\n 퀘스트 파일이 존재하지 않습니다.");
+            sleep(1000);
+            exit(0);
         }
         clrscr();
         printf("\n ");
