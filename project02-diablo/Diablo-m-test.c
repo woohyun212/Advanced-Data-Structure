@@ -1703,10 +1703,10 @@ void Q4_3() {
     if(set() == 0) return;
     if(monster.nhp < 1){ 
         clrscr();
-        textcolor(7);
+        textcolor(4);
         printf("\n%s: 이제 끝이다 디아블로!", user.name);
         delay(1200);
-        textcolor(4);
+        textcolor(7);
         printf("\nDiablo: 하하하...생각보다 강하군...흐흥흥흥... \n 내가 각성하면 어떻게 될지 보자고!!", user.name);
         delay(1200);
         getch();
