@@ -1,4 +1,4 @@
-1. 프로젝트 개요
+# 1. 프로젝트 개요
 
 본 과제는 C 언어로 구현된 텍스트 기반 RPG “텍스트 디아블로(Text Diablo)”를 완성하는 것을 목표로 한다.
 교수님이 제공한 원본 코드는 Act 1 전체와 Act 2 일부까지만 구현되어 있었으며, 이후 Act 2의 나머지 퀘스트와 Act 3, Act 4는 퀘스트 함수의 정의만 존재하는 상태였다.
@@ -15,183 +15,193 @@
 
 ---
 
-2. 개발 환경
-  - 사용 언어
+# 2. 개발 환경
+- 사용 언어
   - C 언어 (C99 표준)
-  - 컴파일러 및 빌드 옵션
+- 컴파일러 및 빌드 옵션
   - Makefile 상의 기본 설정
-  - CC = gcc
-  - CFLAGS := -x c -std=c99 -Wall
-  - LDFLAGS := (별도 링크 옵션 없음)
-  - 플랫폼 지원 구조
+  - `CC = gcc`
+  - `CFLAGS := -x c -std=c99 -Wall`
+  - `LDFLAGS := (별도 링크 옵션 없음)`
+- 플랫폼 지원 구조
   - 코드 상단에서 OS에 따라 다른 헤더를 포함하도록 구성
-  - Windows: #include <conio.h>
-  - POSIX 계열(Linux, macOS): #include <unistd.h>, #include <termios.h>, #include <fcntl.h>
-  - getch(), kbhit(), clrscr(), gotoxy(), textcolor() 등 콘솔 제어 함수는
+  - Windows: `#include <conio.h>`, `#include <windows.h>`
+  - POSIX 계열(Linux, macOS): `#include <unistd.h>`, `#include <termios.h>`, `#include <fcntl.h>`
+  - `getch()`, `kbhit()`, `clrscr()`, `gotoxy()`, `textcolor()` 등 콘솔 제어 함수는
    Windows와 비 Windows 환경 모두에서 동작하도록 조건부 컴파일 및 별도 구현을 사용
-  - 개발/테스트 환경
+- 개발/테스트 환경
   - 코드 및 Makefile에 특정 OS/컴파일러 “버전”은 명시되어 있지 않으며,
-   본 README에서는 일반적인 gcc/clang 계열 컴파일러가 설치된 Windows / Linux / macOS 환경을 기준으로 빌드 방법을 설명한다.
+   본 README에서는 일반적인 gcc 컴파일러가 설치된 Windows / Linux / macOS 환경을 기준으로 빌드 방법을 설명한다.
 
 ---
 
-3. 빌드 및 실행 방법
+# 3. 빌드 및 실행 방법
 
-3.1 공통 사항
+## 3.1 공통 사항
 - 소스 파일: Diablo-m-test.c
-- 기본 실행 파일 이름: Diablo-m (Windows에서는 Diablo-m.exe로 실행)
+- 기본 실행 파일 이름: Diablo-m-run (Windows에서는 Diablo-m.exe로 실행)
 - 제공된 Makefile을 이용할 수도 있고, 단일 소스 파일을 직접 컴파일해도 된다.
 
 ---
 
-3.2 Windows (gcc / MinGW 기준)
+## 3.2 Windows (gcc / MinGW 기준)
 
-(1) 직접 컴파일
-
+### (1) 직접 컴파일
 MinGW-w64 또는 유사한 gcc 환경에서:
+```bash
 
-gcc -std=c99 -Wall -o Diablo-m.exe Diablo-m-test.c
-Diablo-m.exe
+gcc -std=c99 -Wall -o Diablo-m-run.exe Diablo-m-test.c
+Diablo-m-run.exe
 
 PowerShell 기준:
 
-gcc -std=c99 -Wall -o Diablo-m.exe Diablo-m-test.c
-.\Diablo-m.exe
+gcc -std=c99 -Wall -o Diablo-m-run.exe Diablo-m-test.c
+.\Diablo-m-run.exe
+```
 
-(2) Makefile 사용
+### (2) Makefile 사용
 
-# 빌드
-make          # 또는 mingw32-make 등 환경에 맞는 make 명령
+#### # 빌드
+```bash
+make all
+```
 
-# 실행
-.\Diablo-m.exe
+#### # 실행
+```bash
+.\Diablo-m-run.exe
+```
 
-# 정리 및 재빌드
+#### # 정리 및 재빌드
+```bash
 make clean
 make          # 또는 make clean_build
+```
 
 Makefile에서 기본 TARGET은 Diablo-m으로 정의되어 있으며,
-Windows에서는 실행 시 .exe 확장자가 붙는다.
+Windows에서는 실행 시 `.exe` 확장자가 자동으로 붙는다.
 
 ---
 
-3.3 Linux (gcc 기준)
+## 3.3 Linux
 
-(1) 직접 컴파일
+### (1) 직접 컴파일
 
-gcc -std=c99 -Wall -o Diablo-m Diablo-m-test.c
-./Diablo-m
+```bash
+gcc -std=c99 -Wall -o Diablo-m-run Diablo-m-test.c
+./Diablo-m-run
+```
 
-(2) Makefile 사용
+### (2) Makefile 사용
 
 Makefile은 OS를 감지하여 Linux인 경우 별도의 타깃 이름을 사용하도록 설정되어 있다.
 
-# 빌드
-make          # HOST_OS=Linux 인 경우 TARGET=MAKEPIC 으로 설정됨
+#### # 빌드
+```bash
+make all # HOST_OS=Linux 인 경우 TARGET=Diablo-m-run 으로 설정됨
+```
 
 # 실행
-./MAKEPIC     # 또는 Makefile에 설정된 TARGET 이름
+```bash
+./Diablo-m-run # 또는 Makefile에 설정된 TARGET 이름
+```
 
 # 정리 및 재빌드
+```bash
 make clean
-make          # 또는 make clean_build
-
-실제 제출/실행 시에는 TARGET 이름을 Diablo-m으로 맞추거나,
-README에 명시된 실행 파일 이름을 기준으로 조정하면 된다.
+make # 또는 make clean_build
+```
 
 ---
 
-3.4 macOS (gcc/clang 기준)
+## 3.4 macOS
 
-(1) 직접 컴파일
+### (1) 직접 컴파일
 
-macOS에서는 기본적으로 clang이 제공되며, 다음과 같이 컴파일 가능하다.
-
-clang -std=c99 -Wall -o Diablo-m Diablo-m-test.c
+gcc가 설치 후
+```bash
+gcc -std=c99 -Wall -o Diablo-m-run Diablo-m-test.c
 ./Diablo-m
+```
 
-또는 gcc가 설치되어 있다면:
+### (2) Makefile 사용
+```bash
+make all # HOST_OS=macOS 로 인식됨
+./Diablo-m-run # 또는 Makefile에서 지정한 TARGET
+```
 
-gcc -std=c99 -Wall -o Diablo-m Diablo-m-test.c
-./Diablo-m
-
-(2) Makefile 사용
-
-make         # HOST_OS=macOS 로 인식됨
-./Diablo-m   # 또는 Makefile에서 지정한 TARGET
-
+# 정리 및 재빌드
+```bash
 make clean
-make         # 또는 make clean_build
-
+make # 또는 make clean_build
+```
 
 ---
 
-4. 구현 내용 정리
+# 4. 구현 내용 정리
 
-4.1 전체 구조 및 원본 대비 핵심 변화
+## 4.1 전체 구조 및 원본 대비 핵심 변화
 
-(1) 퀘스트 함수 골격 → 실제 구현
+### (1) 퀘스트 함수 골격 → 실제 구현
 - 원본 코드에서 Act 2~4의 퀘스트 함수는 모두 다음과 같은 더미 구현 상태였다.
-- Q2_4() { return; }, Q3_1() { return; }, Q4_3() { return; } 등
+- `Q2_4() { return; }`, `Q3_1() { return; }`, `Q4_3() { return; }` 등
 - 완성본 코드에서는 각 함수에 스토리 진행, 몬스터 등장, 보스 전투, 보상 지급, 퀘스트 진행도 갱신 로직을 모두 구현하였다.
-- 전투는 공통 함수 set()을 통해 수행되며, 각 퀘스트는 set_monster()로 몬스터를 설정한 뒤 set()을 반복 호출하여 전투를 진행한다.
+- 전투는 공통 함수 `set()`을 통해 수행되며, 각 퀘스트는 `set_monster()`로 몬스터를 설정한 뒤 set()을 반복 호출하여 전투를 진행한다.
 - 사용자 상태는 struct my_sturct(user)와 struct monster_struct(monster)를 통해 관리한다.
 - user 구조체: name, lv, hp / nhp, mp / nmp, attack, defence, gold, exp, item[8], wh(퀘스트 진행도) 등
 - monster 구조체: name, lv, hp / nhp, mp / nmp, attack, defence, gold, exp 등
 
-(2) 퀘스트 선택/매핑 로직 개선
+### (2) 퀘스트 선택/매핑 로직 개선
 - 원본 코드
-- 퀘스트 선택 시, 퀘스트 번호 l에 대해
-- if (l==1) fp24=fopen("Quest1_1.dat","rt");
-- ...
-- if (l==21) fp24=fopen("Quest4_3.dat","rt");
-- 퀘스트 실행도
-- if (l==1) Q1_1();
-- ...
-- if (l==21) Q4_3();
-- 즉, 파일명과 함수명을 모두 긴 if 체인으로 관리하여 유지보수가 어려웠음.
+  - 퀘스트 선택 시, 퀘스트 번호 l에 대해
+    - if (l==1) fp24=fopen("Quest1_1.dat","rt");
+    - ...
+    - if (l==21) fp24=fopen("Quest4_3.dat","rt");
+  - 퀘스트 실행도
+    - if (l==1) Q1_1();
+    - ...
+    - if (l==21) Q4_3();
+  - 즉, 파일명과 함수명을 모두 긴 if 체인으로 관리하여 유지보수가 어려웠음.
 - 완성본 코드
-- 다음과 같은 구조체와 테이블을 도입:
+  - 다음과 같은 구조체와 테이블을 도입:
+  ```c++
+  typedef struct {
+  const char *file_name;
+  void (*func_name)(void);
+  } QuestInfo;
+    
+  static const QuestInfo quest_map[] = {
+  {NULL, NULL},
+  {"QUEST1_1.DAT", Q1_1},
+  ...
+  {"QUEST4_3.DAT", Q4_3},
+  };
+  ```
+  - get_quest_info(int quest_id) 함수로 퀘스트 정보를 조회해,
+    - .dat 파일명과 퀘스트 함수 포인터를 동시에 얻고,
+    - 유효성 검사 후 `quest->func_name();` 으로 퀘스트를 실행
+  - 이를 통해 퀘스트 추가/수정 시 한 곳(테이블)에서 관리할 수 있도록 구조를 개선하였다.
 
-typedef struct {
-const char *file_name;
-void (*func_name)(void);
-} QuestInfo;
-
-static const QuestInfo quest_map[] = {
-{NULL, NULL},
-{"QUEST1_1.DAT", Q1_1},
-...
-{"QUEST4_3.DAT", Q4_3},
-};
-
-
-	- get_quest_info(int quest_id) 함수로 퀘스트 정보를 조회해,
-	- .dat 파일명과 퀘스트 함수 포인터를 동시에 얻고,
-	- 유효성 검사 후 quest->func_name(); 으로 퀘스트를 실행
-	- 이를 통해 퀘스트 추가/수정 시 한 곳(테이블)에서 관리할 수 있도록 구조를 개선하였다.
-
-(3) 전투(set) 및 입력 처리 개선
-- set() 함수
-- 원본: void set()
-- 완성본: int set()
-- 전투의 결과(성공/도망/중단 등)를 호출 측에서 판단할 수 있도록, 반환값을 갖는 형태로 변경
-- 각 퀘스트 함수에서는 if (set() == 0) return; 형태로,
-플레이어가 도망가거나 전투가 중단된 경우 퀘스트 진행을 적절히 중단하도록 처리
-- 레벨업 처리 시 user.exp <= 0 조건을 검사하여 레벨을 올리고, 체력/마나/공격력 증가를 직업(cs)에 따라 다르게 적용
-- l_m 변수를 사용해 남은 몬스터 수(Leave Monster) 를 관리, 전투 UI에 표시
+## (3) 전투(set) 및 입력 처리 개선
+- `set()` 함수
+  - 원본: `void set()`
+  - 완성본: `int set()`
+    - 전투의 결과(성공/도망/중단 등)를 호출 측에서 판단할 수 있도록, 반환값을 갖는 형태로 변경
+    - 각 퀘스트 함수에서는 `if (set() == 0) return;` 형태로,
+    플레이어가 도망가거나 전투가 중단된 경우 퀘스트 진행을 적절히 중단하도록 처리
+  - 레벨업 처리 시 `user.exp <= 0` 조건을 검사하여 레벨을 올리고, 체력/마나/공격력 증가를 직업(cs)에 따라 다르게 적용
+  - `l_m` 변수를 사용해 남은 몬스터 수(Leave Monster) 를 관리, 전투 UI에 표시
 - 전투 메뉴
-- 1. Melee Attack, 2. Magic, 3. Eat potion, 4. Run Away 네 가지 선택지를 제공
-- Run_away() 기능이 새로 구현되어, 전투 도중 도망가는 로직을 지원
+  - 1. Melee Attack, 2. Magic, 3. Eat potion, 4. Run Away 네 가지 선택지를 제공
+  - `Run_away()` 기능이 새로 구현되어, 전투 도중 도망가는 로직을 지원
 - 입력 처리
-- 원본에서 scanf("%d", &input); 형태로 직접 입력을 받던 부분을,
-- 완성본에서 scani()라는 래퍼 함수를 사용하여 잘못된 입력에 대한 방어 코드를 강화
-- 개발 메모에 기록된 Issue #34 (Potion 잘못된 번호 입력 시 몬스터에게 데미지) 등을 해결하면서,
-전체적으로 입력값 검증 및 에러 처리 로직이 보강된 형태이다.
+  - 원본에서 `scanf("%d", &input);` 형태로 직접 입력을 받던 부분을,
+  - 완성본에서 `scani()`라는 래퍼 함수를 사용하여 잘못된 입력에 대한 방어 코드를 강화
+  - 개발 메모에 기록된 Issue #34 (Potion 잘못된 번호 입력 시 몬스터에게 데미지) 등을 해결하면서,
+  전체적으로 입력값 검증 및 에러 처리 로직이 보강된 형태이다.
 
 ---
 
-4.2 Act 2 – Q2_4, Q2_5, Q2_6
+## 4.2 Act 2 – Q2_4, Q2_5, Q2_6
 
 Q2_4 – 패스트푸드 테마 던전 및 롯데리우스 전
 - 원본 상태
