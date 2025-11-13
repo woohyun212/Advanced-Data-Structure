@@ -30,6 +30,7 @@ else ifeq ($(HOST_OS),macOS)
   REMOVE_CMD := rm
 else ifeq ($(HOST_OS),Linux)
   # Linux 전용 설정
+  CFLAGS += -D_POSIX_C_SOURCE=200809L -D_DEFAULT_SOURCE # usleep 선언 노출
   TARGET := $(TARGET)
   REMOVE_CMD := rm
 endif

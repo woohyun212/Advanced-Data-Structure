@@ -1737,7 +1737,7 @@ void Q4_3() {
     printf("\nDiablo: 이미 창원시는 나의 행정력에 무릎을 꿇었다.");
     delay(1200);
     textcolor(4);
-    printf("\nDiablo: 이제 네 놈의 죽이고 네 놈의 피로 결제를 해야겠다.");
+    printf("\nDiablo: 이제 네 놈을 죽이고 네 놈의 피로 결제를 해야겠다.");
     delay(1200);
     textcolor(7);
     printf("\n%s: ㅋㅋㅋㅋㅋ이제 곧 죽을 녀석의 말은 듣지 않는다.", user.name);
