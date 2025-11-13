@@ -1387,7 +1387,7 @@ void Q2_4()
         return;
     }
     clrscr();
-    l_m = 14;
+    l_m = 13;
     for (i = 0; i < 6; i++)
     {
         set_monster("고지방 감자튀김", 15, 30, 40, 10, 15,
@@ -1497,7 +1497,7 @@ void Q2_6()
         return;
     }
     clrscr();
-    l_m = 14;
+    l_m = 12;
     for (i = 0; i < 5; i++)
     {
         set_monster("Frozen Stew Chunk", 19, 80, 100, 20,
@@ -1606,7 +1606,7 @@ void Q3_2()
 // Act 3-3: demon chefs from QUEST3_3.DAT
 void Q3_3()
 {
-    l_m = 4;
+    l_m = 3;
 
     set_monster("Demonic_LineCook", 22, 640, 1000, 640, 1000,
                 110, 180, 100, 210, 330, 210, 330);
@@ -1617,9 +1617,9 @@ void Q3_3()
     set_monster("Sashimi_Wraith", 22, 720, 1140, 720, 1140,
                 130, 220, 120, 250, 400, 240, 380);
     if(set() == 0) return;
-    textcolor(4);
+    clrscr();
     printf("\n셰프 마고로시: \"신선함의 비결은... 방금 죽은 손님이죠.\"");
-    textcolor(7);
+    getch();
     set_monster("Chef_Magoroshi", 22, 900, 1420, 900, 1420,
                 170, 280, 140, 260, 440, 280, 440);
     if(set() == 0) return;
@@ -1650,7 +1650,7 @@ void Q3_4()
 // Act 3-5: soul angler from QUEST3_5.DAT
 void Q3_5()
 {
-    l_m = 4;
+    l_m = 3;
 
     set_monster("Hooked_Spirit", 25, 880, 1400, 880, 1400,
                 150, 260, 160, 280, 440, 290, 410);
@@ -1661,9 +1661,9 @@ void Q3_5()
     set_monster("Soul_Net", 25, 1000, 1600, 1000, 1600,
                 170, 300, 180, 320, 510, 320, 540);
     if(set() == 0) return;
-    textcolor(4);
+    clrscr();
     printf("\n조낚귀: \"낚싯줄은 이미 네 심장에 닿아 있다.\"");
-    textcolor(7);
+    getch();
     set_monster("JoNakGwi", 25, 1400, 2100, 1400, 2100,
                 200, 350, 200, 360, 540, 350, 570);
     if(set() == 0) return;
@@ -1718,7 +1718,7 @@ void Q4_1() { // 아정
     if (user.wh == 19) user.wh++;
     return; }
 void Q4_2() {
-    l_m = 4;
+    l_m = 3;
 
     for(int i=0;i<3;i++){
         set_monster("악마 공무원", 29, 1520, 2780, 1520, 2780, 360, 630, 360, 650, 1050, 630, 1230);
