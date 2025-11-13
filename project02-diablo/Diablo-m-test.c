@@ -3,10 +3,10 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include <unistd.h>
 #ifdef _WIN32
     #include <conio.h>
 #else
+    #include <unistd.h>
     #include <termios.h>
     #include <fcntl.h>
 #endif
