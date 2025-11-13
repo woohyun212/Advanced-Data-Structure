@@ -378,7 +378,7 @@ void state_handler(){
             case 6: Save_option(); Func_set = 0; break;
             case 7: Func_set = -1; break;
             case 1008: cheatcenter(); Func_set = 0; break;
-            default: Func_set = 0;break;;
+            default: Func_set = 0;break;
             // default: Func_set = -1;
         }
     }
@@ -473,7 +473,7 @@ void cheatcenter()
         if (ca < 1 || ca > 5) continue;
         switch (ca)
         {
-        case 1: user.gold += 10000;
+        case 1: user.gold += 1000000; // TODO: 10000으로 수정
             break;
         case 2: user.attack += 1;
             break;
