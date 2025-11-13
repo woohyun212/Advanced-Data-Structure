@@ -1710,19 +1710,22 @@ void Q4_3() {
     getch();
 
     l_m = 0;
-    if(monster.nhp > 666){ //페이즈 1
-        set_monster("DIABLO", 35, 1660, 2490, 1660, 2490, 480, 830, 480, 0, 0, 0, 0);
-        if(set() == 0) return;
-
-    }else{ //페이즈 2
+    set_monster("DIABLO", 35, 1660, 2490, 1660, 2490, 480, 830, 480, 0, 0, 0, 0); //페이즈1
+    if(set() == 0) return;
+    if(monster.nhp < 1){ 
         clrscr();
         textcolor(4);
-        printf("\nDiablo: 생각보다 강하군...그럼 진심으로 널 상대해볼까?");
+        printf("\n%s: 이제 끝이다 디아블로!", user.name);
         delay(1200);
-    set_monster("DIABLO[각성]", 35, 3330, 4990, 3330, 4990, 720, 1250, 570, 1140, 1840, 1110, 1810);
-        if(set() == 0) return;
+        textcolor(7);
+        printf("\nDiablo: 하하하...생각보다 강하군...흐흥흥흥... \n 내가 각성하면 어떻게 될지 보자고!!", user.name);
+        delay(1200);
+        getch();
     }
-    //if (user.wh == 21) user.wh++;
+        clrscr();
+        set_monster("DIABLO[각성]", 35, 3330, 4990, 3330, 4990, 720, 1250, 570, 1140, 1840, 1110, 1810); //페이즈2
+        if(set() == 0) return;
+    if (user.wh == 21) user.wh++;
     return; }
 
 
