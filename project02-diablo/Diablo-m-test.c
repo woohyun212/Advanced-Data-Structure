@@ -106,14 +106,6 @@ static const QuestInfo *get_quest_info(int quest_id)
     return &quest_map[quest_id];
 }
 
-void flush_stdin(void)
-{
-    int ch;
-    while ((ch = getchar()) != '\n' && ch != EOF)
-    {
-    }
-}
-
 void clrscr()
 {
     // 화면 clear
