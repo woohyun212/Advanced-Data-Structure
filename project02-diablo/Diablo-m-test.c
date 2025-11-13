@@ -410,7 +410,8 @@ void Insert_defence()
 
 int Play_1()
 {
-    int i, q;
+    // int i, q; // 사용하지 않는 변수 i
+    int q;
     clrscr();
     //user.nhp = user.hp; //배틀 중에 변경된 체력과 마나로 유지하기 위해 초기화 로직을 지움.
     //user.nmp = user.mp;
@@ -628,7 +629,8 @@ void Potion()
 
 void Weapon_Store()
 {
-    int i, j, k, l;
+    // int i, j, k, l; // 사용하지않는 변수 j, k
+    int i, l;
     while (1)
     {
         clrscr();
@@ -679,7 +681,8 @@ void Weapon_Store()
 
 void Defence_Store()
 {
-    int i, j, k, l;
+    // int i, j, k, l; // 사용하지 않는 변수 j, k
+    int i, l;
     while (1)
     {
         clrscr();
@@ -729,7 +732,8 @@ void Defence_Store()
 void Item_store()
 {
     int cost[8] = {50, 50, 100, 100, 500, 500, 1000, 1000};
-    int i, j, k, l;
+    // int i, j, k, l; // 사용하지 않는 변수 i, j, k
+    int l;
     while (1)
     {
         clrscr();
@@ -846,7 +850,8 @@ void Insert_magic()
     if (user.cs == 1) fp2 = fopen("AMAMAGIC.DAT", "rt");
     else if (user.cs == 2) fp2 = fopen("SOCMAGIC.DAT", "rt");
     else if (user.cs == 3) fp2 = fopen("NECMAGIC.DAT", "rt");
-    else {fclose(fp2);return;}
+    // else {fclose(fp2);return;} fp2는 어차피 None일 거니까 return만 하면되지
+    else {return;}
     for (i = 0; i < 8; i++)
         fscanf(fp2, "%s %d %d %d", magic[i].name, &magic[i].power, &magic[i].ump, &magic[i].lv);
     fclose(fp2);
@@ -855,7 +860,7 @@ void Insert_magic()
 
 void Load()
 {
-    char d[100];
+    // char d[100]; // d배열 사용하지 않음
     char name[30];
     int code, lv, cs, nmp, defence, gold, mp, nhp, hp, exp, attack, wh;
     FILE* fp1;
@@ -1052,7 +1057,8 @@ void game_over(void)
 
 int set()
 {
-    int re, input;
+    // int re, input; // re 사용하지 않음
+    int input;
     randomize();
     while (1)
     {
@@ -1835,7 +1841,7 @@ void h_m()
 
 void Mg()
 {
-    int bonus, w, in = 0; // xx
+    int bonus, in = 0; // w, xx
     while (1)
     {
         clrscr();
