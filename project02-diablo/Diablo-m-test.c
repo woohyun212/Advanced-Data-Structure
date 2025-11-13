@@ -5,6 +5,7 @@
 #include <time.h>
 #ifdef _WIN32
     #include <conio.h>
+    #include <windows.h>
 #else
     #include <unistd.h>
     #include <termios.h>
@@ -169,7 +170,12 @@ void delay(int ms)
     // ms 단위 딜레이
     // usleep(ms * 1000);
     // TODO: 제출 시 원상 복구
-    usleep(ms * 1);
+    #ifdef _WIN32
+        Sleep(ms);
+        return;
+    #else 
+        usleep(ms * 1);
+    #endif
 }
 
 #if !defined(_WIN32)
