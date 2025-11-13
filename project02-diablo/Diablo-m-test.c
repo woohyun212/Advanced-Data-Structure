@@ -70,28 +70,28 @@ typedef struct
 
 static const QuestInfo quest_map[] =
 {
-    [0]  = {NULL, NULL},
-    [1]  = {"QUEST1_1.DAT", Q1_1},
-    [2]  = {"QUEST1_2.DAT", Q1_2},
-    [3]  = {"QUEST1_3.DAT", Q1_3},
+    {NULL, NULL},
+    {"QUEST1_1.DAT", Q1_1},
+    {"QUEST1_2.DAT", Q1_2},
+    {"QUEST1_3.DAT", Q1_3},
     [4]  = {"QUEST1_4.DAT", Q1_4},
-    [5]  = {"QUEST1_5.DAT", Q1_5},
-    [6]  = {"QUEST1_6.DAT", Q1_6},
-    [7]  = {"QUEST2_1.DAT", Q2_1},
-    [8]  = {"QUEST2_2.DAT", Q2_2},
-    [9]  = {"QUEST2_3.DAT", Q2_3},
-    [10] = {"QUEST2_4.DAT", Q2_4},
-    [11] = {"QUEST2_5.DAT", Q2_5},
-    [12] = {"QUEST2_6.DAT", Q2_6},
-    [13] = {"QUEST3_1.DAT", Q3_1},
-    [14] = {"QUEST3_2.DAT", Q3_2},
-    [15] = {"QUEST3_3.DAT", Q3_3},
-    [16] = {"QUEST3_4.DAT", Q3_4},
-    [17] = {"QUEST3_5.DAT", Q3_5},
-    [18] = {"QUEST3_6.DAT", Q3_6},
-    [19] = {"QUEST4_1.DAT", Q4_1},
-    [20] = {"QUEST4_2.DAT", Q4_2},
-    [21] = {"QUEST4_3.DAT", Q4_3},
+    {"QUEST1_5.DAT", Q1_5},
+    {"QUEST1_6.DAT", Q1_6},
+    {"QUEST2_1.DAT", Q2_1},
+    {"QUEST2_2.DAT", Q2_2},
+    {"QUEST2_3.DAT", Q2_3},
+    {"QUEST2_4.DAT", Q2_4},
+    {"QUEST2_5.DAT", Q2_5},
+    {"QUEST2_6.DAT", Q2_6},
+    {"QUEST3_1.DAT", Q3_1},
+    {"QUEST3_2.DAT", Q3_2},
+    {"QUEST3_3.DAT", Q3_3},
+    {"QUEST3_4.DAT", Q3_4},
+    {"QUEST3_5.DAT", Q3_5},
+    {"QUEST3_6.DAT", Q3_6},
+    {"QUEST4_1.DAT", Q4_1},
+    {"QUEST4_2.DAT", Q4_2},
+    {"QUEST4_3.DAT", Q4_3},
 };
 
 static const int QUEST_COUNT = (int)(sizeof(quest_map) / sizeof(quest_map[0]));
@@ -519,7 +519,7 @@ void Battle()
         l = scani(); // scanf -> scani
         if (l < 0 || l > user.wh)
         {
-            printf("\n 이전 퀘스트부터 깨고 오세요.");
+            printf("\n눈을 뜨세요 용사여... 웨이포인트 숫자를 좀 읽으세요!!!!");
             getch();
             continue;
         }
