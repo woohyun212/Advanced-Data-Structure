@@ -329,7 +329,7 @@ int cheat = 0, l_m, count1, count2;
 int main()
 {
     int a;
-    #ifdef _WIN32 
+    #ifdef _WIN32
         system("chcp 65001");
     #endif
     randomize();
@@ -844,8 +844,9 @@ void Insert_magic()
     FILE* fp2;
     int i;
     if (user.cs == 1) fp2 = fopen("AMAMAGIC.DAT", "rt");
-    if (user.cs == 2) fp2 = fopen("SOCMAGIC.DAT", "rt");
-    if (user.cs == 3) fp2 = fopen("NECMAGIC.DAT", "rt");
+    else if (user.cs == 2) fp2 = fopen("SOCMAGIC.DAT", "rt");
+    else if (user.cs == 3) fp2 = fopen("NECMAGIC.DAT", "rt");
+    else {fclose(fp2);return;}
     for (i = 0; i < 8; i++)
         fscanf(fp2, "%s %d %d %d", magic[i].name, &magic[i].power, &magic[i].ump, &magic[i].lv);
     fclose(fp2);
@@ -1670,7 +1671,7 @@ void Q3_6()
     if (user.wh > 18)
     {
         printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
-        getch();    
+        getch();
         return;
     }
 
@@ -1751,7 +1752,7 @@ void Q4_3() {
     l_m = 0;
     set_monster("DIABLO", 35, 1660, 2490, 1660, 2490, 480, 830, 480, 0, 0, 0, 0); //페이즈1
     if(set() == 0) return;
-    if(monster.nhp < 1){ 
+    if(monster.nhp < 1){
         clrscr();
         textcolor(4);
         printf("\n%s: 이제 끝이다 디아블로!", user.name);
