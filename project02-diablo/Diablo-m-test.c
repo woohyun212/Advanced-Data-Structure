@@ -329,7 +329,7 @@ int cheat = 0, l_m, count1, count2;
 int main()
 {
     int a;
-    #ifdef _WIN32 
+    #ifdef _WIN32
         system("chcp 65001");
     #endif
     randomize();
@@ -844,8 +844,9 @@ void Insert_magic()
     FILE* fp2;
     int i;
     if (user.cs == 1) fp2 = fopen("AMAMAGIC.DAT", "rt");
-    if (user.cs == 2) fp2 = fopen("SOCMAGIC.DAT", "rt");
-    if (user.cs == 3) fp2 = fopen("NECMAGIC.DAT", "rt");
+    else if (user.cs == 2) fp2 = fopen("SOCMAGIC.DAT", "rt");
+    else if (user.cs == 3) fp2 = fopen("NECMAGIC.DAT", "rt");
+    else {fclose(fp2);return;}
     for (i = 0; i < 8; i++)
         fscanf(fp2, "%s %d %d %d", magic[i].name, &magic[i].power, &magic[i].ump, &magic[i].lv);
     fclose(fp2);
@@ -1670,7 +1671,7 @@ void Q3_6()
     if (user.wh > 18)
     {
         printf("\n 보스급 스테이지는 한번 이상 클리어가 불가능 합니다");
-        getch();    
+        getch();
         return;
     }
 
@@ -1751,7 +1752,7 @@ void Q4_3() {
     l_m = 0;
     set_monster("DIABLO", 35, 1660, 2490, 1660, 2490, 480, 830, 480, 0, 0, 0, 0); //페이즈1
     if(set() == 0) return;
-    if(monster.nhp < 1){ 
+    if(monster.nhp < 1){
         clrscr();
         textcolor(4);
         printf("\n%s: 이제 끝이다 디아블로!", user.name);
@@ -1834,59 +1835,77 @@ void h_m()
 
 void Mg()
 {
-    int bonus, w, in, i, xx, s = 0;
-    gotoxy(1, 13);
-    printf("     Can Private Magic: \n ");
-    printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━");
-    for (i = 0; i < 8; i++)
+    int bonus, w, in = 0; // xx
+    while (1)
     {
-        if (magic[i].lv <= user.lv)
+        clrscr();
+        int i, s = 0;
+        gotoxy(1, 13);
+        printf("     Can Private Magic: \n ");
+        printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━");
+        for (i = 0; i < 8; i++)
         {
-            printf("\n%2d.NAME: %12s   ┃ Damage: %3d  ┃ Mp: %3d  ┃  Level: %3d", s + 1, magic[i].name, magic[i].power,
-                   magic[i].ump, magic[i].lv);
-            s++;
+            if (magic[i].lv <= user.lv)
+            {
+                printf("\n%2d.NAME: %12s   ┃ Damage: %3d  ┃ Mp: %3d  ┃  Level: %3d", s + 1, magic[i].name,
+                       magic[i].power,
+                       magic[i].ump, magic[i].lv);
+                s++;
+            }
         }
-    }
-    printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
-xx:
-    printf("\n0.Cancel, Magic Order(1~%d):", s);
-    in = scani(); // scanf -> scani
+        printf("\n━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┻━━━━━━━━━━┻━━━━━━━━━━━━━━");
 
-    if (in < 0 || in > s || magic[in - 1].ump > user.nmp)
-    {
-        printf("\n 그런것은 불가능 합니다.<Enter>");
-        goto xx;
-    }
-    if (in == 0)
-    {
-        printf("\n Magic canceled. <Enter>");
-        getch();
-        // set(); // 필요없음
-        return;
-    }
-    else
-    {
-        w = my_random(3);
-        if (user.cs == 1) bonus = my_random(magic[in - 1].power + user.lv * 4);
-        if (user.cs == 2) bonus = my_random(magic[in - 1].power + user.lv * 8);
-        if (user.cs == 3) bonus = my_random(magic[in - 1].power + user.lv * 6);
-        switch (w)
+        if (s == 0)
         {
-        case 0: textcolor(7);
-            printf("\n 피에 굶주린 자들이여 성스러운 %s 를 받아라~~~", magic[in - 1].name);
-            break;
-        case 1: textcolor(7);
-            printf("\n 나의 주먹을 맛 보아라~~~~%s!!!!", magic[in - 1].name);
-            break;
-        case 2: textcolor(7);
-            printf("\n %s!!! 하핫 아프지? ", magic[in - 1].name);
-            break;
+            printf("\n사용 가능한 마법이 없습니다. <Enter>");
+            getch();
+            return;
         }
-        printf("\n 당신은 %s 에게 %d 만큼의 데미지를 가합니다", monster.name, magic[in - 1].power + bonus);
-        monster.nhp -= (magic[in - 1].power + bonus);
-        user.nmp -= magic[in - 1].ump;
-        getch();
+        printf("\n0.Cancel, Magic Order(1~%d):", s);
+        in = scani();
+        if (in == 0)
+        {
+            return; //Magic canceled.
+        }
+        if (in < 1 || in > s)
+        {
+            printf("\n 그런것은 불가능 합니다.<Enter>");
+            getch();
+            continue; // 다시 입력
+        }
+        if (magic[in - 1].ump > user.nmp)
+        {
+            printf("\n 마나가 부족합니다. <Enter>");
+            getch();
+            continue; // 다시 입력
+        }
+        break; // 유효한 선택
     }
+
+    if (user.cs == 1) bonus = my_random(magic[in - 1].power + user.lv * 4);
+    else if (user.cs == 2) bonus = my_random(magic[in - 1].power + user.lv * 8);
+    else if (user.cs == 3) bonus = my_random(magic[in - 1].power + user.lv * 6);
+    else bonus = my_random(magic[in - 1].power);
+    // w = my_random(3);
+    switch (my_random(3))
+    {
+    case 0: textcolor(7);
+        printf("\n 피에 굶주린 자들이여 성스러운 %s 를 받아라~~~", magic[in - 1].name);
+        break;
+    case 1: textcolor(7);
+        printf("\n 나의 주먹을 맛 보아라~~~~%s!!!!", magic[in - 1].name);
+        break;
+    case 2:
+    // default:
+        textcolor(7);
+        printf("\n %s!!! 하핫 아프지? ", magic[in - 1].name);
+        break;
+    }
+    printf("\n 당신은 %s 에게 %d 만큼의 데미지를 가합니다", monster.name, magic[in - 1].power + bonus);
+    monster.nhp -= (magic[in - 1].power + bonus);
+    user.nmp -= magic[in - 1].ump;
+    getch();
+
     if (monster.nhp > 0) h_m();
     return;
 }
