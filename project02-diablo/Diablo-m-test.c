@@ -384,6 +384,12 @@ void Insert_weapon()
 {
     int i;
     FILE* fp13 = fopen("WEAPON.QWE", "r");
+    if (fp13 == NULL)
+        {
+            printf("\n 파일이 존재하지 않습니다.");
+            sleep(1000);
+            exit(0);
+        }
     fscanf(fp13, "%d", &count1);
     for (i = 0; i < 100; i++)
         fscanf(fp13, "%s %d %d %d %d", weapon[i].name, &weapon[i].power, &weapon[i].hp_bonus, &weapon[i].mp_bonus,
@@ -396,6 +402,12 @@ void Insert_defence()
 {
     int i;
     FILE* fp56 = fopen("DEFENCE.QWE", "rt"); // 리눅스 환경에서는 대소문자 구분을 해야함. 대문자로 수정
+    if (fp56 == NULL)
+        {
+            printf("\n 파일이 존재하지 않습니다.");
+            sleep(1000);
+            exit(0);
+        }
     fscanf(fp56, "%d", &count2);
     for (i = 0; i < count2; i++)
         fscanf(fp56, "%s %d %d %d %d", defence[i].name, &defence[i].defence, &defence[i].hp, &defence[i].mp,
@@ -778,6 +790,12 @@ void Save_option()
     clrscr();
     user.code = (user.lv + user.cs + user.nhp + user.nmp + user.gold + user.exp) / user.lv + user.lv;
     fp3 = fopen("SAVEDATA.SAV", "w+");
+    if (fp3 == NULL)
+        {
+            printf("\n 파일이 존재하지 않습니다.");
+            sleep(1000);
+            exit(0);
+        }
     fprintf(fp3, "%s", user.name);
     fprintf(fp3, "\n%d", user.lv);
     fprintf(fp3, "\n%d", user.cs);
@@ -848,6 +866,12 @@ void Insert_magic()
     else if (user.cs == 3) fp2 = fopen("NECMAGIC.DAT", "rt");
     // else {fclose(fp2);return;} fp2는 어차피 None일 거니까 return만 하면되지
     else {return;}
+    if (fp2 == NULL)
+        {
+            printf("\n 파일이 존재하지 않습니다.");
+            sleep(1000);
+            exit(0);
+        }
     for (i = 0; i < 8; i++)
         fscanf(fp2, "%s %d %d %d", magic[i].name, &magic[i].power, &magic[i].ump, &magic[i].lv);
     fclose(fp2);
@@ -862,6 +886,12 @@ void Load()
     FILE* fp1;
     clrscr();
     fp1 = fopen("SAVEDATA.SAV", "rt");
+    if (fp1 == NULL)
+        {
+            printf("\n 파일이 존재하지 않습니다.");
+            sleep(1000);
+            exit(0);
+        }
     fscanf(fp1, "%s", name);
     fscanf(fp1, "%d", &lv);
     fscanf(fp1, "%d", &cs);
@@ -910,6 +940,12 @@ void Load()
 void Opening()
 {
     FILE* fp0 = fopen("OPENING.QWE", "rt");
+    if (fp0 == NULL)
+        {
+            printf("\n 파일이 존재하지 않습니다.");
+            sleep(1000);
+            exit(0);
+        }
     int ch, i;
     char data;
     randomize();
